@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static be.javabeans.utils.ArrayUtils.isArrayWithValues;
 
@@ -22,7 +21,7 @@ public class FileReaderUtil {
         this.file = new File(fileName);
     };
 
-    public List<CSVObject> readFile(CSVFileMapper mapper){
+    public List<CSVObject> convert(CSVFileMapper mapper){
         try {
             List<CSVObject> csvObjects = new ArrayList<>();
             CSVReader reader = new CSVReader(new FileReader(file));

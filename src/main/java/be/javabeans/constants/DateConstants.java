@@ -1,4 +1,4 @@
-package be.javabeans.utils.mapper.constants;
+package be.javabeans.constants;
 
 import java.time.format.DateTimeFormatter;
 

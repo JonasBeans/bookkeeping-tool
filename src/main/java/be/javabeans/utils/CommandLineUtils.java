@@ -10,9 +10,11 @@ public class CommandLineUtils {
         return getCommandLineInput((choice) -> true);
     }
     public static String getCommandLineInput(Predicate<String> validation){
+        System.out.print("> ");
         String userInput = inputScanner.next();
         while(validation.negate().test(userInput)){
             System.out.println("Not a valid option");
+            System.out.print("> ");
             userInput = inputScanner.next();
         }
         return userInput;

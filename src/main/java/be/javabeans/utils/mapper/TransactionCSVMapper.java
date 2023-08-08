@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 import static be.javabeans.utils.StringUtils.convertEuropeanDecimal;
 import static be.javabeans.utils.StringUtils.validateString;
-import static be.javabeans.utils.mapper.constants.DateConstants.TRANSACTION_DATE_TIME_FORMATTER;
+import static be.javabeans.constants.DateConstants.TRANSACTION_DATE_TIME_FORMATTER;
 
 public class TransactionCSVMapper implements CSVFileMapper {
 
