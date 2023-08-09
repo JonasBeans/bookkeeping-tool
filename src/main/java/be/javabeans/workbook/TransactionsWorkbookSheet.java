@@ -1,16 +1,17 @@
 package be.javabeans.workbook;
 
+import be.javabeans.model.Transaction;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static be.javabeans.constants.TransactionConstants.ACCOUNTING_WORKSHEET;
-import static be.javabeans.constants.TransactionConstants.CellValues.DATE_CELL;
-import static java.lang.String.format;
+import static be.javabeans.constants.TransactionConstants.CellValues.*;
 
 /**
  * The accounting workbook is in the .xlsx format.
@@ -22,13 +23,32 @@ public class TransactionsWorkbookSheet {
         this.workbooklocation = workbooklocation;
     }
 
-    public void appendDate(LocalDate date) throws IOException {
+    public void processTransactionToAccountingFile(Transaction transaction) throws IOException {
         Workbook workbook = readSheet();
         Sheet rows = workbook.getSheetAt(ACCOUNTING_WORKSHEET);
-        rows.createRow(getFirstEmptyRowIndex(rows))
-                .createCell(DATE_CELL)
-                .setCellValue(date);
+        Integer firstEmptyRowIndex = getFirstEmptyRowIndex(rows);
+        rows.createRow(firstEmptyRowIndex);
+        appendDate(rows, firstEmptyRowIndex,transaction.getTransactionDate());
+        appendAmount(rows, firstEmptyRowIndex, transaction.getAmount());
+        appendNameOfOtherParty(rows, firstEmptyRowIndex, transaction.getNameOtherParty());
+        appendCostCenter(rows, firstEmptyRowIndex, transaction.getCostCenterIndex(), transaction.getAmount());
         saveChanges(workbook);
+    }
+
+    private void appendNameOfOtherParty(Sheet row, Integer index, String nameOtherParty) {
+        row.getRow(index).createCell(NAME_OTHER_PARTY_CELL).setCellValue(nameOtherParty);
+    }
+
+    private void appendAmount(Sheet row, Integer index ,BigDecimal amount) {
+        row.getRow(index).createCell(AMOUNT_CELL).setCellValue(amount.doubleValue());
+    }
+
+    private void appendCostCenter(Sheet row, Integer index, Integer costCenterIndex, BigDecimal amount) {
+        row.getRow(index).createCell(costCenterIndex).setCellValue(Math.abs(amount.doubleValue()));
+    }
+
+    private void appendDate(Sheet row, Integer index , LocalDate date) {
+        row.getRow(index).createCell(DATE_CELL).setCellValue(date);
     }
 
     private Workbook readSheet() throws IOException {

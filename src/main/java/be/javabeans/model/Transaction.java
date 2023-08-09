@@ -15,6 +15,6 @@ public class Transaction {
     private LocalDate transactionDate;
     private BigDecimal amount;
     private String nameOtherParty;
-    private String accountType;
+    private Integer costCenterIndex;
 
 }

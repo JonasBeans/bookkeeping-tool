@@ -9,5 +9,7 @@ public class TransactionConstants {
 
     public static class CellValues{
        public static final Integer DATE_CELL = 0;
+        public static final Integer AMOUNT_CELL = 6;
+        public static final Integer NAME_OTHER_PARTY_CELL = 1;
     }
 }

@@ -1,34 +1,28 @@
 package be.javabeans.service;
 
 import be.javabeans.DTO.TransactionDTO;
-import be.javabeans.constants.FileConstansts;
 import be.javabeans.mapper.TransactionMapper;
 import be.javabeans.model.Transaction;
 import be.javabeans.utils.FileReaderUtil;
 import be.javabeans.utils.mapper.CSVObject;
 import be.javabeans.utils.mapper.TransactionCSVMapper;
-import be.javabeans.constants.TransactionConstants;
 import be.javabeans.workbook.TransactionsWorkbookSheet;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.nio.channels.FileChannel;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import static be.javabeans.constants.FileConstansts.ACCOUNTING_WORKBOOK_LOCATION;
-import static be.javabeans.constants.TransactionConstants.ACCOUNTING_WORKSHEET;
-import static be.javabeans.utils.CommandLineUtils.getCommandLineInput;
 import static be.javabeans.constants.TransactionConstants.SEPERATOR;
+import static be.javabeans.utils.CommandLineUtils.getCommandLineInput;
 
 @Slf4j
 public final class TransactionService {
      private static TransactionService instance;
      private final TransactionsWorkbookSheet sheet;
-     private Predicate<String> validateCostCenter = TransactionConstants.POSSIBLE_COST_CENTERS::contains;
+     private Predicate<String> validateCostCenter = (value) -> CostCenterService.getInstance().getCostCenterIndexes().contains(Integer.valueOf(value));
     private TransactionService(){
         this.sheet = new TransactionsWorkbookSheet(ACCOUNTING_WORKBOOK_LOCATION);
     }
@@ -46,14 +40,12 @@ public final class TransactionService {
 
         List<CSVObject> transactionsFromFile = reader.convert(transactionCSVMapper);
         List<Transaction> transactions = appointCostCentersToTransactions(transactionsFromFile);
-        transactions.stream()
-                .map(Transaction::getTransactionDate)
-                .forEach(this::tryToReadTransactionSheet);
+        transactions.forEach(this::tryToReadTransactionSheet);
     }
 
-    private void tryToReadTransactionSheet(LocalDate date) {
+    private void tryToReadTransactionSheet(Transaction transaction) {
         try {
-            sheet.appendDate(date);
+            sheet.processTransactionToAccountingFile(transaction);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -66,6 +58,7 @@ public final class TransactionService {
             System.out.print("On which cost center to put: ");
             String chosenCostCenter = getCommandLineInput(validateCostCenter);
 
+            //todo add cost center confirmation
             System.out.printf("Transaction was put on cost center: %s\n", chosenCostCenter);
 
             transactions.add(
