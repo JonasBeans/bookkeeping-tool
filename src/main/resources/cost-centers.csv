@@ -16,6 +16,6 @@ Transactiekosten,true,21
 Salaris/loon,false,22
 Inkomsten uit rente en dividenden, false,23
 Vorderingen,false,24
-Debiteuren,false,25
+Intertransfer bank,false,25
 Zakgeld,false,26
 Diverse Inkomsten,false,27
