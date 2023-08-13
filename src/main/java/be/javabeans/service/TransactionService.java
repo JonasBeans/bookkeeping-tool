@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -41,10 +42,13 @@ public final class TransactionService {
     public void processTransactionsToBookkeeping(String fileName){
         FileReaderUtil reader = new FileReaderUtil(fileName);
         TransactionCSVMapper transactionCSVMapper = new TransactionCSVMapper();
+        Comparator<Transaction> compareDates = Comparator.comparing(Transaction::getTransactionDate).reversed();
 
         List<CSVObject> transactionsFromFile = reader.convert(transactionCSVMapper);
         List<Transaction> transactions = appointCostCentersToTransactions(transactionsFromFile);
-        transactions.stream().sorted().forEach(this::tryToReadTransactionSheet);
+        transactions.stream()
+                .sorted(compareDates)
+                .forEach(this::tryToReadTransactionSheet);
     }
 
     private void tryToReadTransactionSheet(Transaction transaction) {
