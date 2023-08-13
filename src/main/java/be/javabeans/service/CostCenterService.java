@@ -58,7 +58,7 @@ public final class CostCenterService {
         List<String> costCenterLines = new ArrayList<>();
 
         String line = "";
-        try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(getCostCenterFile()))) {
             while((line = reader.readLine()) != null){
                 costCenterLines.add(line);
             }
@@ -67,5 +67,10 @@ public final class CostCenterService {
         }
 
         return costCenterLines;
+    }
+
+    private InputStream getCostCenterFile(){
+        ClassLoader classLoader = CostCenterService.class.getClassLoader();
+        return classLoader.getResourceAsStream(FileConstansts.COST_CENTERS_LOCATION);
     }
 }
