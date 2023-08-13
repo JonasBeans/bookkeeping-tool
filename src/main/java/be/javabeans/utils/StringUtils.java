@@ -7,7 +7,10 @@ public class StringUtils {
     public static Predicate<String> isNull = value -> value.trim() == null;
     public static Predicate<String> isBlank = String::isBlank;
     public static Predicate<String> isEmpty = String::isEmpty;
+    private static Predicate<String> isYes = (value) -> value.equalsIgnoreCase("y");
+    private static Predicate<String> isNo = (value) -> value.equalsIgnoreCase("n");
     public static Predicate<String> validateString = isNull.and(isBlank).and(isEmpty).negate();
+    public static Predicate<String> validateConfirmation = validateString.and(isYes).or(isNo);
 
     /**
      * @Case: To convert a string to BigDecimal the European way of representing a decimal is not possible.

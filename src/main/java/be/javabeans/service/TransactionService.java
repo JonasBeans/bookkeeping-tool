@@ -17,14 +17,18 @@ import java.util.function.Predicate;
 import static be.javabeans.constants.FileConstansts.ACCOUNTING_WORKBOOK_LOCATION;
 import static be.javabeans.constants.TransactionConstants.SEPERATOR;
 import static be.javabeans.utils.CommandLineUtils.getCommandLineInput;
+import static be.javabeans.utils.StringUtils.validateConfirmation;
 
 @Slf4j
 public final class TransactionService {
      private static TransactionService instance;
      private final TransactionsWorkbookSheet sheet;
+     private final CostCenterService costCenterService;
      private Predicate<String> validateCostCenter = (value) -> CostCenterService.getInstance().getCostCenterIndexes().contains(Integer.valueOf(value));
+
     private TransactionService(){
         this.sheet = new TransactionsWorkbookSheet(ACCOUNTING_WORKBOOK_LOCATION);
+        this.costCenterService = CostCenterService.getInstance();
     }
 
     public static TransactionService getInstance(){
@@ -40,7 +44,7 @@ public final class TransactionService {
 
         List<CSVObject> transactionsFromFile = reader.convert(transactionCSVMapper);
         List<Transaction> transactions = appointCostCentersToTransactions(transactionsFromFile);
-        transactions.forEach(this::tryToReadTransactionSheet);
+        transactions.stream().sorted().forEach(this::tryToReadTransactionSheet);
     }
 
     private void tryToReadTransactionSheet(Transaction transaction) {
@@ -56,10 +60,13 @@ public final class TransactionService {
         for (CSVObject transaction : transactonsFromFile) {
             System.out.printf("%s\n%s\n%s\n", SEPERATOR, transaction.toString(), SEPERATOR);
             System.out.print("On which cost center to put: ");
-            String chosenCostCenter = getCommandLineInput(validateCostCenter);
 
-            //todo add cost center confirmation
-            System.out.printf("Transaction was put on cost center: %s\n", chosenCostCenter);
+            //Cost center is being chosen by the user
+            String chosenCostCenter;
+            do {
+                chosenCostCenter = getCommandLineInput(validateCostCenter);
+            } while (!confirmChoice(chosenCostCenter));
+            printChoice(chosenCostCenter, "\nTransaction was put on cost center: %s\n");
 
             transactions.add(
                     TransactionMapper.toTransactionWithCostCenter((TransactionDTO) transaction, chosenCostCenter)
@@ -67,5 +74,17 @@ public final class TransactionService {
             System.out.println();
         }
         return transactions;
+    }
+
+    private void printChoice(String chosenCostCenter, String format) {
+        Integer chosenCostCenterIndex = Integer.valueOf(chosenCostCenter);
+        System.out.printf(format,
+                costCenterService.findCostByIndex(chosenCostCenterIndex));
+    }
+
+    private boolean confirmChoice(String choice){
+        printChoice(choice, "Chosen cost center: %s\n");
+        System.out.print("Confirm cost center(y/n): ");
+        return getCommandLineInput(validateConfirmation).equalsIgnoreCase("y");
     }
 }
