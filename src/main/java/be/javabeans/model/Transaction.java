@@ -1,5 +1,6 @@
 package be.javabeans.model;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,10 +12,9 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class Transaction {
-    private LocalDate bookDate;
+    public LocalDate bookDate;
     private LocalDate transactionDate;
     private BigDecimal amount;
     private String nameOtherParty;
     private Integer costCenterIndex;
-
 }

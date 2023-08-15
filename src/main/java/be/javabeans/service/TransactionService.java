@@ -22,10 +22,10 @@ import static be.javabeans.utils.StringUtils.validateConfirmation;
 
 @Slf4j
 public final class TransactionService {
-     private static TransactionService instance;
-     private final TransactionsWorkbookSheet sheet;
-     private final CostCenterService costCenterService;
-     private Predicate<String> validateCostCenter = (value) -> CostCenterService.getInstance().getCostCenterIndexes().contains(Integer.valueOf(value));
+    private static TransactionService instance;
+    private final TransactionsWorkbookSheet sheet;
+    private final CostCenterService costCenterService;
+    private Predicate<String> validateCostCenter = (value) -> CostCenterService.getInstance().getCostCenterIndexes().contains(Integer.valueOf(value));
 
     private TransactionService(){
         this.sheet = new TransactionsWorkbookSheet(ACCOUNTING_WORKBOOK_LOCATION);
@@ -42,7 +42,7 @@ public final class TransactionService {
     public void processTransactionsToBookkeeping(String fileName){
         FileReaderUtil reader = new FileReaderUtil(fileName);
         TransactionCSVMapper transactionCSVMapper = new TransactionCSVMapper();
-        Comparator<Transaction> compareDates = Comparator.comparing(Transaction::getTransactionDate).reversed();
+        Comparator<Transaction> compareDates = Comparator.comparing(Transaction::getTransactionDate);
 
         List<CSVObject> transactionsFromFile = reader.convert(transactionCSVMapper);
         List<Transaction> transactions = appointCostCentersToTransactions(transactionsFromFile);
@@ -71,10 +71,11 @@ public final class TransactionService {
                 chosenCostCenter = getCommandLineInput(validateCostCenter);
             } while (!confirmChoice(chosenCostCenter));
             printChoice(chosenCostCenter, "\nTransaction was put on cost center: %s\n");
-
-            transactions.add(
-                    TransactionMapper.toTransactionWithCostCenter((TransactionDTO) transaction, chosenCostCenter)
-            );
+            if(!chosenCostCenter.equals("skip")){
+                transactions.add(
+                        TransactionMapper.toTransactionWithCostCenter((TransactionDTO) transaction, chosenCostCenter)
+                );
+            }
             System.out.println();
         }
         return transactions;
