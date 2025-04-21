@@ -1,0 +1,22 @@
+skip,false,1
+Andere kosten,true,7
+Belastingen,true,8
+Huur,true,9
+Hobby's,true,10
+voedsel,true,11
+kleding,true,12
+verzekering,true,13
+Kosten voertuigen,true,14
+Ontspanning,true,15
+Online Aankopen,true,16
+Gezondheid,true,17
+Openstaande schuld,true,18
+Sport,true,19
+School,true,20
+Transactiekosten,true,21
+Salaris/loon,false,22
+Inkomsten uit rente en dividenden, false,23
+Vorderingen,false,24
+Intertransfer bank,false,25
+Zakgeld,false,26
+Diverse Inkomsten,false,27
