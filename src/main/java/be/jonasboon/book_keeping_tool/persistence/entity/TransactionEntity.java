@@ -4,10 +4,12 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Document(collation = "transactions")
 @Builder(setterPrefix = "with")
 @EqualsAndHashCode
 @Getter

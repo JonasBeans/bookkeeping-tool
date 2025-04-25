@@ -1,8 +1,7 @@
 package be.jonasboon.book_keeping_tool.controllers;
 
 import be.jonasboon.book_keeping_tool.model.Transaction;
-import be.jonasboon.book_keeping_tool.persistence.entity.TransactionEntity;
-import be.jonasboon.book_keeping_tool.service.TransactionService;
+import be.jonasboon.book_keeping_tool.service.transaction.TransactionService;
 import be.jonasboon.book_keeping_tool.utils.FileReaderUtil;
 import com.opencsv.CSVReader;
 import lombok.AllArgsConstructor;

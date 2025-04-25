@@ -2,15 +2,14 @@ package be.jonasboon.book_keeping_tool.model;
 
 import lombok.*;
 
+@Builder(setterPrefix = "with")
+@AllArgsConstructor
 @Getter
 @Setter
-@Builder(setterPrefix = "with")
-@EqualsAndHashCode
-@AllArgsConstructor
 public class CostCenter {
-        String costCenter;
-        Boolean isCost;
-        Integer index;
+        private String costCenter;
+        private Boolean isCost;
+        private Integer index;
 }
 
 
