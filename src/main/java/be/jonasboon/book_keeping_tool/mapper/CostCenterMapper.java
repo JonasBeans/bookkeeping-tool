@@ -33,4 +33,12 @@ public class CostCenterMapper {
                 .build();
     }
 
+    public static CostCenterDTO fromEntity(CostCenterEntity entity){
+        return CostCenterDTO.builder()
+                .withCostCenter(entity.getCostCenter())
+                .withIsCost(entity.getIsCost())
+                .withIndex(entity.getIndex())
+                .build();
+    }
+
 }

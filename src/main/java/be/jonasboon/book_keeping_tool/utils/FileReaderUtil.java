@@ -30,7 +30,7 @@ public class FileReaderUtil {
         try {
             List<CSVObject> csvObjects = new ArrayList<>();
             String[] header = reader.readNext();
-            Arrays.stream(header).forEach(log::info);
+            log.info("Headers: {}", Arrays.stream(header).reduce("", (result, item) -> result.concat(", " + item)));
             String[] row;
             while((row = reader.readNext()) != null){
                 CSVObject convertedItem = map(row, mapper);

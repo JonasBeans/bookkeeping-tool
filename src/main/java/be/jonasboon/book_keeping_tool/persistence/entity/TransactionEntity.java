@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Document(collation = "transactions")
+@Document(collection = "transactions")
 @Builder(setterPrefix = "with")
 @EqualsAndHashCode
 @Getter
@@ -19,5 +19,5 @@ public class TransactionEntity {
     private LocalDate transactionDate;
     private BigDecimal amount;
     private String nameOtherParty;
-    private Integer costCenterIndex;
+    private String costCenter;
 }
