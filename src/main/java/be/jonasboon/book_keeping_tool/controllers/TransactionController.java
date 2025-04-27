@@ -5,6 +5,7 @@ import be.jonasboon.book_keeping_tool.service.transaction.TransactionService;
 import be.jonasboon.book_keeping_tool.utils.FileReaderUtil;
 import com.opencsv.CSVReader;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,8 +24,9 @@ public class TransactionController {
     }
 
     @PostMapping(value = "/upload/transaction-file")
-    public String uploadTransactions(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Void> uploadTransactions(@RequestParam("file") MultipartFile file) {
         CSVReader reader = FileReaderUtil.supply(file);
-        return transactionService.process(reader);
+        transactionService.process(reader);
+        return ResponseEntity.ok().build();
     }
 }
