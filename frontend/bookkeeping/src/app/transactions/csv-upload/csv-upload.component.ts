@@ -1,9 +1,12 @@
 import {Component, inject} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpEvent, HttpEventType} from '@angular/common/http';
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {Transaction} from "../../../dto/transaction";
 import {CostCenterService} from "../../services/cost-center.service";
 import {MatTableModule} from "@angular/material/table";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatOption, MatSelectModule} from "@angular/material/select";
+import {FormsModule} from "@angular/forms";
 
 
 @Component({
@@ -11,7 +14,12 @@ import {MatTableModule} from "@angular/material/table";
 	templateUrl: './csv-upload.component.html',
 	imports: [
 		NgIf,
-		MatTableModule
+		MatTableModule,
+		MatFormFieldModule,
+		MatSelectModule,
+		MatOption,
+		FormsModule,
+		NgForOf
 	],
 	standalone: true,
 	styleUrl: "csv-upload.component.css"
@@ -23,7 +31,7 @@ export class CsvUploadComponent {
 	error: string | null = null;
 	transactions: Transaction[] = [];
 	costCenterService: CostCenterService = inject(CostCenterService);
-	displayedColumns: string[] = ['bookDate','transactionDate', 'amount', 'nameOtherParty'];
+	displayedColumns: string[] = ['bookDate','transactionDate', 'amount', 'nameOtherParty', 'costCenter'];
 
 	constructor(private http: HttpClient) {
 	}
