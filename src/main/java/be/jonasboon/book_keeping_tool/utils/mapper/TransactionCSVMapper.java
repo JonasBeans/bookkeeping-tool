@@ -3,10 +3,11 @@ package be.jonasboon.book_keeping_tool.utils.mapper;
 import be.jonasboon.book_keeping_tool.DTO.TransactionDTO;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import static be.jonasboon.book_keeping_tool.constants.DateConstants.TRANSACTION_DATE_TIME_FORMATTER;
-import static be.jonasboon.book_keeping_tool.utils.StringUtils.convertEuropeanDecimal;
+import static be.jonasboon.book_keeping_tool.utils.StringUtils.removeCommas;
 import static be.jonasboon.book_keeping_tool.utils.StringUtils.validateString;
 
 public class TransactionCSVMapper implements CSVFileMapper {
@@ -41,14 +42,17 @@ public class TransactionCSVMapper implements CSVFileMapper {
 
     private BigDecimal convertAmount(String value){
         if (value == null) throw new NullPointerException("Amount is empty");
-        value = convertEuropeanDecimal.apply(value);
+        value = removeCommas.apply(value);
         try {
-            return new BigDecimal(value);
+            BigDecimal result = new BigDecimal(value);
+            result = result.setScale(2, RoundingMode.HALF_UP);
+            return result;
         } catch (NumberFormatException e) {
-            throw new RuntimeException("Could not convert amount to a number while reading CSV file");
+            throw new RuntimeException(String.format("Could not convert amount %s to a number while reading CSV file", value));
         }
 
     }
+
     private LocalDate convertTransactionDate(String date){
         if(validateString.test(date))
             return LocalDate.parse(date, TRANSACTION_DATE_TIME_FORMATTER);

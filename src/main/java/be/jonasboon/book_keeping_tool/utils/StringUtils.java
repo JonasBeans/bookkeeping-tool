@@ -22,11 +22,12 @@ public class StringUtils {
      * @Case: To convert a string to BigDecimal the European way of representing a decimal is not possible.
      * That's why separating points should be removed.
      */
-    public static Function<String, String> removeSeperatingPoint = (value) -> value.replace(".","");
+    public static Function<String, String> removeSeparatingPoint = (value) -> value.replace(".","");
+    public static Function<String, String> removeCommas = (value) -> org.apache.commons.lang3.StringUtils.remove(value, ",");
 
     /**
      * @Description Convert a European Decimal for example to convert a string to a BigDecimal
      * @Example 2.000,00 => 2000,00
      */
-    public static Function<String,String> convertEuropeanDecimal = removeSeperatingPoint.andThen(convertCommaToPoint);
+    public static Function<String,String> convertEuropeanDecimal = removeSeparatingPoint.andThen(convertCommaToPoint);
 }
