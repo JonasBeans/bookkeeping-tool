@@ -42,6 +42,10 @@ export class CsvUploadComponent {
 		this.error = null;
 	}
 
+	assign() {
+		this.http.put('http://localhost:8080/transactions/assigned', this.transactions).subscribe();
+	}
+
 	upload() {
 		if (!this.file) return;
 
@@ -51,24 +55,25 @@ export class CsvUploadComponent {
 		this.uploading = true;
 		this.progress = 0;
 
-		this.http.post('http://localhost:8080/transactions/upload/transaction-file', formData, {
+		this.http.post<Transaction[]>('http://localhost:8080/transactions/upload/transaction-file', formData, {
 			reportProgress: true,
 			observe: 'events'
 		}).subscribe({
-				next: (response) => this.execute_upload(response),
+				next: (response: HttpEvent<Transaction[]>) => this.execute_upload(response),
 				error: (error: HttpErrorResponse) => this.handle_upload_error(error)
 			}
 		);
 	}
 
-	execute_upload(event: HttpEvent<Object>) {
+	execute_upload(event: HttpEvent<Transaction[]>) {
 		if (event.type === HttpEventType.UploadProgress && event.total) {
 			this.progress = Math.round((event.loaded / event.total) * 100);
 		} else if (event.type === HttpEventType.Response) {
 			this.progress = 100;
 			this.uploading = false;
+			this.transactions = event.body || [];
 		}
-		this.load_transaction();
+
 		console.log(this.transactions);
 	}
 
@@ -78,10 +83,5 @@ export class CsvUploadComponent {
 		this.progress = -1;
 	}
 
-	load_transaction() {
-		this.http.get<Transaction[]>("http://localhost:8080/transactions/all").subscribe((response) => {
-			this.transactions = response
-		})
-	}
 
 }

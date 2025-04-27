@@ -2,14 +2,13 @@ package be.jonasboon.book_keeping_tool.service.transaction;
 
 import be.jonasboon.book_keeping_tool.mapper.TransactionMapper;
 import be.jonasboon.book_keeping_tool.model.Transaction;
+import be.jonasboon.book_keeping_tool.persistence.entity.TransactionEntity;
 import be.jonasboon.book_keeping_tool.persistence.repository.TransactionRepository;
-import be.jonasboon.book_keeping_tool.service.cost_center.CostCenterService;
 import be.jonasboon.book_keeping_tool.utils.FileReaderUtil;
 import be.jonasboon.book_keeping_tool.utils.mapper.CSVObject;
 import be.jonasboon.book_keeping_tool.utils.mapper.TransactionCSVMapper;
 import com.opencsv.CSVReader;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.actuate.metrics.data.DefaultRepositoryTagsProvider;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,14 +17,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public final class TransactionService {
-    private final CostCenterService costCenterService;
     private final TransactionRepository transactionRepository;
-    private final DefaultRepositoryTagsProvider repositoryTagsProvider;
 
-    private TransactionService(CostCenterService costCenterService, TransactionRepository transactionRepository, DefaultRepositoryTagsProvider repositoryTagsProvider) {
-        this.costCenterService = costCenterService;
+    private TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
-        this.repositoryTagsProvider = repositoryTagsProvider;
     }
 
     public List<Transaction> getAllTransactions() {
@@ -34,11 +29,14 @@ public final class TransactionService {
                 .collect(Collectors.toList());
     }
 
-    public String process(CSVReader csvReader) {
+    public List<Transaction> process(CSVReader csvReader) {
+        transactionRepository.deleteAll();
+
         FileReaderUtil
                 .convert( new TransactionCSVMapper(), csvReader)
                 .forEach(this::save);
-        return "File uploaded!";
+
+        return transactionRepository.findAll().stream().map(TransactionMapper::from).toList();
     }
 
     public void save(CSVObject transactions) {
@@ -47,4 +45,9 @@ public final class TransactionService {
         );
     }
 
+    public List<Transaction> loadAssigned(List<Transaction> transactions) {
+        List<TransactionEntity> mappedTransactions = transactions.stream().map(TransactionMapper::from).toList();
+        transactionRepository.saveAll(mappedTransactions) ;
+        return transactionRepository.findAll().stream().map(TransactionMapper::from).toList();
+    }
 }
