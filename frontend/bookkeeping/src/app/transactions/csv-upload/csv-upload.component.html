@@ -4,17 +4,30 @@
 	<input type="file" accept=".csv" (change)="onFileSelected($event)"
 		   class="file:border file:rounded-lg file:px-4 file:py-2"/>
 
-	<button [disabled]="transactions === []" (click)="assign()" class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
-		Assign
-	</button>
+
 	<button [disabled]="!file || uploading" (click)="upload()"
 			class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
-		{{ uploading ? 'Uploading…' : 'Upload' }}
+		{{ uploading ? 'Uploading…' : '1 Upload' }}
+	</button>
+	<button [disabled]="!file" (click)="assign()" class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
+		2 Assign
+	</button>
+	<button [disabled]="!assign_upload"
+			class="px-6 py-2 rounded-xl shadow disabled:opacity-40"
+			(click)="save()">
+		3 Save
 	</button>
 
 	<p *ngIf="progress>=0 && progress<100" class="text-sm">Uploading… {{ progress }}%</p>
 	<p *ngIf="progress===100" class="text-sm text-green-600">Upload complete ✓</p>
 	<p *ngIf="error" class="text-sm text-red-600">{{ error }}</p>
+
+	<p *ngIf="assign_upload" class="text-sm text-green-600">Assigning complete ✓</p>
+	<p *ngIf="assign_error" class="text-sm text-red-600">{{ assign_error }}</p>
+
+	<p *ngIf="save_ok" class="text-sm text-green-600">Save complete ✓</p>
+	<p *ngIf="save_error" class="text-sm text-red-600">{{ save_error }}</p>
+
 </div>
 <table mat-table [dataSource]="transactions">
 	<ng-container matColumnDef="bookDate">

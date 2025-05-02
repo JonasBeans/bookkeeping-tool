@@ -7,6 +7,7 @@ import be.jonasboon.book_keeping_tool.persistence.repository.TransactionReposito
 import be.jonasboon.book_keeping_tool.utils.FileReaderUtil;
 import be.jonasboon.book_keeping_tool.utils.mapper.CSVObject;
 import be.jonasboon.book_keeping_tool.utils.mapper.TransactionCSVMapper;
+import be.jonasboon.book_keeping_tool.workbook.TransactionsWorkbookSheet;
 import com.opencsv.CSVReader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,11 @@ import java.util.stream.Collectors;
 @Service
 public final class TransactionService {
     private final TransactionRepository transactionRepository;
+    private final TransactionsWorkbookSheet transactionsWorkbookSheet;
 
-    private TransactionService(TransactionRepository transactionRepository) {
+    private TransactionService(TransactionRepository transactionRepository, TransactionsWorkbookSheet transactionsWorkbookSheet) {
         this.transactionRepository = transactionRepository;
+        this.transactionsWorkbookSheet = transactionsWorkbookSheet;
     }
 
     public List<Transaction> getAllTransactions() {
@@ -49,5 +52,13 @@ public final class TransactionService {
         List<TransactionEntity> mappedTransactions = transactions.stream().map(TransactionMapper::from).toList();
         transactionRepository.saveAll(mappedTransactions) ;
         return transactionRepository.findAll().stream().map(TransactionMapper::from).toList();
+    }
+
+    public void saveToFile() {
+        transactionRepository
+                .findAll()
+                .stream()
+                .map(TransactionMapper::from)
+                .forEach(transactionsWorkbookSheet::processTransactionToAccountingFile);
     }
 }

@@ -23,4 +23,9 @@ public class TransactionEntity {
     private BigDecimal amount;
     private String nameOtherParty;
     private Integer costCenterIndex;
+
+    public boolean hasCostCenter() {
+        return costCenterIndex != null;
+    }
+
 }

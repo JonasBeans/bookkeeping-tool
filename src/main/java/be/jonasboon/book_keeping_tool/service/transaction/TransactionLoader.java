@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-public class TransActionLoader {
+public class TransactionLoader {
 
     private final TransactionRepository transactionRepository;
 

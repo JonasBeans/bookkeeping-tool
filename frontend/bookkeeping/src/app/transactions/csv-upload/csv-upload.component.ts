@@ -26,15 +26,22 @@ import {FormsModule} from "@angular/forms";
 })
 export class CsvUploadComponent {
 	file: File | null = null;
+
 	progress = -1;
 	uploading = false;
 	error: string | null = null;
+
+	assign_upload: boolean = false;
+	assign_error: string = "";
+
+	save_ok: boolean = false;
+	save_error: string = "";
+
 	transactions: Transaction[] = [];
 	costCenterService: CostCenterService = inject(CostCenterService);
 	displayedColumns: string[] = ['bookDate','transactionDate', 'amount', 'nameOtherParty', 'costCenter'];
 
-	constructor(private http: HttpClient) {
-	}
+	constructor(private http: HttpClient) {}
 
 	onFileSelected(event: Event) {
 		const input = event.target as HTMLInputElement;
@@ -43,7 +50,11 @@ export class CsvUploadComponent {
 	}
 
 	assign() {
-		this.http.put('http://localhost:8080/transactions/assigned', this.transactions).subscribe();
+		this.http.put<Transaction[]>('http://localhost:8080/transactions/assigned', this.transactions, {reportProgress: true, observe: 'events'})
+			.subscribe({
+				next: (response: HttpEvent<Transaction[]>) => this.assign_callback(response),
+				error: (error) => this.handle_assign_error(error)
+			});
 	}
 
 	upload() {
@@ -59,13 +70,21 @@ export class CsvUploadComponent {
 			reportProgress: true,
 			observe: 'events'
 		}).subscribe({
-				next: (response: HttpEvent<Transaction[]>) => this.execute_upload(response),
+				next: (response: HttpEvent<Transaction[]>) => this.upload_callback(response),
 				error: (error: HttpErrorResponse) => this.handle_upload_error(error)
 			}
 		);
 	}
 
-	execute_upload(event: HttpEvent<Transaction[]>) {
+	save() {
+		this.http.put<any>("http://localhost:8080/transactions/save-to-file", {}, {reportProgress: true, observe: "events"}).subscribe({
+			next: (response : HttpEvent<any>) => this.save_callback(response),
+			error: (error: HttpErrorResponse) => this.handle_save_error(error)
+		})
+	}
+
+	upload_callback(event: HttpEvent<Transaction[]>) {
+		console.log(event.type)
 		if (event.type === HttpEventType.UploadProgress && event.total) {
 			this.progress = Math.round((event.loaded / event.total) * 100);
 		} else if (event.type === HttpEventType.Response) {
@@ -73,8 +92,6 @@ export class CsvUploadComponent {
 			this.uploading = false;
 			this.transactions = event.body || [];
 		}
-
-		console.log(this.transactions);
 	}
 
 	handle_upload_error(error: HttpErrorResponse) {
@@ -83,5 +100,26 @@ export class CsvUploadComponent {
 		this.progress = -1;
 	}
 
+	assign_callback(event: HttpEvent<Transaction[]>) {
+		console.log(event.type)
+		if (event.type === HttpEventType.Response) {
+			this.assign_upload = true;
+		}
+	}
+
+	handle_assign_error(error: HttpErrorResponse) {
+		this.assign_error = error.message;
+		this.assign_upload = false;
+	}
+
+	save_callback(event: HttpEvent<any>) {
+		if (event.type === HttpEventType.Response) {
+			this.save_ok = true;
+		}
+	}
+
+	handle_save_error(error: HttpErrorResponse) {
+		this.save_error = error.message;
+	}
 
 }

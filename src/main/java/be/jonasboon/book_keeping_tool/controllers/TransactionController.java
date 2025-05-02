@@ -5,6 +5,7 @@ import be.jonasboon.book_keeping_tool.service.transaction.TransactionService;
 import be.jonasboon.book_keeping_tool.utils.FileReaderUtil;
 import com.opencsv.CSVReader;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,5 +32,11 @@ public class TransactionController {
     @PutMapping(value = "/assigned")
     public List<Transaction> assignTransactions(@RequestBody List<Transaction> transactions) {
         return transactionService.loadAssigned(transactions);
+    }
+
+    @PutMapping(value = "/save-to-file")
+    public ResponseEntity<Void> saveTransactionToFile() {
+        transactionService.saveToFile();
+        return ResponseEntity.ok().build();
     }
 }

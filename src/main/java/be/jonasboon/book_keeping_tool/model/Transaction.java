@@ -17,4 +17,9 @@ public class Transaction {
     private BigDecimal amount;
     private String nameOtherParty;
     private Integer costCenterIndex;
+
+    @Override
+    public String toString() {
+        return String.format("ID: %s, amount: %s", this.id, this.amount);
+    }
 }
