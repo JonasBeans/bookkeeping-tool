@@ -7,6 +7,7 @@ import {MatTableModule} from "@angular/material/table";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatOption, MatSelectModule} from "@angular/material/select";
 import {FormsModule} from "@angular/forms";
+import {BalanceSheetComponent} from "../../balance_sheet/balance-sheet/balance-sheet.component";
 
 
 @Component({
@@ -19,7 +20,8 @@ import {FormsModule} from "@angular/forms";
 		MatSelectModule,
 		MatOption,
 		FormsModule,
-		NgForOf
+		NgForOf,
+		BalanceSheetComponent
 	],
 	standalone: true,
 	styleUrl: "csv-upload.component.css"
