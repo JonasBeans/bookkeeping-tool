@@ -1,9 +1,8 @@
 <div class="flex flex-col items-center gap-4 p-6 max-w-md mx-auto bg-white shadow-xl rounded-2xl">
 	<h2 class="text-2xl font-semibold">Upload Transactions CSV</h2>
 
-	<div class="d-flex flex-column">
-		<app-balance-sheet></app-balance-sheet>
-		<div>
+	<div class="d-flex flex-row justify-content-between">
+		<div style="margin: 5px">
 			<button [disabled]="!file || uploading" (click)="upload()"
 					class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
 				{{ uploading ? 'Uploading…' : '1 Upload' }}
@@ -24,13 +23,14 @@
 			<p *ngIf="assign_upload" class="text-sm text-green-600">Assigning complete ✓</p>
 			<p *ngIf="assign_error" class="text-sm text-red-600">{{ assign_error }}</p>
 
-			<p *ngIf="saving" class="text-sm text-green-600">Save complete ✓</p>
+			<p *ngIf="saving_progress>=0 && saving_progress<100" class="text-sm text-green-600">Save complete ✓</p>
 			<p *ngIf="save_error" class="text-sm text-red-600">{{ save_error }}</p>
 
 			<input type="file" accept=".csv" (change)="onFileSelected($event)"
 				   class="file:border file:rounded-lg file:px-4 file:py-2"/>
 
 		</div>
+		<app-balance-sheet></app-balance-sheet>
 	</div>
 </div>
 
