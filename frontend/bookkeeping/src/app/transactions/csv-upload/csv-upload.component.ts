@@ -34,12 +34,14 @@ export class CsvUploadComponent {
 	assign_upload: boolean = false;
 	assign_error: string = "";
 
-	save_ok: boolean = false;
+	saving: boolean = false;
 	save_error: string = "";
+	saving_progress: number = -1;
 
 	transactions: Transaction[] = [];
 	costCenterService: CostCenterService = inject(CostCenterService);
 	displayedColumns: string[] = ['bookDate','transactionDate', 'amount', 'nameOtherParty', 'costCenter'];
+
 
 	constructor(private http: HttpClient) {}
 
@@ -77,6 +79,9 @@ export class CsvUploadComponent {
 	}
 
 	save() {
+		this.saving = true;
+		this.saving_progress = 0;
+
 		this.http.put<any>("http://localhost:8080/transactions/save-to-file", {}, {reportProgress: true, observe: "events"}).subscribe({
 			next: (response : HttpEvent<any>) => this.save_callback(response),
 			error: (error: HttpErrorResponse) => this.handle_save_error(error)
@@ -84,7 +89,6 @@ export class CsvUploadComponent {
 	}
 
 	upload_callback(event: HttpEvent<Transaction[]>) {
-		console.log(event.type)
 		if (event.type === HttpEventType.UploadProgress && event.total) {
 			this.progress = Math.round((event.loaded / event.total) * 100);
 		} else if (event.type === HttpEventType.Response) {
@@ -113,13 +117,17 @@ export class CsvUploadComponent {
 	}
 
 	save_callback(event: HttpEvent<any>) {
-		if (event.type === HttpEventType.Response) {
-			this.save_ok = true;
+		if (event.type === HttpEventType.UploadProgress && event.total) {
+			this.progress = Math.round((event.loaded / event.total) * 100)
+		} else if (event.type === HttpEventType.Response) {
+			this.saving = false;
 		}
 	}
 
 	handle_save_error(error: HttpErrorResponse) {
 		this.save_error = error.message;
+		this.saving = false;
+		this.saving_progress = -1;
 	}
 
 	protected readonly CostCenterService = CostCenterService;
