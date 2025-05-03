@@ -7,7 +7,8 @@ import be.jonasboon.book_keeping_tool.persistence.repository.TransactionReposito
 import be.jonasboon.book_keeping_tool.utils.FileReaderUtil;
 import be.jonasboon.book_keeping_tool.utils.mapper.CSVObject;
 import be.jonasboon.book_keeping_tool.utils.mapper.TransactionCSVMapper;
-import be.jonasboon.book_keeping_tool.workbook.TransactionsWorkbookSheet;
+import be.jonasboon.book_keeping_tool.workbook.BalanceSheetUpdater;
+import be.jonasboon.book_keeping_tool.workbook.BalanceSheetUpdatingService;
 import com.opencsv.CSVReader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,11 @@ import static be.jonasboon.book_keeping_tool.service.transaction.TransactionVali
 @Service
 public final class TransactionService {
     private final TransactionRepository transactionRepository;
-    private final TransactionsWorkbookSheet transactionsWorkbookSheet;
+    private final BalanceSheetUpdater balanceSheetUpdatingService;
 
-    private TransactionService(TransactionRepository transactionRepository, TransactionsWorkbookSheet transactionsWorkbookSheet) {
+    private TransactionService(TransactionRepository transactionRepository, BalanceSheetUpdatingService balanceSheetUpdatingService) {
         this.transactionRepository = transactionRepository;
-        this.transactionsWorkbookSheet = transactionsWorkbookSheet;
+        this.balanceSheetUpdatingService = balanceSheetUpdatingService;
     }
 
     public List<Transaction> getAllTransactions() {
@@ -36,11 +37,9 @@ public final class TransactionService {
 
     public List<Transaction> process(CSVReader csvReader) {
         transactionRepository.deleteAll();
-
         FileReaderUtil
                 .convert(new TransactionCSVMapper(), csvReader)
                 .forEach(this::save);
-
         return transactionRepository.findAll().stream().map(TransactionMapper::from).toList();
     }
 
@@ -60,8 +59,6 @@ public final class TransactionService {
         List<TransactionEntity> transactions = transactionRepository.findAll();
         validateAllHaveCostCenters(transactions);
         transactions.stream().map(TransactionMapper::from)
-                .forEach(transactionsWorkbookSheet::processTransactionToAccountingFile);
+                .forEach(balanceSheetUpdatingService::processTransactionToAccountingFile);
     }
-
-
 }
