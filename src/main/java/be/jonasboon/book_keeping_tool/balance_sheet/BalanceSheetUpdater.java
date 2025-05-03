@@ -1,4 +1,4 @@
-package be.jonasboon.book_keeping_tool.workbook;
+package be.jonasboon.book_keeping_tool.balance_sheet;
 
 import be.jonasboon.book_keeping_tool.model.Transaction;
 import lombok.extern.slf4j.Slf4j;

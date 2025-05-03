@@ -34,7 +34,7 @@ export class BalanceSheetComponent {
 		this.uploading = true;
 		this.progress = 0;
 
-		this.http.post<Transaction[]>('http://localhost:8080/balance-sheet/', formData, {
+		this.http.post<Transaction[]>('http://localhost:8080/balance-sheet/upload', formData, {
 			reportProgress: true,
 			observe: 'events'
 		}).subscribe({
@@ -42,6 +42,17 @@ export class BalanceSheetComponent {
 				error: (error: HttpErrorResponse) => this.handle_upload_error(error)
 			}
 		);
+	}
+
+	download() {
+		this.http.get('http://localhost:8080/balance-sheet/download', {responseType: "blob"}).subscribe(blob => {
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = 'balance-sheet.xlsx';
+			a.click();
+			window.URL.revokeObjectURL(url);
+		});
 	}
 
 	upload_callback(event: HttpEvent<Transaction[]>) {

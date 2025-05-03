@@ -1,4 +1,4 @@
-package be.jonasboon.book_keeping_tool.workbook;
+package be.jonasboon.book_keeping_tool.balance_sheet;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;

@@ -1,4 +1,4 @@
-package be.jonasboon.book_keeping_tool.workbook;
+package be.jonasboon.book_keeping_tool.balance_sheet;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class BalanceSheetSavingService extends BalanceSheetSaver {
     private String balanceSheetWorkingDirectory;
 
     @Setter(AccessLevel.PROTECTED)
-    @Getter(AccessLevel.PROTECTED)
+    @Getter(AccessLevel.PUBLIC)
     private String balanceSheetFileName;
 
     @Override

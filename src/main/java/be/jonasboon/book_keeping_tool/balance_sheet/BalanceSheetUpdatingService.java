@@ -1,4 +1,4 @@
-package be.jonasboon.book_keeping_tool.workbook;
+package be.jonasboon.book_keeping_tool.balance_sheet;
 
 import be.jonasboon.book_keeping_tool.model.Transaction;
 import lombok.AllArgsConstructor;
@@ -14,8 +14,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import static be.jonasboon.book_keeping_tool.balance_sheet.BalanceSheetPlotter.*;
 import static be.jonasboon.book_keeping_tool.constants.TransactionConstants.ACCOUNTING_WORKSHEET;
-import static be.jonasboon.book_keeping_tool.workbook.BalanceSheetPlotter.*;
 
 @AllArgsConstructor
 @Service

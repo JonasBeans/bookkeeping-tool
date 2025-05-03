@@ -1,4 +1,4 @@
-package be.jonasboon.book_keeping_tool.workbook;
+package be.jonasboon.book_keeping_tool.balance_sheet;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +9,7 @@ public abstract class BalanceSheetSaver {
 
     public abstract void saveBalanceSheet(MultipartFile file) throws IOException;
 
-    protected abstract String getBalanceSheetFileName();
+    public abstract String getBalanceSheetFileName();
     protected abstract String getBalanceSheetWorkingDirectory();
     protected abstract void setBalanceSheetFileName(String fileName);
 

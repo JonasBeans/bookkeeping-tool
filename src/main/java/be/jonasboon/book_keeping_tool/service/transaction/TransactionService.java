@@ -1,5 +1,7 @@
 package be.jonasboon.book_keeping_tool.service.transaction;
 
+import be.jonasboon.book_keeping_tool.balance_sheet.BalanceSheetUpdater;
+import be.jonasboon.book_keeping_tool.balance_sheet.BalanceSheetUpdatingService;
 import be.jonasboon.book_keeping_tool.mapper.TransactionMapper;
 import be.jonasboon.book_keeping_tool.model.Transaction;
 import be.jonasboon.book_keeping_tool.persistence.entity.TransactionEntity;
@@ -7,8 +9,6 @@ import be.jonasboon.book_keeping_tool.persistence.repository.TransactionReposito
 import be.jonasboon.book_keeping_tool.utils.FileReaderUtil;
 import be.jonasboon.book_keeping_tool.utils.mapper.CSVObject;
 import be.jonasboon.book_keeping_tool.utils.mapper.TransactionCSVMapper;
-import be.jonasboon.book_keeping_tool.workbook.BalanceSheetUpdater;
-import be.jonasboon.book_keeping_tool.workbook.BalanceSheetUpdatingService;
 import com.opencsv.CSVReader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

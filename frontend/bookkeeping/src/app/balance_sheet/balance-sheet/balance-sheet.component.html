@@ -1,3 +1,7 @@
+<button (click)="download()"
+        class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
+    Download
+</button>
 <button [disabled]="!file || uploading" (click)="upload()"
 		class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
 	{{ uploading ? 'Uploading…' : 'Upload balance sheet' }}
