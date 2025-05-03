@@ -122,4 +122,5 @@ export class CsvUploadComponent {
 		this.save_error = error.message;
 	}
 
+	protected readonly CostCenterService = CostCenterService;
 }

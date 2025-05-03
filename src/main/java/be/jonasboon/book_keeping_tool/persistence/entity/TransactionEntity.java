@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Document(collection = "transactions")
 @Builder(setterPrefix = "with")
@@ -24,8 +25,8 @@ public class TransactionEntity {
     private String nameOtherParty;
     private Integer costCenterIndex;
 
-    public boolean hasCostCenter() {
-        return costCenterIndex != null;
+    public boolean hasNoCostCenter() {
+        return Objects.isNull(costCenterIndex) ;
     }
 
 }

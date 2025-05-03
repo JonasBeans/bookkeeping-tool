@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static be.jonasboon.book_keeping_tool.service.transaction.TransactionValidator.validateAllHaveCostCenters;
+
 @Slf4j
 @Service
 public final class TransactionService {
@@ -36,7 +38,7 @@ public final class TransactionService {
         transactionRepository.deleteAll();
 
         FileReaderUtil
-                .convert( new TransactionCSVMapper(), csvReader)
+                .convert(new TransactionCSVMapper(), csvReader)
                 .forEach(this::save);
 
         return transactionRepository.findAll().stream().map(TransactionMapper::from).toList();
@@ -50,15 +52,16 @@ public final class TransactionService {
 
     public List<Transaction> loadAssigned(List<Transaction> transactions) {
         List<TransactionEntity> mappedTransactions = transactions.stream().map(TransactionMapper::from).toList();
-        transactionRepository.saveAll(mappedTransactions) ;
+        transactionRepository.saveAll(mappedTransactions);
         return transactionRepository.findAll().stream().map(TransactionMapper::from).toList();
     }
 
-    public void saveToFile() {
-        transactionRepository
-                .findAll()
-                .stream()
-                .map(TransactionMapper::from)
+    public void saveToFile() throws TransactionValidator.ValidationException {
+        List<TransactionEntity> transactions = transactionRepository.findAll();
+        validateAllHaveCostCenters(transactions);
+        transactions.stream().map(TransactionMapper::from)
                 .forEach(transactionsWorkbookSheet::processTransactionToAccountingFile);
     }
+
+
 }
