@@ -1,7 +1,7 @@
 FROM maven:3.9.9-eclipse-temurin-21 AS backend-builder
 WORKDIR /code
 COPY . /code/
-RUN mvn -f /code/pom.xml clean package -DskipTests=true
+RUN mvn -f /code/pom.xml clean package -P build-frontend -DskipTests=true
 
 FROM eclipse-temurin:21-jre-jammy
 ARG JAR_FILE=/code/target/*-exec.jar
