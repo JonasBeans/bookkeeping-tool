@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    command: ["--noauth"]
+    ports:
+      - "27017:27017"
+
+  springboot-app:
+    image: javabeans108/bookkeeping-tool:latest       # Replace with your built image name
+    container_name: bookkeeping-tool
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/bookkeeping
+    depends_on:
+      - mongo
