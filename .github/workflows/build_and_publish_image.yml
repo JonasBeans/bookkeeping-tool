@@ -37,8 +37,4 @@ jobs:
       - name: Set next version
         run: | 
           mvn versions:set -DnewVersion=${{ inputs.next-version }} -DgenerateBackupPoms=false
-          git config --global user.name ${{ secrets.CI_GITHUB_USER }}
-          git config --global user.email ${{ secrets.CI_GITHUB_EMAIL }}
-          git add *
-          git commit -m "Set next version to ${{ inputs.next-version }}"
-          git push
+      - uses: stefanzweifel/git-auto-commit-action@v6
