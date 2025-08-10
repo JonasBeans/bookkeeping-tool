@@ -127,7 +127,7 @@ export class CsvUploadComponent {
 	}
 
 	handle_save_error(error: HttpErrorResponse) {
-		this.save_error = error.message;
+		this.save_error = error.error;
 		this.saving = false;
 		this.saving_progress = -1;
 	}

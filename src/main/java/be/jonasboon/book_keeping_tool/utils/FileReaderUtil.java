@@ -8,7 +8,8 @@ import com.opencsv.exceptions.CsvValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,7 @@ public class FileReaderUtil {
         try {
             List<CSVObject> csvObjects = new ArrayList<>();
             String[] header = reader.readNext();
-            log.info("Headers: {}", Arrays.stream(header).reduce("", (result, item) -> result.concat(", " + item)));
+            log.debug("Headers: {}", Arrays.stream(header).reduce("", (result, item) -> result.concat(", " + item)));
             String[] row;
             while((row = reader.readNext()) != null){
                 CSVObject convertedItem = map(row, mapper);
