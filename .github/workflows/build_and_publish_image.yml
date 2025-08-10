@@ -7,7 +7,10 @@ on:
         description: 'Set docker image version'
         required: true
         type: string
-
+      next-version:
+        description: 'Set next version'
+        required: true
+        type: string
 jobs:
   build_image:
     name: Build and Push Docker Image
@@ -21,7 +24,7 @@ jobs:
         uses: actions/setup-node@4.3.0
         with:
           node-version: 22.x
-          
+
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USER }}" --password-stdin
 
@@ -30,3 +33,12 @@ jobs:
 
       - name: Push Docker Image
         run: docker push javabeans108/bookkeeping-tool:${{ inputs.version }}
+
+      - name: Set next version
+        run: | 
+          mvn versions:set -DnewVersion=${{ inputs.next-version }} -DgenerateBackupPoms=false
+          git config --global user.name ${{ secrets.CI_GITHUB_USER }}
+          git config --global user.email ${{ secrets.CI_GITHUB_EMAIL }}
+          git add *
+          git commit -m "Set next version to ${{ inputs.next-version }}"
+          git push
