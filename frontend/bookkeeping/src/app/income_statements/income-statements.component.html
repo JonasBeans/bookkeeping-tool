@@ -1,0 +1,36 @@
+<div class="container">
+	<div class="row">
+		<div class="col">
+			<table class="table">
+				<thead>
+				<tr>
+					<th>Incomes</th>
+					<th>Amount</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr *ngFor="let cost_center of this.costCenterService.incomes; index as i">
+					<td>{{ cost_center.costCenter }}</td>
+					<td>{{ cost_center.totalAmount | currency: 'EUR' }}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col">
+			<table class="table">
+				<thead>
+				<tr>
+					<th>Costs</th>
+					<th>Amount</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr *ngFor="let cost_center of this.costCenterService.costs; index as i">
+					<td>{{ cost_center.costCenter }}</td>
+					<td>{{ cost_center.totalAmount | currency: 'EUR' }}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

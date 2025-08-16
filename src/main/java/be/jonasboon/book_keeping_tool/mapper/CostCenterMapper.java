@@ -38,6 +38,7 @@ public class CostCenterMapper {
                 .withCostCenter(entity.getCostCenter())
                 .withIsCost(entity.getIsCost())
                 .withIndex(entity.getIndex())
+                .withTotalAmount(entity.getTotalAmount())
                 .build();
     }
 

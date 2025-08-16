@@ -2,3 +2,41 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+}
+.navbar {
+	display: flex;
+	justify-content: flex-start ;
+	align-items: start;
+	gap: 1rem;
+	padding: 0.5rem 1rem;
+}
+.navbar > li > a {
+	text-decoration: none;
+	padding: 0.5rem 1rem;
+}
+.navbar > a > button:hover {
+	border-radius: 4px;
+}
+
+.income-statement-cost-centers {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.cost-center {
+	font-weight: bold;
+}
+
+.cost {
+	align-self: flex-end;
+	color: red;
+}
+
+.income {
+	align-self: flex-start;
+	color: green;
+}

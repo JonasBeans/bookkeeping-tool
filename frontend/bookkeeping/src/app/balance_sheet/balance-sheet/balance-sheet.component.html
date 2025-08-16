@@ -1,9 +1,0 @@
-<button (click)="download()"
-        class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
-    Download
-</button>
-<button [disabled]="!file || uploading" (click)="upload()"
-		class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
-	{{ uploading ? 'Uploading…' : 'Upload balance sheet' }}
-</button>
-<input id="balance-sheet" type="file" accept=".xlsx" (change)="onFileSelected($event)" placeholder="Balance sheet">
