@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpEvent, HttpEventType} from '@angular/common/http';
-import {NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {Transaction} from "../../../dto/transaction";
 import {CostCenterService} from "../../services/cost-center.service";
 import {MatTableModule} from "@angular/material/table";
@@ -21,7 +21,8 @@ import {BalanceSheetComponent} from "../../balance_sheet/balance-sheet/balance-s
 		MatOption,
 		FormsModule,
 		NgForOf,
-		BalanceSheetComponent
+		BalanceSheetComponent,
+		DatePipe
 	],
 	standalone: true,
 	styleUrl: "csv-upload.component.css"
