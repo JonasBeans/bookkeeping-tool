@@ -1,25 +1,27 @@
 Skip,false,1
 Andere kosten,true,7
-Water,true,8
-Elektriciteit & Gas,true,9
-Belastingen,true,10
-Huur,true,11
-Hobby's,true,12
-Voedsel,true,13
-Kleding,true,14
-Verzekering,true,15
-Kosten voertuigen,true,16
-Ontspanning,true,17
-Online Aankopen,true,18
-Gezondheid,true,19
-Openstaande schuld,true,20
-Sport,true,21
-School,true,22
-Transactiekosten,true,23
-Salaris/loon,false,24
-Inkomsten uit rente en dividenden, false,25
-Vorderingen,false,26
-Intertransfer bank,false,27
-Zakgeld,false,28
-Diverse Inkomsten,false,29
-Intresten,false,30
+Vakbond,true,8
+Krediet kaart,true,9
+Water,true,10
+Elektriciteit & Gas,true,11
+Belastingen,true,12
+Huur,true,13
+Hobby's,true,14
+Voedsel,true,15
+Kleding,true,16
+Verzekering,true,17
+Kosten voertuigen,true,18
+Ontspanning,true,19
+Online Aankopen,true,20
+Gezondheid,true,21
+Openstaande schuld,true,22
+Sport,true,23
+School,true,24
+Transactiekosten,true,25
+Salaris/loon,false,26
+Inkomsten uit rente en dividenden, false,27
+Vorderingen,false,28
+Intertransfer bank,false,29
+Zakgeld,false,30
+Diverse Inkomsten,false,31
+Intresten,false,32
