@@ -27,7 +27,7 @@ public class TransactionController {
 
     @PostMapping(value = "/upload/transaction-file")
     public List<TransactionDTO> uploadTransactions(@RequestParam("file") MultipartFile file) {
-        CSVReader reader = FileReaderUtil.supply(file);
+        CSVReader reader = FileReaderUtil.consume(file);
         return transactionService.process(reader);
     }
 
