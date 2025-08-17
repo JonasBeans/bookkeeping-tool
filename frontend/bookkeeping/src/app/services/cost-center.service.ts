@@ -21,4 +21,13 @@ export class CostCenterService {
 			})
 	}
 
+	refresh_data(): void {
+		this.client.get<CostCenter[]>('http://localhost:8080/api/cost-centers/all')
+			.subscribe((response) => {
+				this.all = response;
+				this.costs = this.all.filter(item => item.isCost);
+				this.incomes = this.all.filter(item => !item.isCost)
+			})
+	}
+
 }
