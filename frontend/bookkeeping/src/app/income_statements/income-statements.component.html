@@ -3,13 +3,17 @@
 		<div class="col">
 			<table class="table">
 				<thead>
-				<tr>
-					<th>Incomes</th>
+				<tr style="color:red">
+					<th>Costs</th>
 					<th>Amount</th>
 				</tr>
 				</thead>
 				<tbody>
-				<tr *ngFor="let cost_center of this.costCenterService.incomes; index as i">
+				<tr style="font-weight: bold">
+					<td>Total cost</td>
+					<td>{{this.costCenterService.accumulatedAmounts.totalCost}}</td>
+				</tr>
+				<tr *ngFor="let cost_center of this.costCenterService.costs; index as i">
 					<td>{{ cost_center.costCenter }}</td>
 					<td>{{ cost_center.totalAmount | currency: 'EUR' }}</td>
 				</tr>
@@ -20,12 +24,16 @@
 			<table class="table">
 				<thead>
 				<tr>
-					<th>Costs</th>
+					<th>Incomes</th>
 					<th>Amount</th>
 				</tr>
 				</thead>
 				<tbody>
-				<tr *ngFor="let cost_center of this.costCenterService.costs; index as i">
+				<tr style="font-weight: bold">
+					<td>Total income</td>
+					<td>{{this.costCenterService.accumulatedAmounts.totalIncome}}</td>
+				</tr>
+				<tr *ngFor="let cost_center of this.costCenterService.incomes; index as i">
 					<td>{{ cost_center.costCenter }}</td>
 					<td>{{ cost_center.totalAmount | currency: 'EUR' }}</td>
 				</tr>
