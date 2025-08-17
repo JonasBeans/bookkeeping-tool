@@ -40,4 +40,5 @@ jobs:
         run: | 
           mvn versions:set -DnewVersion=${{ inputs.next-version }} -DgenerateBackupPoms=false
       - uses: stefanzweifel/git-auto-commit-action@v6
-        commit_message: 'Set next version to ${{ inputs.next-version }}'
+        with:
+          commit_message: 'Set next version to ${{ inputs.next-version }}'
