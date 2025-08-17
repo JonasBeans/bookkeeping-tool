@@ -1,5 +1,10 @@
-<nav class="navbar">
-	<a routerLink="transactions"><button>Transactions</button></a>
-	<a routerLink="income-statements"><button>Income statements</button></a>
-</nav>
-<router-outlet></router-outlet>
+<div style="display: flex; background-color:#f7f0e5;margin-bottom: 20px;">
+	<img src="./assets/banner-cropped.webp" alt="Logo">
+	<nav class="navbar">
+		<a routerLink="transactions">Transactions</a>
+		<a routerLink="income-statements">Income statements</a>
+	</nav>
+</div>
+<main>
+	<router-outlet></router-outlet>
+</main>
