@@ -1,6 +1,6 @@
 export interface CostCenter {
-  costCenter: string;
-  isCost: boolean;
-  index: number;
-  totalAmount: number;
+	id: string;
+	costCenter: string;
+	isCost: boolean;
+	totalAmount: number;
 }

@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 public class CostCenter {
         private String costCenter;
         private Boolean isCost;
-        private Integer index;
         private BigDecimal totalAmount;
 }
 

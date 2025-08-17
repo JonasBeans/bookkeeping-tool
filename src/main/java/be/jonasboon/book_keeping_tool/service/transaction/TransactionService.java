@@ -1,7 +1,7 @@
 package be.jonasboon.book_keeping_tool.service.transaction;
 
 import be.jonasboon.book_keeping_tool.mapper.TransactionMapper;
-import be.jonasboon.book_keeping_tool.model.Transaction;
+import be.jonasboon.book_keeping_tool.model.TransactionDTO;
 import be.jonasboon.book_keeping_tool.persistence.entity.TransactionEntity;
 import be.jonasboon.book_keeping_tool.persistence.repository.TransactionRepository;
 import be.jonasboon.book_keeping_tool.service.cost_center.CostCenterService;
@@ -28,13 +28,13 @@ public final class TransactionService {
         this.costCenterService = costCenterService;
     }
 
-    public List<Transaction> getAllTransactions() {
+    public List<TransactionDTO> getAllTransactions() {
         return transactionRepository.findAll().stream()
                 .map(TransactionMapper::from)
                 .collect(Collectors.toList());
     }
 
-    public List<Transaction> process(CSVReader csvReader) {
+    public List<TransactionDTO> process(CSVReader csvReader) {
         transactionRepository.deleteAll();
         FileReaderUtil
                 .convert(new TransactionCSVMapper(), csvReader)
@@ -48,10 +48,9 @@ public final class TransactionService {
         );
     }
 
-    public List<Transaction> loadAssigned(List<Transaction> transactions) {
-        List<TransactionEntity> mappedTransactions = transactions.stream().map(TransactionMapper::from).toList();
-        transactionRepository.saveAll(mappedTransactions);
-        mappedTransactions.forEach(costCenterService::appendTotalAmount);
+    public List<TransactionDTO> loadAssigned(List<TransactionDTO> transactions) {
+        transactionRepository.saveAll(transactions.stream().map(TransactionMapper::from).toList());
+        costCenterService.updateTotalAmounts(transactions);
         return transactionRepository.findAll().stream().map(TransactionMapper::from).toList();
     }
 

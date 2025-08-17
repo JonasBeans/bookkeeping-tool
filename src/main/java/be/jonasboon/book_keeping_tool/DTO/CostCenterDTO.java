@@ -11,21 +11,19 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CostCenterDTO {
 
+    private String id;
     private String costCenter;
     private Boolean isCost;
-    private Integer index;
     private BigDecimal totalAmount;
 
-    public CostCenterDTO(String costCenter, String isCost, String index) {
+    public CostCenterDTO(String costCenter, String isCost) {
         this.costCenter = costCenter;
         this.isCost = Boolean.valueOf(isCost);
-        this.index = Integer.valueOf(index);
     }
 
-    public CostCenterDTO(String costCenter, String isCost, String index, BigDecimal totalAmount) {
+    public CostCenterDTO(String costCenter, String isCost, BigDecimal totalAmount) {
         this.costCenter = costCenter;
         this.isCost = Boolean.valueOf(isCost);
-        this.index = Integer.valueOf(index);
         this.totalAmount = totalAmount;
     }
 }

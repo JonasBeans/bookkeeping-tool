@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,16 +17,16 @@ import java.util.Objects;
 @Getter
 @Setter
 public class TransactionEntity {
-    @MongoId
+    @Id
     public String id;
     public LocalDate bookDate;
     private LocalDate transactionDate;
     private BigDecimal amount;
     private String nameOtherParty;
-    private Integer costCenterIndex;
+    private String costCenterId;
 
     public boolean hasNoCostCenter() {
-        return Objects.isNull(costCenterIndex) ;
+        return Objects.isNull(costCenterId) ;
     }
 
 }

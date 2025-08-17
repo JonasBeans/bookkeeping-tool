@@ -1,6 +1,6 @@
 package be.jonasboon.book_keeping_tool.controllers;
 
-import be.jonasboon.book_keeping_tool.model.Transaction;
+import be.jonasboon.book_keeping_tool.model.TransactionDTO;
 import be.jonasboon.book_keeping_tool.service.transaction.TransactionService;
 import be.jonasboon.book_keeping_tool.service.transaction.TransactionValidator;
 import be.jonasboon.book_keeping_tool.utils.FileReaderUtil;
@@ -21,18 +21,18 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @GetMapping("/all")
-    public List<Transaction> getAllTransactions() {
+    public List<TransactionDTO> getAllTransactions() {
         return transactionService.getAllTransactions();
     }
 
     @PostMapping(value = "/upload/transaction-file")
-    public List<Transaction> uploadTransactions(@RequestParam("file") MultipartFile file) {
+    public List<TransactionDTO> uploadTransactions(@RequestParam("file") MultipartFile file) {
         CSVReader reader = FileReaderUtil.supply(file);
         return transactionService.process(reader);
     }
 
     @PutMapping(value = "/assigned")
-    public List<Transaction> assignTransactions(@RequestBody List<Transaction> transactions) {
+    public List<TransactionDTO> assignTransactions(@RequestBody List<TransactionDTO> transactions) {
         return transactionService.loadAssigned(transactions);
     }
 

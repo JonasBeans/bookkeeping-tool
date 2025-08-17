@@ -7,7 +7,7 @@
 					class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
 				{{ uploading ? 'Uploading…' : '1 Upload' }}
 			</button>
-			<button [disabled]="!file" (click)="assign()" class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
+			<button [disabled]="transactions.length<1" (click)="assign()" class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
 				2 Assign
 			</button>
 			<button [disabled]="!assign_upload || saving"
@@ -57,17 +57,17 @@
 		<th mat-header-cell *matHeaderCellDef>Cost center</th>
 		<td mat-cell *matCellDef="let element">
 			<mat-form-field appearance="fill" style="width: 100%;">
-				<mat-select [(ngModel)]="element.costCenterIndex">
+				<mat-select [(ngModel)]="element.costCenterId">
 					<mat-optgroup label="Cost" *ngIf="costCenterService.costs.length">
 						<mat-option *ngFor="let costCenter of costCenterService.costs"
-									[value]="costCenter.index"
+									[value]="costCenter.id"
 									class="cost-center-option">
 							{{costCenter.costCenter}}
 						</mat-option>
 					</mat-optgroup>
 					<mat-optgroup label="Income" *ngIf="costCenterService.incomes.length">
 						<mat-option *ngFor="let costCenter of costCenterService.incomes"
-									[value]="costCenter.index"
+									[value]="costCenter.id"
 									class="income-center-option">
 							{{costCenter.costCenter}}
 						</mat-option>

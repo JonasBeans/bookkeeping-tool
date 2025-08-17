@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpEvent, HttpEventType} from '@angular/common/http';
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {Transaction} from "../../../dto/transaction";
@@ -25,7 +25,7 @@ import {FormsModule} from "@angular/forms";
 	standalone: true,
 	styleUrl: "csv-upload.component.css"
 })
-export class CsvUploadComponent {
+export class CsvUploadComponent implements OnInit {
 	file: File | null = null;
 
 	progress = -1;
@@ -45,6 +45,13 @@ export class CsvUploadComponent {
 
 
 	constructor(private http: HttpClient) {}
+
+	ngOnInit() {
+		this.http.get<Transaction[]>('http://localhost:8080/transactions/all').subscribe({
+			next: (transactions) => this.transactions = transactions,
+			error: (error: HttpErrorResponse) => this.error = error.message
+		});
+	}
 
 	onFileSelected(event: Event) {
 		const input = event.target as HTMLInputElement;
