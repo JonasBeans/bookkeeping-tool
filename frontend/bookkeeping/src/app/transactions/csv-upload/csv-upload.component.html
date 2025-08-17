@@ -8,7 +8,7 @@
 			<button [disabled]="transactions.length<1" (click)="assign()" class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
 				2 Assign
 			</button>
-			<button [disabled]="!assign_upload || saving"
+			<button [disabled]="saving"
 					class="px-6 py-2 rounded-xl shadow disabled:opacity-40"
 					(click)="save()">
 				{{ saving ? 'Saving…' : '3 Save' }}

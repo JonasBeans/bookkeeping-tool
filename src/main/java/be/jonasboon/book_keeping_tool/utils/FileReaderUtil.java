@@ -19,7 +19,7 @@ import static be.jonasboon.book_keeping_tool.utils.ArrayUtils.isArrayWithValues;
 @Slf4j
 public class FileReaderUtil {
 
-    public static CSVReader supply(MultipartFile file) {
+    public static CSVReader consume(MultipartFile file) {
         try {
             return new CSVReader(new InputStreamReader(file.getInputStream()));
         } catch (IOException e) {

@@ -90,10 +90,11 @@ export class CsvUploadComponent implements OnInit {
 		this.saving = true;
 		this.saving_progress = 0;
 
-		this.http.put<any>("http://localhost:8080/transactions/save-to-file", {}, {reportProgress: true, observe: "events"}).subscribe({
-			next: (response : HttpEvent<any>) => this.save_callback(response),
-			error: (error: HttpErrorResponse) => this.handle_save_error(error)
-		})
+		this.http.post<any>("http://localhost:8080/backup/request", {})
+			.subscribe({
+				next: response => this.saving_progress = 100,
+				error: response => this.handle_save_error(response),
+			});
 	}
 
 	upload_callback(event: HttpEvent<Transaction[]>) {
