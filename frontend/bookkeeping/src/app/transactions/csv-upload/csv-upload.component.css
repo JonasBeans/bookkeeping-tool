@@ -5,7 +5,3 @@
 .income-center-option {
 	color: green;
 }
-
-tbody > tr:nth-child(odd) {
-	background-color: red;
-}

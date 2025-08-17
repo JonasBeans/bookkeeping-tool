@@ -3,18 +3,21 @@
 		<div class="col">
 			<table class="table">
 				<thead>
-				<tr style="color:red">
-					<th>Costs</th>
-					<th>Amount</th>
+				<tr>
+					<th class="statement-header statement-header-cost">Costs</th>
+					<th class="statement-header statement-header-cost">Amount per month</th>
+					<th class="statement-header statement-header-cost">Amount</th>
 				</tr>
 				</thead>
 				<tbody>
-				<tr style="font-weight: bold">
+				<tr class="statement-accumulated-amount-header">
 					<td>Total cost</td>
-					<td>{{this.costCenterService.accumulatedAmounts.totalCost}}</td>
+					<td>{{ this.costCenterService.accumulatedAmounts.totalCost / 12 | currency: 'EUR'}}</td>
+					<td>{{ this.costCenterService.accumulatedAmounts.totalCost | currency: 'EUR'}}</td>
 				</tr>
 				<tr *ngFor="let cost_center of this.costCenterService.costs; index as i">
 					<td>{{ cost_center.costCenter }}</td>
+					<td>{{ cost_center.totalAmount / 12 | currency: 'EUR' }}</td>
 					<td>{{ cost_center.totalAmount | currency: 'EUR' }}</td>
 				</tr>
 				</tbody>
@@ -24,17 +27,20 @@
 			<table class="table">
 				<thead>
 				<tr>
-					<th>Incomes</th>
-					<th>Amount</th>
+					<th class="statement-header statement-header-income">Incomes</th>
+					<th class="statement-header statement-header-income">Amount per month</th>
+					<th class="statement-header statement-header-income">Amount</th>
 				</tr>
 				</thead>
 				<tbody>
-				<tr style="font-weight: bold">
+				<tr class="statement-accumulated-amount-header">
 					<td>Total income</td>
-					<td>{{this.costCenterService.accumulatedAmounts.totalIncome}}</td>
+					<td>{{ this.costCenterService.accumulatedAmounts.totalIncome / 12 | currency: 'EUR'}}</td>
+					<td>{{ this.costCenterService.accumulatedAmounts.totalIncome | currency: 'EUR'}}</td>
 				</tr>
 				<tr *ngFor="let cost_center of this.costCenterService.incomes; index as i">
 					<td>{{ cost_center.costCenter }}</td>
+					<td>{{ cost_center.totalAmount / 12 | currency: 'EUR' }}</td>
 					<td>{{ cost_center.totalAmount | currency: 'EUR' }}</td>
 				</tr>
 				</tbody>
