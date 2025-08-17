@@ -31,7 +31,7 @@ public class CostCenterService {
         transactions.forEach(transaction -> {
             Optional<CostCenterEntity> foundEntity = costCenterRepository.findById(transaction.getCostCenterId());
             foundEntity.ifPresent(costCenterEntity -> {
-                costCenterEntity.addToTotalAmount(transaction.getAmount());
+                costCenterEntity.addToTotalAmount(transaction.getAmount().abs());
                 costCenterRepository.save(costCenterEntity);
             });
         });
