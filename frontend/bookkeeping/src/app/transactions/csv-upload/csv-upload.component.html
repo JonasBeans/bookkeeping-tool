@@ -13,6 +13,11 @@
 					(click)="save()">
 				{{ saving ? 'Saving…' : '3 Save' }}
 			</button>
+			<button
+				class="px-6 py-2 rounded-xl shadow disabled:opacity-40"
+				(click)="restore()">
+				4. Restore
+			</button>
 
 			<p *ngIf="progress>=0 && progress<100" class="text-sm">Uploading… {{ progress }}%</p>
 			<p *ngIf="progress===100" class="text-sm text-green-600">Upload complete ✓</p>

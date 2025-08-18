@@ -40,7 +40,7 @@ public class TransactionCSVMapper implements CSVFileMapper {
         throw new RuntimeException("Name of other party is empty");
     }
 
-    private BigDecimal convertAmount(String value){
+    public static BigDecimal convertAmount(String value){
         if (value == null) throw new NullPointerException("Amount is empty");
         value = removeCommas.apply(value);
         try {

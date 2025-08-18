@@ -1,10 +1,10 @@
 package be.jonasboon.book_keeping_tool.backup.transaction.mapper;
 
-import be.jonasboon.book_keeping_tool.backup.common.BackupModelMapper;
+import be.jonasboon.book_keeping_tool.backup.common.RestoreMapper;
 import be.jonasboon.book_keeping_tool.backup.transaction.model.TransactionBackupModel;
 import be.jonasboon.book_keeping_tool.persistence.entity.TransactionEntity;
 
-public class TransactionMapper implements BackupModelMapper<TransactionEntity, TransactionBackupModel> {
+public class TransactionMapper implements RestoreMapper<TransactionEntity, TransactionBackupModel> {
 
     public static final TransactionMapper INSTANCE = new TransactionMapper();
 

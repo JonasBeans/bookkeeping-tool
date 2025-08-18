@@ -1,12 +1,12 @@
 package be.jonasboon.book_keeping_tool.service.transaction;
 
+import be.jonasboon.book_keeping_tool.mapper.TransactionEntityMapper;
 import be.jonasboon.book_keeping_tool.mapper.TransactionMapper;
 import be.jonasboon.book_keeping_tool.model.TransactionDTO;
 import be.jonasboon.book_keeping_tool.persistence.entity.TransactionEntity;
 import be.jonasboon.book_keeping_tool.persistence.repository.TransactionRepository;
 import be.jonasboon.book_keeping_tool.service.cost_center.CostCenterService;
-import be.jonasboon.book_keeping_tool.utils.FileReaderUtil;
-import be.jonasboon.book_keeping_tool.utils.mapper.CSVObject;
+import be.jonasboon.book_keeping_tool.utils.CSVFileReaderUtil;
 import be.jonasboon.book_keeping_tool.utils.mapper.TransactionCSVMapper;
 import com.opencsv.CSVReader;
 import lombok.extern.slf4j.Slf4j;
@@ -35,17 +35,16 @@ public final class TransactionService {
     }
 
     public List<TransactionDTO> process(CSVReader csvReader) {
+        TransactionEntityMapper entityMapper = new TransactionEntityMapper();
         transactionRepository.deleteAll();
-        FileReaderUtil
-                .convert(new TransactionCSVMapper(), csvReader)
-                .forEach(this::save);
-        return transactionRepository.findAll().stream().map(TransactionMapper::from).toList();
-    }
-
-    public void save(CSVObject transactions) {
-        transactionRepository.save(
-                TransactionMapper.from(transactions)
+        transactionRepository.saveAll(
+                CSVFileReaderUtil
+                        .convert(new TransactionCSVMapper(), csvReader)
+                        .stream()
+                        .map(entityMapper::map)
+                        .toList()
         );
+        return transactionRepository.findAll().stream().map(TransactionMapper::from).toList();
     }
 
     public List<TransactionDTO> loadAssigned(List<TransactionDTO> transactions) {

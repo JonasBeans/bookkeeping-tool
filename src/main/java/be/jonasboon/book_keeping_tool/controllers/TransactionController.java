@@ -3,7 +3,7 @@ package be.jonasboon.book_keeping_tool.controllers;
 import be.jonasboon.book_keeping_tool.backup.service.BackupService;
 import be.jonasboon.book_keeping_tool.model.TransactionDTO;
 import be.jonasboon.book_keeping_tool.service.transaction.TransactionService;
-import be.jonasboon.book_keeping_tool.utils.FileReaderUtil;
+import be.jonasboon.book_keeping_tool.utils.CSVFileReaderUtil;
 import com.opencsv.CSVReader;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class TransactionController {
 
     @PostMapping(value = "/upload/transaction-file")
     public List<TransactionDTO> uploadTransactions(@RequestParam("file") MultipartFile file) {
-        CSVReader reader = FileReaderUtil.consume(file);
+        CSVReader reader = CSVFileReaderUtil.consume(file);
         return transactionService.process(reader);
     }
 

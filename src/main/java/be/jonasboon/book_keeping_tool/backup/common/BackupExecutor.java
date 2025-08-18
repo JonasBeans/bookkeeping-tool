@@ -10,7 +10,7 @@ import java.util.Collection;
 @Component
 public class BackupExecutor {
 
-    public <I, O extends BackupModel> void executeBackup(File filePath, BackupModelMapper<I, O> mapper, Collection<I> models) {
+    public <I, O extends BackupModel> void execute(File filePath, RestoreMapper<I, O> mapper, Collection<I> models) {
         String[] objectToBackup = models.stream()
                 .map(mapper::of)
                 .map(BackupModel::toBackupString)
@@ -18,9 +18,4 @@ public class BackupExecutor {
         FileWriterUtil.writeToFile(filePath.getPath(), objectToBackup);
     }
 
-    public void restoreBackup() {
-        // Logic to restore from a backup
-        // This could involve reading from a file or database and converting
-        // the strings back into the appropriate model objects.
-    }
 }

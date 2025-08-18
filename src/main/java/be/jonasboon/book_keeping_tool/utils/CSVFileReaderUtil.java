@@ -8,6 +8,8 @@ import com.opencsv.exceptions.CsvValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import java.util.List;
 import static be.jonasboon.book_keeping_tool.utils.ArrayUtils.isArrayWithValues;
 
 @Slf4j
-public class FileReaderUtil {
+public class CSVFileReaderUtil {
 
     public static CSVReader consume(MultipartFile file) {
         try {
@@ -27,14 +29,28 @@ public class FileReaderUtil {
         }
     }
 
-    public static List<CSVObject> convert(CSVFileMapper mapper, CSVReader reader){
+    public static CSVReader consume(File file) {
         try {
-            List<CSVObject> csvObjects = new ArrayList<>();
-            String[] header = reader.readNext();
-            log.debug("Headers: {}", Arrays.stream(header).reduce("", (result, item) -> result.concat(", " + item)));
+            return new CSVReader(new InputStreamReader(new FileInputStream(file) ));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <O extends CSVObject> List<O> convert(CSVFileMapper mapper, CSVReader reader) {
+        return convert(mapper, reader, true);
+    }
+
+    public static <O extends CSVObject> List<O> convert(CSVFileMapper mapper, CSVReader reader, boolean headerIndicator) {
+        try {
+            List<O> csvObjects = new ArrayList<>();
+            if (headerIndicator) {
+                String[] header = reader.readNext();
+                log.debug("Headers: {}", Arrays.stream(header).reduce("", (result, item) -> result.concat(", " + item)));
+            }
             String[] row;
             while((row = reader.readNext()) != null){
-                CSVObject convertedItem = map(row, mapper);
+                O convertedItem = map(row, mapper);
                 csvObjects.add(convertedItem);
             }
             reader.close();
@@ -44,7 +60,7 @@ public class FileReaderUtil {
         }
     }
 
-    private static CSVObject map(String[] valuesFromFile, CSVFileMapper mapper){
+    private static <O extends CSVObject> O map(String[] valuesFromFile, CSVFileMapper mapper){
         try {
             isArrayWithValues(valuesFromFile);
             return mapper.mapToObject(valuesFromFile);

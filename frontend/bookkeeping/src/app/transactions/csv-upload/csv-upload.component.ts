@@ -47,6 +47,10 @@ export class CsvUploadComponent implements OnInit {
 	constructor(private http: HttpClient) {}
 
 	ngOnInit() {
+		this.retrieveAllTransactions();
+	}
+
+	private retrieveAllTransactions() {
 		this.http.get<Transaction[]>('http://localhost:8080/transactions/all').subscribe({
 			next: (transactions) => this.transactions = transactions,
 			error: (error: HttpErrorResponse) => this.error = error.message
@@ -57,6 +61,14 @@ export class CsvUploadComponent implements OnInit {
 		const input = event.target as HTMLInputElement;
 		this.file = input.files && input.files.length ? input.files[0] : null;
 		this.error = null;
+	}
+
+	restore() {
+		this.http.put('http://localhost:8080/backup/restore', {}, {reportProgress: true, observe: 'events'})
+			.subscribe({
+				next: respone => this.retrieveAllTransactions(),
+				error: (error: HttpErrorResponse) => console.log(error),
+			})
 	}
 
 	assign() {
@@ -140,4 +152,6 @@ export class CsvUploadComponent implements OnInit {
 	}
 
 	protected readonly CostCenterService = CostCenterService;
+
+
 }

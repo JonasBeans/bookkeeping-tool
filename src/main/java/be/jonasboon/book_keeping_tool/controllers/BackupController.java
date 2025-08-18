@@ -5,9 +5,14 @@ import be.jonasboon.book_keeping_tool.backup.service.BackupService;
 import be.jonasboon.book_keeping_tool.backup.transaction.mapper.TransactionMapper;
 import be.jonasboon.book_keeping_tool.persistence.repository.CostCenterRepository;
 import be.jonasboon.book_keeping_tool.persistence.repository.TransactionRepository;
+import be.jonasboon.book_keeping_tool.restore.cost_center.CSVCostCenterMapper;
+import be.jonasboon.book_keeping_tool.restore.cost_center.CostCenterEntityMapper;
+import be.jonasboon.book_keeping_tool.restore.transaction.TransactionCSVMapper;
+import be.jonasboon.book_keeping_tool.restore.transaction.TransactionEntityMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,10 +25,17 @@ public class BackupController {
     private CostCenterRepository costCenterRepository;
     private BackupService backupService;
 
-     @PostMapping("/request")
-     public ResponseEntity<String> createBackup() {
-         backupService.make("transactions_backup.bkt", TransactionMapper.INSTANCE, transactionRepository);
-         backupService.make("cost_centers_backup.bkt", CostCenterMapper.INSTANCE, costCenterRepository);
-         return ResponseEntity.ok("Backup successfully requested");
-     }
+    @PostMapping("/request")
+    public ResponseEntity<String> createBackup() {
+        backupService.make("transactions_backup.bkt", TransactionMapper.INSTANCE, transactionRepository);
+        backupService.make("cost_centers_backup.bkt", CostCenterMapper.INSTANCE, costCenterRepository);
+        return ResponseEntity.ok("Backup successfully requested");
+    }
+
+    @PutMapping("/restore")
+    public ResponseEntity<String> restoreFromBackup() {
+        backupService.restore("transactions_backup.bkt", new TransactionCSVMapper(), new TransactionEntityMapper(), transactionRepository);
+        backupService.restore("cost_centers_backup.bkt", new CSVCostCenterMapper(), new CostCenterEntityMapper(), costCenterRepository);
+        return ResponseEntity.ok("Backup successfully restored");
+    }
 }

@@ -7,13 +7,15 @@ import java.math.BigDecimal;
 
 @Builder
 public record CostCenterBackupModel(
+        String id,
         String costCenter,
         Boolean isCost,
         BigDecimal totalAmount
 ) implements BackupModel {
 
     public String toBackupString() {
-        return String.format("%s,%s,%s",
+        return String.format("%s,%s,%s,%s",
+                id,
                 costCenter,
                 isCost,
                 totalAmount
