@@ -14,9 +14,9 @@ import {CurrencyPipe, NgForOf} from "@angular/common";
 })
 export class IncomeStatementsComponent implements OnInit {
 
-	costCenterService: CostCenterService = inject(CostCenterService);
+	cost_center_service: CostCenterService = inject(CostCenterService);
 
 	ngOnInit(): void {
-		this.costCenterService.refresh_data();
+		this.cost_center_service.refresh_data();
 	}
 }

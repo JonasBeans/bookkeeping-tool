@@ -12,10 +12,10 @@
 				<tbody>
 				<tr class="statement-accumulated-amount-header">
 					<td>Total cost</td>
-					<td>{{ this.costCenterService.accumulatedAmounts.totalCost / 12 | currency: 'EUR'}}</td>
-					<td>{{ this.costCenterService.accumulatedAmounts.totalCost | currency: 'EUR'}}</td>
+					<td>{{ this.cost_center_service.accumulatedAmounts.totalCost / 12 | currency: 'EUR'}}</td>
+					<td>{{ this.cost_center_service.accumulatedAmounts.totalCost | currency: 'EUR'}}</td>
 				</tr>
-				<tr *ngFor="let cost_center of this.costCenterService.costs; index as i">
+				<tr *ngFor="let cost_center of this.cost_center_service.costs; index as i">
 					<td>{{ cost_center.costCenter }}</td>
 					<td>{{ cost_center.totalAmount / 12 | currency: 'EUR' }}</td>
 					<td>{{ cost_center.totalAmount | currency: 'EUR' }}</td>
@@ -35,10 +35,10 @@
 				<tbody>
 				<tr class="statement-accumulated-amount-header">
 					<td>Total income</td>
-					<td>{{ this.costCenterService.accumulatedAmounts.totalIncome / 12 | currency: 'EUR'}}</td>
-					<td>{{ this.costCenterService.accumulatedAmounts.totalIncome | currency: 'EUR'}}</td>
+					<td>{{ this.cost_center_service.accumulatedAmounts.totalIncome / 12 | currency: 'EUR'}}</td>
+					<td>{{ this.cost_center_service.accumulatedAmounts.totalIncome | currency: 'EUR'}}</td>
 				</tr>
-				<tr *ngFor="let cost_center of this.costCenterService.incomes; index as i">
+				<tr *ngFor="let cost_center of this.cost_center_service.incomes; index as i">
 					<td>{{ cost_center.costCenter }}</td>
 					<td>{{ cost_center.totalAmount / 12 | currency: 'EUR' }}</td>
 					<td>{{ cost_center.totalAmount | currency: 'EUR' }}</td>
