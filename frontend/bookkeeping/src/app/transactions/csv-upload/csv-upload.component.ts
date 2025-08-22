@@ -27,6 +27,7 @@ import {FormsModule} from "@angular/forms";
 })
 export class CsvUploadComponent implements OnInit {
 	file: File | null = null;
+	backupFile: File | null = null;
 
 	progress = -1;
 	uploading = false;
@@ -61,6 +62,44 @@ export class CsvUploadComponent implements OnInit {
 		const input = event.target as HTMLInputElement;
 		this.file = input.files && input.files.length ? input.files[0] : null;
 		this.error = null;
+	}
+
+	onBackupFileSelected(event: Event) {
+		const input = event.target as HTMLInputElement;
+		this.backupFile = input.files && input.files.length ? input.files[0] : null;
+		this.error = null;
+
+		if (!this.backupFile) return;
+
+		const formData = new FormData();
+		formData.append('file', this.backupFile, this.backupFile.name);
+
+		this.uploading = true;
+		this.progress = 0;
+
+		this.http.post<Transaction[]>('http://localhost:8080/backup/upload', formData, {
+			reportProgress: true,
+			observe: 'events'
+		}).subscribe({
+				next: (response: HttpEvent<Transaction[]>) => console.log(response),
+				error: (error: HttpErrorResponse) => console.log(error)
+			}
+		);
+	}
+
+	downloadBackupFiles() {
+		this.http.get('http://localhost:8080/backup/download', {responseType: 'blob'})
+			.subscribe({
+				next: (blob) => {
+					const url = window.URL.createObjectURL(blob);
+					const a = document.createElement('a');
+					a.href = url;
+					a.download = 'backup.zip'; // Set the file name
+					a.click();
+					window.URL.revokeObjectURL(url); //
+				},
+				error: (error: HttpErrorResponse) => console.log(error),
+			})
 	}
 
 	restore() {

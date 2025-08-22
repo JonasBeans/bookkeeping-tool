@@ -18,6 +18,11 @@
 				(click)="restore()">
 				4. Restore
 			</button>
+			<button
+				class="px-6 py-2 rounded-xl shadow disabled:opacity-40"
+				(click)="downloadBackupFiles()">
+				5. Download backup files
+			</button>
 
 			<p *ngIf="progress>=0 && progress<100" class="text-sm">Uploading… {{ progress }}%</p>
 			<p *ngIf="progress===100" class="text-sm text-green-600">Upload complete ✓</p>
@@ -29,8 +34,19 @@
 			<p *ngIf="saving_progress>=0 && saving_progress<100" class="text-sm text-green-600">Save complete ✓</p>
 			<p *ngIf="save_error" class="text-sm text-red-600">{{ save_error }}</p>
 
-			<input type="file" accept=".csv" (change)="onFileSelected($event)"
-				   class="file:border file:rounded-lg file:px-4 file:py-2"/>
+			<div>
+				<p>Upload transactions</p>
+				<input type="file" accept=".csv" (change)="onFileSelected($event)"
+					   class="file:border file:rounded-lg file:px-4 file:py-2"/>
+			</div>
+
+
+			<div>
+				<p>Upload backup files</p>
+				<input type="file" accept=".zip" (change)="onBackupFileSelected($event)"
+					   class="file:border file:rounded-lg file:px-4 file:py-2"/>
+			</div>
+
 		</div>
 	</div>
 </div>
