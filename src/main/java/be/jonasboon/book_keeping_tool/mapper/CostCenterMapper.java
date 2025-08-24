@@ -1,5 +1,6 @@
 package be.jonasboon.book_keeping_tool.mapper;
 
+import be.jonasboon.book_keeping_tool.DTO.AddCostCenterDTO;
 import be.jonasboon.book_keeping_tool.DTO.CostCenterDTO;
 import be.jonasboon.book_keeping_tool.model.CostCenter;
 import be.jonasboon.book_keeping_tool.persistence.entity.CostCenterEntity;
@@ -30,6 +31,13 @@ public class CostCenterMapper {
         return CostCenterEntity.builder()
                 .withCostCenter(dto.getCostCenter())
                 .withIsCost(dto.getIsCost())
+                .build();
+    }
+
+    public static CostCenterEntity toEntity(AddCostCenterDTO dto){
+        return CostCenterEntity.builder()
+                .withCostCenter(dto.costCenter())
+                .withIsCost(dto.isCost())
                 .build();
     }
 

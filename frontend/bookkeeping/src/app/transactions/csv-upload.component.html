@@ -1,4 +1,6 @@
-<div class="flex flex-col items-center gap-4 p-6 max-w-md mx-auto bg-white shadow-xl rounded-2xl">
+<a (click)="expand_operations=!expand_operations"><mat-icon [hidden]="expand_operations">keyboard_arrow_right</mat-icon></a>
+<a (click)="expand_operations=!expand_operations"><mat-icon [hidden]="!expand_operations">keyboard_arrow_down</mat-icon></a>
+<div class="flex flex-col items-center gap-4 p-6 max-w-md mx-auto bg-white shadow-xl rounded-2xl" [hidden]="!expand_operations">
 	<div class="d-flex flex-row justify-content-between">
 		<div style="margin: 5px">
 			<button [disabled]="!file || uploading" (click)="upload()"
@@ -34,23 +36,19 @@
 			<p *ngIf="saving_progress>=0 && saving_progress<100" class="text-sm text-green-600">Save complete ✓</p>
 			<p *ngIf="save_error" class="text-sm text-red-600">{{ save_error }}</p>
 
-			<div>
-				<p>Upload transactions</p>
-				<input type="file" accept=".csv" (change)="onFileSelected($event)"
-					   class="file:border file:rounded-lg file:px-4 file:py-2"/>
-			</div>
-
-
-			<div>
-				<p>Upload backup files</p>
-				<input type="file" accept=".zip" (change)="onBackupFileSelected($event)"
-					   class="file:border file:rounded-lg file:px-4 file:py-2"/>
-			</div>
-
+		</div>
+		<div>
+			<p>Upload transactions</p>
+			<input type="file" accept=".csv" (change)="onFileSelected($event)"
+				   class="file:border file:rounded-lg file:px-4 file:py-2"/>
+		</div>
+		<div>
+			<p>Upload backup files</p>
+			<input type="file" accept=".zip" (change)="onBackupFileSelected($event)"
+				   class="file:border file:rounded-lg file:px-4 file:py-2"/>
 		</div>
 	</div>
 </div>
-
 <table mat-table [dataSource]="transactions">
 	<ng-container matColumnDef="bookDate">
 		<th mat-header-cell *matHeaderCellDef>Book Date</th>

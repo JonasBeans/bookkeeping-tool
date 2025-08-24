@@ -1,12 +1,13 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpEvent, HttpEventType} from '@angular/common/http';
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
-import {Transaction} from "../../../dto/transaction";
-import {CostCenterService} from "../../services/cost-center.service";
+import {Transaction} from "../../dto/transaction";
+import {CostCenterService} from "../services/cost-center.service";
 import {MatTableModule} from "@angular/material/table";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatOption, MatSelectModule} from "@angular/material/select";
 import {FormsModule} from "@angular/forms";
+import {MatIcon} from "@angular/material/icon";
 
 
 @Component({
@@ -20,7 +21,8 @@ import {FormsModule} from "@angular/forms";
 		MatOption,
 		FormsModule,
 		NgForOf,
-		DatePipe
+		DatePipe,
+		MatIcon
 	],
 	standalone: true,
 	styleUrl: "csv-upload.component.css"
@@ -44,6 +46,7 @@ export class CsvUploadComponent implements OnInit {
 	costCenterService: CostCenterService = inject(CostCenterService);
 	displayedColumns: string[] = ['bookDate','transactionDate', 'amount', 'nameOtherParty', 'costCenter'];
 
+	expand_operations : boolean = false;
 
 	constructor(private http: HttpClient) {}
 

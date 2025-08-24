@@ -1,6 +1,7 @@
 package be.jonasboon.book_keeping_tool.service.cost_center;
 
 import be.jonasboon.book_keeping_tool.DTO.AccumulatedAmountsDTO;
+import be.jonasboon.book_keeping_tool.DTO.AddCostCenterDTO;
 import be.jonasboon.book_keeping_tool.DTO.CostCenterDTO;
 import be.jonasboon.book_keeping_tool.mapper.CostCenterMapper;
 import be.jonasboon.book_keeping_tool.model.AccumulatedAmounts;
@@ -42,5 +43,24 @@ public class CostCenterService {
         costCenterRepository.findByIsCost(true).stream().map(CostCenterEntity::getTotalAmount).forEach(totalAmounts::addCost);
         costCenterRepository.findByIsCost(false).stream().map(CostCenterEntity::getTotalAmount).forEach(totalAmounts::addIncome);
         return new AccumulatedAmountsDTO(totalAmounts.getTotalIncome(), totalAmounts.getTotalCost());
+    }
+
+    public void addCostCenter(AddCostCenterDTO costCenterDTO) throws CostCenterException {
+        costCenterRepository.findByCostCenter(costCenterDTO.costCenter()).ifPresent(result -> CostCenterException.throwAlreadyExists(result.getCostCenter()));
+        costCenterRepository.save(CostCenterMapper.toEntity(costCenterDTO));
+    }
+
+    public static class CostCenterException extends RuntimeException {
+        public CostCenterException(String message) {
+            super(message);
+        }
+
+        public static void throwAlreadyExists(String costCenter) {
+            throw new CostCenterException("Cost center already exists: " + costCenter);
+        }
+
+        public String toJson() {
+            return String.format("{ 'error': '%s'}", this.getMessage());
+        }
     }
 }

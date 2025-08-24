@@ -43,4 +43,19 @@ export class CostCenterService {
 			});
 	}
 
+	addCostCenter(cost_center_title: string, isCost: boolean) : void {
+		this.client.post(
+			'http://localhost:8080/api/cost-centers/add',
+			{title: cost_center_title, isCost: isCost}
+		).subscribe({
+			next: result => {
+				console.log('Cost center added successfully:', result);
+				this.refresh_data(); // Refresh data after adding a new cost center
+			},
+			error: error => {
+				console.error('Error adding cost center:', error);
+			}
+		});
+	}
+
 }

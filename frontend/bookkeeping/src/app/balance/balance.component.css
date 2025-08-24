@@ -1,0 +1,10 @@
+thead {
+	font-size: 20px;
+}
+
+tbody:first-child {
+	margin-top: 10px;
+}
+th {
+	margin-bottom: 20px;
+}

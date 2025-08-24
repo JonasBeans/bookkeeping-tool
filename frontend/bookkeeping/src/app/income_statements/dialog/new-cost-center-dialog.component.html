@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Add cost center</h2>
+<mat-dialog-content>
+	<mat-form-field>
+		<mat-label>Cost center title</mat-label>
+		<input matInput [(ngModel)]="new_cost_center_title"/>
+	</mat-form-field>
+	<mat-checkbox [(ngModel)]="is_new_cost_center_a_cost">
+		Is this cost center a cost?
+	</mat-checkbox>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button matButton (click)="onNoClick()">Cancel</button>
+	<button matButton
+			[mat-dialog-close]="
+				{
+				new_cost_center_title: new_cost_center_title(),
+				is_new_cost_center_a_cost: is_new_cost_center_a_cost()
+				}"
+			cdkFocusInitial
+	>
+		ADD
+	</button>
+</mat-dialog-actions>

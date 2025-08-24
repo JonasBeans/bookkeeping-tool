@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {CostCenterService} from "../../services/cost-center.service";
+import {CostCenterService} from "../services/cost-center.service";
 import {NgForOf} from "@angular/common";
 
 @Component({

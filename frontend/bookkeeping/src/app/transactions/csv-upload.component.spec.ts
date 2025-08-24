@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CsvUploadComponent } from './csv-upload.component';
+import {CsvUploadComponent} from './csv-upload.component';
 
 describe('CsvUploadComponent', () => {
   let component: CsvUploadComponent;
@@ -11,7 +11,7 @@ describe('CsvUploadComponent', () => {
       imports: [CsvUploadComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(CsvUploadComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
