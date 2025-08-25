@@ -26,7 +26,7 @@ export class IncomeStatementsComponent implements OnInit {
 		this.cost_center_service.refresh_data();
 	}
 
-	opendialog() {
+	open_add_new_cost_center_dialog() {
 		const dialogRef = this.dialog.open(NewCostCenterDialog, {
 			data: {new_cost_center_title: this.new_cost_center_title(), is_new_cost_center_a_cost: this.is_new_cost_center_a_cost()}
 		});
@@ -34,9 +34,6 @@ export class IncomeStatementsComponent implements OnInit {
 			console.log('The dialog was closed');
 			this.new_cost_center_title.set(result.new_cost_center_title);
 			this.is_new_cost_center_a_cost.set(result.is_new_cost_center_a_cost);
-			console.log(result)
-			console.log(this.new_cost_center_title())
-			console.log(result.new_cost_center_title);
 			this.cost_center_service.addCostCenter(this.new_cost_center_title(), this.is_new_cost_center_a_cost());
 		});
 	}

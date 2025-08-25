@@ -2,20 +2,18 @@
 	<thead>
 	<tr>
 		<th>
+			<mat-icon (click)="open_dialog_add_sub_post()" class="icon">library_add</mat-icon>
+		</th>
+		<th style="padding-right: 20px">{{ total_post_amount | currency }}</th>
+		<th>
 			{{post_title}}
 		</th>
-		<th>{{ total_post_amount | currency }}</th>
 	</tr>
 	</thead>
 	<tbody>
-	<tr *ngFor="let sub_post of this.sub_posts; index as i">
-		<td>{{sub_post.title}}</td>
-		<td>{{sub_post.amount}}</td>
-	</tr>
-	<tr>
-		<td><button (click)="add_sub_post(sub_posts_title, sub_post_amount)">+</button></td>
-		<td><input type="text" [(ngModel)]="sub_posts_title"></td>
-		<td><input type="number" [(ngModel)]="sub_post_amount"></td>
+	<tr *ngFor="let sub_post of this.sub_posts(); index as i">
+		<td (click)="open_dialog_edit_sub_post(sub_post.title, sub_post.amount)">{{sub_post.title}}</td>
+		<td>{{ sub_post.amount | currency }}</td>
 	</tr>
 	</tbody>
 </table>

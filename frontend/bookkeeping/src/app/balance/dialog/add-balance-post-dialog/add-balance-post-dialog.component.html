@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Add cost center</h2>
+<mat-dialog-content>
+	<mat-form-field>
+		<mat-label>Balance post title</mat-label>
+		<input [(ngModel)]="new_balance_post_title" matInput/>
+	</mat-form-field>
+	<mat-form-field>
+		<mat-label>Amount</mat-label>
+		<input [(ngModel)]="new_balance_post_amount" matInput type="number"/>
+	</mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button (click)="onNoClick()" matButton>Cancel</button>
+	<button [mat-dialog-close]="
+				{
+				new_balance_post_title: new_balance_post_title(),
+				new_balance_post_amount: new_balance_post_amount()
+				}"
+			cdkFocusInitial
+			matButton
+	>
+		ADD
+	</button>
+</mat-dialog-actions>
