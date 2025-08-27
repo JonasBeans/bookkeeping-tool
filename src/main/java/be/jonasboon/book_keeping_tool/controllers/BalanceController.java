@@ -1,0 +1,49 @@
+package be.jonasboon.book_keeping_tool.controllers;
+
+import be.jonasboon.book_keeping_tool.DTO.AddBalancePostDTO;
+import be.jonasboon.book_keeping_tool.DTO.GetBalanceInformationDTO;
+import be.jonasboon.book_keeping_tool.DTO.UpdateBalancePostDTO;
+import be.jonasboon.book_keeping_tool.service.balance.BalanceService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@AllArgsConstructor
+@RequestMapping("/balance")
+public class BalanceController {
+
+    private final BalanceService balanceService;
+
+    @GetMapping
+    public GetBalanceInformationDTO getBalanceInformation(@RequestParam("title") String balancePostTitle) {
+        if (balancePostTitle.isEmpty()) throw new IllegalArgumentException();
+
+        return balanceService.findBalancePostByTitle(balancePostTitle);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity addBalanceInformation(@RequestBody AddBalancePostDTO dto) {
+        if (dto == null || dto.title().isEmpty()) throw new IllegalArgumentException("Balance post title cannot be empty");
+        if (dto.subPost() == null || dto.subPost().title().isEmpty()) throw new IllegalArgumentException("Sub post title cannot be empty");
+        balanceService.saveBalancePost(dto);
+        return ResponseEntity.ok("Successfully added new balance post");
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity updateBalanceInformation(@RequestBody UpdateBalancePostDTO dto) {
+        if (dto == null || dto.title().isEmpty()) throw new IllegalArgumentException();
+        balanceService.updateBalancePost(dto);
+        return ResponseEntity.ok(String.format("Successfully updated balance post: %s", dto.title()));
+    }
+
+    @DeleteMapping
+    public ResponseEntity deleteBalanceInformation(@RequestParam("title") String balancePostTitle, @RequestParam("subPostTitle") String subPostTitle) {
+        if (balancePostTitle.isEmpty()) throw new IllegalArgumentException();
+        if (subPostTitle.isEmpty()) throw new IllegalArgumentException();
+        balanceService.deleteBalancePost(balancePostTitle, subPostTitle);
+        return ResponseEntity.ok(String.format("Successfully deleted balance post: %s from %s", subPostTitle, balancePostTitle));
+    }
+
+
+}
