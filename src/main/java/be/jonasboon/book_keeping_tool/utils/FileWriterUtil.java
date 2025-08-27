@@ -6,7 +6,7 @@ import java.io.FileWriter;
 
 public class FileWriterUtil {
 
-    public static void writeToFile(String filePath, String[] content) {
+    public static void writeToCSVFile(String filePath, String[] content) {
         CSVWriter writer = null;
         try {
              writer = new CSVWriter(new FileWriter(filePath));
@@ -22,6 +22,17 @@ public class FileWriterUtil {
             } catch (Exception e) {
                 throw new RuntimeException("Error closing the writer", e);
             }
+        }
+    }
+
+    public static void writeToJsonFile(String filePath, String[] content) {
+        try (FileWriter writer = new FileWriter(filePath)) {
+            for (String line : content) {
+                writer.write(line);
+                writer.write(System.lineSeparator());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error writing to file: " + filePath, e);
         }
     }
 }
