@@ -4,9 +4,9 @@ import be.jonasboon.book_keeping_tool.DTO.AccumulatedAmountsDTO;
 import be.jonasboon.book_keeping_tool.DTO.AddCostCenterDTO;
 import be.jonasboon.book_keeping_tool.DTO.CostCenterDTO;
 import be.jonasboon.book_keeping_tool.service.cost_center.CostCenterService;
+import be.jonasboon.book_keeping_tool.utils.ExceptionUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +37,7 @@ public class CostCenterController {
             costCenterService.addCostCenter(costCenterDTO);
         } catch (CostCenterService.CostCenterException e) {
             log.error("Error adding cost center: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatusCode.valueOf(500)).body(e.toJson());
+            return ExceptionUtils.sendExceptionResponse(e, 500);
         }
         return ResponseEntity.ok().build();
     }

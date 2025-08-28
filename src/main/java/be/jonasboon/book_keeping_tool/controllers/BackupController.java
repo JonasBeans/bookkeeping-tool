@@ -7,6 +7,7 @@ import be.jonasboon.book_keeping_tool.persistence.entity.TransactionEntity;
 import be.jonasboon.book_keeping_tool.persistence.repository.BalanceRepository;
 import be.jonasboon.book_keeping_tool.persistence.repository.CostCenterRepository;
 import be.jonasboon.book_keeping_tool.persistence.repository.TransactionRepository;
+import be.jonasboon.book_keeping_tool.utils.ExceptionUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -55,7 +56,7 @@ public class BackupController {
         try (InputStream inputStream = file.getInputStream()) {
             backupService.uploadBackup(inputStream, "transactions_backup.bkt", "cost_centers_backup.bkt", "balance_posts.bkt");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return ExceptionUtils.sendExceptionResponse(e, 500);
         }
         return ResponseEntity.ok().body("Successfully uploaded backup file.");
     }
