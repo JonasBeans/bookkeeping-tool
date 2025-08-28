@@ -19,11 +19,13 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CostCenterService {
 
+    private final String SKIP_COST_CENTER = "Skip";
     private final CostCenterRepository costCenterRepository;
     private final CostCenterCustomRepository costCenterCustomRepository;
 
     public List<CostCenterDTO> getAllCostCenters() {
-        return costCenterRepository.findAll().stream().map(CostCenterMapper::fromEntity).toList();
+        return costCenterRepository.findAll().stream()
+                .map(CostCenterMapper::fromEntity).toList();
     }
 
     public void updateTotalAmounts(List<TransactionDTO> transactions) {
@@ -41,7 +43,10 @@ public class CostCenterService {
     public AccumulatedAmountsDTO getAccumulatedAmounts() {
         AccumulatedAmounts totalAmounts = new AccumulatedAmounts();
         costCenterRepository.findByIsCost(true).stream().map(CostCenterEntity::getTotalAmount).forEach(totalAmounts::addCost);
-        costCenterRepository.findByIsCost(false).stream().map(CostCenterEntity::getTotalAmount).forEach(totalAmounts::addIncome);
+        costCenterRepository.findByIsCost(false).stream()
+                .filter(income -> !SKIP_COST_CENTER.equals(income.getCostCenter()))
+                .map(CostCenterEntity::getTotalAmount)
+                .forEach(totalAmounts::addIncome);
         return new AccumulatedAmountsDTO(totalAmounts.getTotalIncome(), totalAmounts.getTotalCost());
     }
 
