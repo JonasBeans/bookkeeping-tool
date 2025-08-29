@@ -2,8 +2,7 @@ package be.jonasboon.book_keeping_tool.mapper;
 
 import be.jonasboon.book_keeping_tool.DTO.AddCostCenterDTO;
 import be.jonasboon.book_keeping_tool.DTO.CostCenterDTO;
-import be.jonasboon.book_keeping_tool.model.CostCenter;
-import be.jonasboon.book_keeping_tool.persistence.entity.CostCenterEntity;
+import be.jonasboon.book_keeping_tool.persistence.entity.CostCenter;
 import lombok.experimental.UtilityClass;
 
 import static be.jonasboon.book_keeping_tool.constants.CostCenterConstants.COST_CENTER_TITLE;
@@ -12,8 +11,8 @@ import static be.jonasboon.book_keeping_tool.constants.CostCenterConstants.COST_
 @UtilityClass
 public class CostCenterMapper {
 
-    public static CostCenter from(CostCenterDTO dto){
-        return CostCenter.builder()
+    public static be.jonasboon.book_keeping_tool.model.CostCenter from(CostCenterDTO dto){
+        return be.jonasboon.book_keeping_tool.model.CostCenter.builder()
                 .withCostCenter(dto.getCostCenter())
                 .withIsCost(dto.getIsCost())
                 .withTotalAmount(dto.getTotalAmount())
@@ -27,23 +26,22 @@ public class CostCenterMapper {
         );
     }
 
-    public static CostCenterEntity toEntity(CostCenterDTO dto){
-        return CostCenterEntity.builder()
+    public static CostCenter toEntity(CostCenterDTO dto){
+        return CostCenter.builder()
                 .withCostCenter(dto.getCostCenter())
                 .withIsCost(dto.getIsCost())
                 .build();
     }
 
-    public static CostCenterEntity toEntity(AddCostCenterDTO dto){
-        return CostCenterEntity.builder()
+    public static CostCenter toEntity(AddCostCenterDTO dto){
+        return CostCenter.builder()
                 .withCostCenter(dto.costCenter())
                 .withIsCost(dto.isCost())
                 .build();
     }
 
-    public static CostCenterDTO fromEntity(CostCenterEntity entity){
+    public static CostCenterDTO fromEntity(CostCenter entity){
         return CostCenterDTO.builder()
-                .withId(entity.getId())
                 .withCostCenter(entity.getCostCenter())
                 .withIsCost(entity.getIsCost())
                 .withTotalAmount(entity.getTotalAmount())

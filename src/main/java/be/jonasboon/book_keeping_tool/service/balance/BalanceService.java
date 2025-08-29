@@ -4,7 +4,8 @@ import be.jonasboon.book_keeping_tool.DTO.AddBalancePostDTO;
 import be.jonasboon.book_keeping_tool.DTO.GetBalanceInformationDTO;
 import be.jonasboon.book_keeping_tool.DTO.UpdateBalancePostDTO;
 import be.jonasboon.book_keeping_tool.mapper.BalanceMapper;
-import be.jonasboon.book_keeping_tool.persistence.entity.BalancePostEntity;
+import be.jonasboon.book_keeping_tool.persistence.entity.BalancePost;
+import be.jonasboon.book_keeping_tool.persistence.entity.BalanceSubPost;
 import be.jonasboon.book_keeping_tool.persistence.repository.BalanceRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,30 +23,30 @@ public class BalanceService {
     private final BalanceRepository balanceRepository;
 
     public GetBalanceInformationDTO findBalancePostByTitle(String balancePostTitle) {
-        BalancePostEntity balancePost = balanceRepository.findByTitle(balancePostTitle)
+        BalancePost balancePost = balanceRepository.findByTitle(balancePostTitle)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Balance post not found: %s", balancePostTitle)));
         return BalanceMapper.toDTO(balancePost);
     }
 
     public void saveBalancePost(AddBalancePostDTO dto) {
-        BalancePostEntity balancePost = balanceRepository.findByTitle(dto.title())
+        BalancePost balancePost = balanceRepository.findByTitle(dto.title())
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Balance post not found: %s", dto.title())));
-        BalancePostEntity.SubPostEntity entity = BalanceMapper.toEntity(dto);
-        balancePost.getSubPosts().add(entity);
+        BalanceSubPost entity = BalanceMapper.toEntity(dto);
+        balancePost.getBalanceSubPosts().add(entity);
         balanceRepository.save(balancePost);
     }
 
     public void updateBalancePost(UpdateBalancePostDTO dto) {
-        BalancePostEntity updatedEntity =
+        BalancePost updatedEntity =
                 balanceRepository
                         .findByTitle(dto.title())
                         .orElseThrow(() -> new IllegalArgumentException(String.format("Balance post not found: %s", dto.title())));
 
         updatedEntity
-                .getSubPosts()
+                .getBalanceSubPosts()
                 .stream()
                 .collect(Collectors.toMap(
-                        BalancePostEntity.SubPostEntity::getTitle,
+                        BalanceSubPost::getTitle,
                         identity()
                 ))
                 .computeIfPresent(dto.subPost().title(), (title, entity) -> {
@@ -57,12 +58,12 @@ public class BalanceService {
     }
 
     public void deleteBalancePost(String balancePostTitle, String subPostTitle) {
-        BalancePostEntity entity =
+        BalancePost entity =
                 balanceRepository
                         .findByTitle(balancePostTitle)
                         .orElseThrow(() -> new IllegalArgumentException(String.format("Balance post not found: %s", subPostTitle)));
 
-        boolean isASubPostRemoved = entity.getSubPosts().removeIf(subPost -> subPostTitle.equals(subPost.getTitle()));
+        boolean isASubPostRemoved = entity.getBalanceSubPosts().removeIf(balanceSubPost -> subPostTitle.equals(balanceSubPost.getTitle()));
         if (!isASubPostRemoved)
             throw new IllegalArgumentException(String.format("Sub post not found: %s", subPostTitle));
         else

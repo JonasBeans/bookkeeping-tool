@@ -1,0 +1,5 @@
+databaseChangeLog:
+    - include:
+        file: db/changelog/init-database.yaml
+    - include:
+        file: db/changelog/add-cost-centers-bulk-changelog.yaml

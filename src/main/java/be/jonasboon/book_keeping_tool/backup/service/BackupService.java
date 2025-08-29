@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class BackupService {
     private final RestoreExecutor restoreExecutor;
 
     @Async
-    public <I> void make(String fileName, MongoRepository<I, ?> repository) {
+    public <I> void make(String fileName, JpaRepository<I, ?> repository) {
         log.info("Received backup request for {}", fileName);
         File tempDirectory = FileUtils.getTempDirectory();
         Path filePath = tempDirectory.toPath().resolve(fileName);
@@ -36,7 +36,7 @@ public class BackupService {
         log.info("Successfully made backup {}", filePath);
     }
 
-    public <I> void restore(String fileName, MongoRepository<I, ?> repository, ParameterizedTypeReference<I> reference) {
+    public <I> void restore(String fileName, JpaRepository<I, ?> repository, ParameterizedTypeReference<I> reference) {
         log.info("Received restore request for {}", fileName);
         File tempDirectory = FileUtils.getTempDirectory();
         Path filePath = tempDirectory.toPath().resolve(fileName);

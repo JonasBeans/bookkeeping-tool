@@ -13,7 +13,7 @@ public record TransactionBackupModel(
         LocalDate transactionDate,
         LocalDate bookDate,
         String nameOtherParty,
-        String costCenterId
+        String costCenterReference
 ) implements BackupModel {
 
     public String toBackupString() {
@@ -22,7 +22,7 @@ public record TransactionBackupModel(
                 transactionDate,
                 amount,
                 nameOtherParty,
-                costCenterId
+                costCenterReference
         );
     }
 }

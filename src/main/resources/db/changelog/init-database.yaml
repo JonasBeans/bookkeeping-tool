@@ -1,0 +1,115 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1756501925358-1
+      author: Jonas Boon
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_balance_posts
+                  name: balance_post_id
+                  type: BIGINT
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+            tableName: balance_posts
+  - changeSet:
+      id: 1756501925358-2
+      author: jonas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_balance_sub_posts
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  name: amount
+                  type: DOUBLE
+              - column:
+                  name: balance_post_id
+                  type: BIGINT
+            tableName: balance_sub_posts
+  - changeSet:
+      id: 1756501925358-3
+      author: jonas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_cost_centers
+                  name: cost_center
+                  type: VARCHAR(255)
+              - column:
+                  name: is_cost
+                  type: BOOLEAN
+              - column:
+                  name: total_amount
+                  type: DECIMAL
+            tableName: cost_centers
+  - changeSet:
+      id: 1756501925358-4
+      author: jonas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_transactions
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: book_date
+                  type: DATE
+              - column:
+                  name: transaction_date
+                  type: DATE
+              - column:
+                  name: amount
+                  type: DECIMAL
+              - column:
+                  name: name_other_party
+                  type: VARCHAR(255)
+              - column:
+                  name: cost_center
+                  type: VARCHAR(255)
+            tableName: transactions
+  - changeSet:
+      id: 1756501925358-5
+      author: jonas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: balance_post_id
+            baseTableName: balance_sub_posts
+            constraintName: FK_BALANCE_SUB_POSTS_ON_BALANCE_POST
+            referencedColumnNames: balance_post_id
+            referencedTableName: balance_posts
+  - changeSet:
+      id: 1756501925358-6
+      author: jonas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: cost_center
+            baseTableName: transactions
+            constraintName: FK_TRANSACTIONS_ON_COST_CENTER
+            referencedColumnNames: cost_center
+            referencedTableName: cost_centers
+
