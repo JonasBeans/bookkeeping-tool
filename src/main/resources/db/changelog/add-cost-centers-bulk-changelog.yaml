@@ -1,0 +1,329 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Jonas Boon
+      changes:
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Skip"
+              - column:
+                  name: is_cost
+                  valueBoolean: false
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Andere kosten"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Vakbond"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Krediet kaart"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Water"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Elektriciteit & Gas"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Belastingen"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Huur"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Hobby's"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Voedsel"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Kleding"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Verzekering"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Kosten voertuigen"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Ontspanning"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Online Aankopen"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Gezondheid"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Openstaande schuld"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Sport"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "School"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Transactiekosten"
+              - column:
+                  name: is_cost
+                  valueBoolean: true
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Salaris/loon"
+              - column:
+                  name: is_cost
+                  valueBoolean: false
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Inkomsten uit rente en dividenden"
+              - column:
+                  name: is_cost
+                  valueBoolean: false
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Vorderingen"
+              - column:
+                  name: is_cost
+                  valueBoolean: false
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Intertransfer bank"
+              - column:
+                  name: is_cost
+                  valueBoolean: false
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Zakgeld"
+              - column:
+                  name: is_cost
+                  valueBoolean: false
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Diverse Inkomsten"
+              - column:
+                  name: is_cost
+                  valueBoolean: false
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00
+        - insert:
+            tableName: cost_centers
+            columns:
+              - column:
+                  name: cost_center
+                  value: "Intresten"
+              - column:
+                  name: is_cost
+                  valueBoolean: false
+              - column:
+                  name: total_amount
+                  valueNumeric: 0.00

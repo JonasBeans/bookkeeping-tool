@@ -3,7 +3,7 @@ package be.jonasboon.book_keeping_tool.service.transaction;
 import be.jonasboon.book_keeping_tool.mapper.TransactionEntityMapper;
 import be.jonasboon.book_keeping_tool.mapper.TransactionMapper;
 import be.jonasboon.book_keeping_tool.model.TransactionDTO;
-import be.jonasboon.book_keeping_tool.persistence.entity.TransactionEntity;
+import be.jonasboon.book_keeping_tool.persistence.entity.Transaction;
 import be.jonasboon.book_keeping_tool.persistence.repository.TransactionRepository;
 import be.jonasboon.book_keeping_tool.service.cost_center.CostCenterService;
 import be.jonasboon.book_keeping_tool.utils.CSVFileReaderUtil;
@@ -54,7 +54,7 @@ public final class TransactionService {
     }
 
     public void saveToFile() throws TransactionValidator.ValidationException {
-        List<TransactionEntity> transactions = transactionRepository.findAll();
+        List<Transaction> transactions = transactionRepository.findAll();
         validateAllHaveCostCenters(transactions);
     }
 }

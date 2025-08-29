@@ -1,18 +1,28 @@
 version: '3.8'
 services:
-  mongo:
-    image: mongo:latest
-    container_name: mongodb
-    command: ["--noauth"]
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: jauzK8c0AfAMy6
+      POSTGRES_USER: postgres
     ports:
-      - "27017:27017"
-
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
   springboot-app:
-    image: javabeans108/bookkeeping-tool:2.1.0
+    image: javabeans108/bookkeeping-tool:2.4.1
     container_name: bookkeeping-tool
     ports:
       - "8080:8080"
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/bookkeeping
     depends_on:
-      - mongo
+      - db

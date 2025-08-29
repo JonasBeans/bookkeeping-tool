@@ -1,25 +1,13 @@
 package be.jonasboon.book_keeping_tool.persistence.repository;
 
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import be.jonasboon.book_keeping_tool.persistence.entity.CostCenter;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CostCenterCustomRepository {
+public interface CostCenterCustomRepository extends JpaRepository<CostCenter, Long> {
 
-    private final MongoTemplate mongoTemplate;
-
-    public CostCenterCustomRepository(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
-    }
-
-    public void resetTotalAllAmounts() {
-        mongoTemplate.updateMulti(
-                new Query(),
-                new Update().set("totalAmount", 0.0),
-                "cost_centers"
-        );
-    }
-
+    @Query("UPDATE CostCenter c SET c.totalAmount = 0")
+    void resetTotalAllAmounts();
 }

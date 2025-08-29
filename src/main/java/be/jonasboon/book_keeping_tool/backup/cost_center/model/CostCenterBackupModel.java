@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Builder
 public record CostCenterBackupModel(
-        String id,
+        Long id,
         String costCenter,
         Boolean isCost,
         BigDecimal totalAmount

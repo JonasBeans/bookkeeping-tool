@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CostCenterDTO {
 
-    private String id;
+    private Long id;
     private String costCenter;
     private Boolean isCost;
     private BigDecimal totalAmount;

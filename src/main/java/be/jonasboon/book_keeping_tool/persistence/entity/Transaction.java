@@ -1,32 +1,36 @@
 package be.jonasboon.book_keeping_tool.persistence.entity;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Document(collection = "transactions")
 @Builder(setterPrefix = "with")
+@AllArgsConstructor
 @EqualsAndHashCode
+@NoArgsConstructor
+@Table(name = "transactions")
+@Entity
 @Getter
 @Setter
-public class TransactionEntity {
+public class Transaction {
+
     @Id
-    public String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
     public LocalDate bookDate;
     private LocalDate transactionDate;
     private BigDecimal amount;
     private String nameOtherParty;
-    private String costCenterId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cost_center")
+    private CostCenter costCenter;
 
     public boolean hasNoCostCenter() {
-        return Objects.isNull(costCenterId) ;
+        return Objects.isNull(costCenter) ;
     }
 
 }

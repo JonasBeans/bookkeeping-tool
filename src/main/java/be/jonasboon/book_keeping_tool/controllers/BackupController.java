@@ -1,9 +1,9 @@
 package be.jonasboon.book_keeping_tool.controllers;
 
 import be.jonasboon.book_keeping_tool.backup.service.BackupService;
-import be.jonasboon.book_keeping_tool.persistence.entity.BalancePostEntity;
-import be.jonasboon.book_keeping_tool.persistence.entity.CostCenterEntity;
-import be.jonasboon.book_keeping_tool.persistence.entity.TransactionEntity;
+import be.jonasboon.book_keeping_tool.persistence.entity.BalancePost;
+import be.jonasboon.book_keeping_tool.persistence.entity.CostCenter;
+import be.jonasboon.book_keeping_tool.persistence.entity.Transaction;
 import be.jonasboon.book_keeping_tool.persistence.repository.BalanceRepository;
 import be.jonasboon.book_keeping_tool.persistence.repository.CostCenterRepository;
 import be.jonasboon.book_keeping_tool.persistence.repository.TransactionRepository;
@@ -38,9 +38,9 @@ public class BackupController {
 
     @PutMapping("/restore")
     public ResponseEntity<String> restoreFromBackup() {
-        backupService.restore("transactions_backup.bkt", transactionRepository, ParameterizedTypeReference.forType(TransactionEntity.class));
-        backupService.restore("cost_centers_backup.bkt", costCenterRepository, ParameterizedTypeReference.forType(CostCenterEntity.class));
-        backupService.restore("balance_posts.bkt", balanceRepository, ParameterizedTypeReference.forType(BalancePostEntity.class));
+        backupService.restore("transactions_backup.bkt", transactionRepository, ParameterizedTypeReference.forType(Transaction.class));
+        backupService.restore("cost_centers_backup.bkt", costCenterRepository, ParameterizedTypeReference.forType(CostCenter.class));
+        backupService.restore("balance_posts.bkt", balanceRepository, ParameterizedTypeReference.forType(BalancePost.class));
         return ResponseEntity.ok("Backup successfully restored");
     }
 

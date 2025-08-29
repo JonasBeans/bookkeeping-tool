@@ -6,7 +6,7 @@ import be.jonasboon.book_keeping_tool.DTO.CostCenterDTO;
 import be.jonasboon.book_keeping_tool.mapper.CostCenterMapper;
 import be.jonasboon.book_keeping_tool.model.AccumulatedAmounts;
 import be.jonasboon.book_keeping_tool.model.TransactionDTO;
-import be.jonasboon.book_keeping_tool.persistence.entity.CostCenterEntity;
+import be.jonasboon.book_keeping_tool.persistence.entity.CostCenter;
 import be.jonasboon.book_keeping_tool.persistence.repository.CostCenterCustomRepository;
 import be.jonasboon.book_keeping_tool.persistence.repository.CostCenterRepository;
 import lombok.AllArgsConstructor;
@@ -32,7 +32,7 @@ public class CostCenterService {
         costCenterCustomRepository.resetTotalAllAmounts();
 
         transactions.forEach(transaction -> {
-            Optional<CostCenterEntity> foundEntity = costCenterRepository.findById(transaction.getCostCenterId());
+            Optional<CostCenter> foundEntity = costCenterRepository.findById(transaction.getCostCenterReference());
             foundEntity.ifPresent(costCenterEntity -> {
                 costCenterEntity.addToTotalAmount(transaction.getAmount().abs());
                 costCenterRepository.save(costCenterEntity);
@@ -42,10 +42,10 @@ public class CostCenterService {
 
     public AccumulatedAmountsDTO getAccumulatedAmounts() {
         AccumulatedAmounts totalAmounts = new AccumulatedAmounts();
-        costCenterRepository.findByIsCost(true).stream().map(CostCenterEntity::getTotalAmount).forEach(totalAmounts::addCost);
+        costCenterRepository.findByIsCost(true).stream().map(CostCenter::getTotalAmount).forEach(totalAmounts::addCost);
         costCenterRepository.findByIsCost(false).stream()
                 .filter(income -> !SKIP_COST_CENTER.equals(income.getCostCenter()))
-                .map(CostCenterEntity::getTotalAmount)
+                .map(CostCenter::getTotalAmount)
                 .forEach(totalAmounts::addIncome);
         return new AccumulatedAmountsDTO(totalAmounts.getTotalIncome(), totalAmounts.getTotalCost());
     }

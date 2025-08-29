@@ -1,24 +1,27 @@
 package be.jonasboon.book_keeping_tool.persistence.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-@Document(collection = "cost_centers")
-@Builder(setterPrefix = "with")
 @Getter
-public class CostCenterEntity {
+@Builder(setterPrefix = "with")
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "cost_centers")
+public class CostCenter {
 
     @Id
-    String id;
-    String costCenter;
-    Boolean isCost;
+    private String costCenter;
+    private Boolean isCost;
     @Setter
-    BigDecimal totalAmount;
+    private BigDecimal totalAmount;
+
+    @OneToMany(mappedBy = "costCenter", fetch = FetchType.LAZY)
+    private List<Transaction> transactions;
 
     public BigDecimal getTotalAmount() {
         if (totalAmount == null) {
@@ -37,8 +40,4 @@ public class CostCenterEntity {
         totalAmount = totalAmount.add(amount);
     }
 
-    public CostCenterEntity resetTotalAmount() {
-        totalAmount = BigDecimal.ZERO;
-        return this;
-    }
 }

@@ -1,14 +1,14 @@
 package be.jonasboon.book_keeping_tool.persistence.repository;
 
-import be.jonasboon.book_keeping_tool.persistence.entity.BalancePostEntity;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import be.jonasboon.book_keeping_tool.persistence.entity.BalancePost;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface BalanceRepository extends MongoRepository<BalancePostEntity, String> {
+public interface BalanceRepository extends JpaRepository<BalancePost, Long> {
 
-    Optional<BalancePostEntity> findByTitle(String title);
+    Optional<BalancePost> findByTitle(String title);
 
 }
