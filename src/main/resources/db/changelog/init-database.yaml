@@ -7,20 +7,16 @@ databaseChangeLog:
         - createTable:
             columns:
               - column:
-                  autoIncrement: true
                   constraints:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: pk_balance_posts
-                  name: balance_post_id
-                  type: BIGINT
-              - column:
                   name: title
                   type: VARCHAR(255)
             tableName: balance_posts
   - changeSet:
       id: 1756501925358-2
-      author: jonas
+      author: Jonas Boon
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -37,11 +33,11 @@ databaseChangeLog:
                   type: DOUBLE
               - column:
                   name: balance_post_id
-                  type: BIGINT
+                  type: VARCHAR(255)
             tableName: balance_sub_posts
   - changeSet:
       id: 1756501925358-3
-      author: jonas
+      author: Jonas Boon
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -61,7 +57,7 @@ databaseChangeLog:
             tableName: cost_centers
   - changeSet:
       id: 1756501925358-4
-      author: jonas
+      author: Jonas Boon
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - createTable:
@@ -92,18 +88,18 @@ databaseChangeLog:
             tableName: transactions
   - changeSet:
       id: 1756501925358-5
-      author: jonas
+      author: Jonas Boon
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: balance_post_id
             baseTableName: balance_sub_posts
             constraintName: FK_BALANCE_SUB_POSTS_ON_BALANCE_POST
-            referencedColumnNames: balance_post_id
+            referencedColumnNames: title
             referencedTableName: balance_posts
   - changeSet:
       id: 1756501925358-6
-      author: jonas
+      author: Jonas Boon
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:

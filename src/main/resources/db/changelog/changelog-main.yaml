@@ -3,3 +3,5 @@ databaseChangeLog:
         file: db/changelog/init-database.yaml
     - include:
         file: db/changelog/add-cost-centers-bulk-changelog.yaml
+    - include:
+        file: db/changelog/add-balance-posts.yaml

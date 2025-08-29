@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0
+      author: admin
+      changes:
+        - insert:
+            tableName: balance_posts
+            columns:
+                - column:
+                    name: title
+                    value: "Vaste activa"
+        - insert:
+            tableName: balance_posts
+            columns:
+              - column:
+                  name: title
+                  value: "Vlottende activa"
+        - insert:
+            tableName: balance_posts
+            columns:
+              - column:
+                  name: title
+                  value: "Liquide middelen"
+        - insert:
+            tableName: balance_posts
+            columns:
+              - column:
+                  name: title
+                  value: "Eigen vermogen"
+        - insert:
+            tableName: balance_posts
+            columns:
+              - column:
+                  name: title
+                  value: "Langlopende schulden"
+        - insert:
+            tableName: balance_posts
+            columns:
+              - column:
+                  name: title
+                  value: "Kortlopende schulden"
+

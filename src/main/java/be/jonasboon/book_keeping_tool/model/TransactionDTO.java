@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class TransactionDTO {
-    public Long id;
     public LocalDate bookDate;
     private LocalDate transactionDate;
     private BigDecimal amount;
@@ -20,6 +19,6 @@ public class TransactionDTO {
 
     @Override
     public String toString() {
-        return String.format("ID: %s, amount: %s", this.id, this.amount);
+        return String.format("amount: %s", this.amount);
     }
 }

@@ -3,6 +3,5 @@ export interface Transaction {
 	transactionDate: string;
 	amount: number;
 	nameOtherParty: string;
-	costCenter: string
-	costCenterId: string;
+	costCenterReference: string
 }

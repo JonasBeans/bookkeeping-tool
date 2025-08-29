@@ -33,4 +33,11 @@ public class Transaction {
         return Objects.isNull(costCenter) ;
     }
 
+    public CostCenter getCostCenter() {
+        if (costCenter == null) {
+            return new CostCenter();
+        }
+        return costCenter;
+    }
+
 }
