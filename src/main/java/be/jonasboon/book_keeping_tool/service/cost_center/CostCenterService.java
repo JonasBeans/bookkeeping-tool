@@ -9,6 +9,7 @@ import be.jonasboon.book_keeping_tool.model.TransactionDTO;
 import be.jonasboon.book_keeping_tool.persistence.entity.CostCenter;
 import be.jonasboon.book_keeping_tool.persistence.repository.CostCenterCustomRepository;
 import be.jonasboon.book_keeping_tool.persistence.repository.CostCenterRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class CostCenterService {
                 .map(CostCenterMapper::fromEntity).toList();
     }
 
+    @Transactional
     public void updateTotalAmounts(List<TransactionDTO> transactions) {
         costCenterCustomRepository.resetTotalAllAmounts();
 

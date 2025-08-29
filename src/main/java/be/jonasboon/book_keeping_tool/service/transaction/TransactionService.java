@@ -19,18 +19,21 @@ import static be.jonasboon.book_keeping_tool.service.transaction.TransactionVali
 
 @Slf4j
 @Service
-public final class TransactionService {
+public class TransactionService {
+
+    private final TransactionMapper transactionMapper;
     private final TransactionRepository transactionRepository;
     private final CostCenterService costCenterService;
 
-    private TransactionService(TransactionRepository transactionRepository, CostCenterService costCenterService) {
+    private TransactionService(TransactionMapper transactionMapper, TransactionRepository transactionRepository, CostCenterService costCenterService) {
+        this.transactionMapper = transactionMapper;
         this.transactionRepository = transactionRepository;
         this.costCenterService = costCenterService;
     }
 
     public List<TransactionDTO> getAllTransactions() {
         return transactionRepository.findAll().stream()
-                .map(TransactionMapper::from)
+                .map(transactionMapper::from)
                 .collect(Collectors.toList());
     }
 
@@ -44,13 +47,13 @@ public final class TransactionService {
                         .map(entityMapper::map)
                         .toList()
         );
-        return transactionRepository.findAll().stream().map(TransactionMapper::from).toList();
+        return transactionRepository.findAll().stream().map(transactionMapper::from).toList();
     }
 
     public List<TransactionDTO> loadAssigned(List<TransactionDTO> transactions) {
-        transactionRepository.saveAll(transactions.stream().map(TransactionMapper::from).toList());
+        transactionRepository.saveAll(transactions.stream().map(transactionMapper::from).toList());
         costCenterService.updateTotalAmounts(transactions);
-        return transactionRepository.findAll().stream().map(TransactionMapper::from).toList();
+        return transactionRepository.findAll().stream().map(transactionMapper::from).toList();
     }
 
     public void saveToFile() throws TransactionValidator.ValidationException {

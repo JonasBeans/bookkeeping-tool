@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 1
-      author: Jonas Boon
+      author: Jonas Boon Boon
       changes:
         - insert:
             tableName: cost_centers
