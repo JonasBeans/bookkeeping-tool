@@ -1,6 +1,5 @@
 package be.jonasboon.book_keeping_tool.controllers;
 
-import be.jonasboon.book_keeping_tool.backup.service.BackupService;
 import be.jonasboon.book_keeping_tool.model.TransactionDTO;
 import be.jonasboon.book_keeping_tool.service.transaction.TransactionService;
 import be.jonasboon.book_keeping_tool.utils.CSVFileReaderUtil;
@@ -17,7 +16,6 @@ import java.util.List;
 public class TransactionController {
 
     private final TransactionService transactionService;
-    private final BackupService backupService;
 
     @GetMapping("/all")
     public List<TransactionDTO> getAllTransactions() {

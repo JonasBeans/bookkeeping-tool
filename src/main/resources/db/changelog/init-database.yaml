@@ -54,6 +54,12 @@ databaseChangeLog:
               - column:
                   name: total_amount
                   type: DECIMAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: version
+                  type: BIGINT
+                  defaultValueNumeric: "0"
             tableName: cost_centers
   - changeSet:
       id: 1756501925358-4
@@ -82,6 +88,12 @@ databaseChangeLog:
               - column:
                   name: name_other_party
                   type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: version
+                  type: BIGINT
+                  defaultValueNumeric: "0"
               - column:
                   name: cost_center
                   type: VARCHAR(255)

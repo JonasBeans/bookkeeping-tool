@@ -11,11 +11,14 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class TransactionDTO {
-    public LocalDate bookDate;
+
+    private Long id;
+    private LocalDate bookDate;
     private LocalDate transactionDate;
     private BigDecimal amount;
     private String nameOtherParty;
     private String costCenterReference;
+    private Long version;
 
     @Override
     public String toString() {
