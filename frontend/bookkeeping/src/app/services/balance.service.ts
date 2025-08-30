@@ -21,8 +21,8 @@ export class BalanceService {
 		return this.http.put<string>('http://localhost:8080/balance/update', edit_balance_post, {responseType: 'text' as 'json'});
 	}
 
-	delete_balance_post(title: string, sub_post_title: string) {
-		return this.http.delete<string>('http://localhost:8080/balance?title=' + title + '&subPostTitle=' + sub_post_title, {responseType: 'text' as 'json'});
+	delete_balance_post(sub_post_title: string) {
+		return this.http.delete<string>('http://localhost:8080/balance?subPostTitle=' + sub_post_title, {responseType: 'text' as 'json'});
 	}
 
 }

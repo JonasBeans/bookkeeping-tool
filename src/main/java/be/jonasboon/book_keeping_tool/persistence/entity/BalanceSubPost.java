@@ -19,6 +19,5 @@ public class BalanceSubPost {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "balance_post_id")
-    private BalancePost balancePostId;
+    private BalancePost balancePost;
 }
-

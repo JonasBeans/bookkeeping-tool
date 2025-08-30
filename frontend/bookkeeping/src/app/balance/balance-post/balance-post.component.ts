@@ -107,7 +107,6 @@ export class BalancePostComponent implements OnInit {
 		const dialogref = this.dialog.open(EditBalancePostDialogComponent,
 			{
 				data: {
-					balance_post_title: this.post_title,
 					edit_balance_post_title: title,
 					edit_balance_post_amount: amount
 				}

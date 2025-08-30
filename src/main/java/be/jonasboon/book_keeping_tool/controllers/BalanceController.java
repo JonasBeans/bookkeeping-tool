@@ -23,26 +23,25 @@ public class BalanceController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity addBalanceInformation(@RequestBody AddBalancePostDTO dto) {
+    public ResponseEntity<String> addBalanceInformation(@RequestBody AddBalancePostDTO dto) {
         if (dto == null || dto.title().isEmpty()) throw new IllegalArgumentException("Balance post title cannot be empty");
         if (dto.subPost() == null || dto.subPost().title().isEmpty()) throw new IllegalArgumentException("Sub post title cannot be empty");
-        balanceService.saveBalancePost(dto);
+        balanceService.saveBalanceSubPost(dto);
         return ResponseEntity.ok("Successfully added new balance post");
     }
 
     @PutMapping("/update")
-    public ResponseEntity updateBalanceInformation(@RequestBody UpdateBalancePostDTO dto) {
+    public ResponseEntity<String> updateBalanceInformation(@RequestBody UpdateBalancePostDTO dto) {
         if (dto == null || dto.title().isEmpty()) throw new IllegalArgumentException();
         balanceService.updateBalancePost(dto);
         return ResponseEntity.ok(String.format("Successfully updated balance post: %s", dto.title()));
     }
 
     @DeleteMapping
-    public ResponseEntity deleteBalanceInformation(@RequestParam("title") String balancePostTitle, @RequestParam("subPostTitle") String subPostTitle) {
-        if (balancePostTitle.isEmpty()) throw new IllegalArgumentException();
+    public ResponseEntity<String> deleteBalanceInformation(@RequestParam("subPostTitle") String subPostTitle) {
         if (subPostTitle.isEmpty()) throw new IllegalArgumentException();
-        balanceService.deleteBalancePost(balancePostTitle, subPostTitle);
-        return ResponseEntity.ok(String.format("Successfully deleted balance post: %s from %s", subPostTitle, balancePostTitle));
+        balanceService.deleteBalancePost(subPostTitle);
+        return ResponseEntity.ok(String.format("Successfully deleted balance sub post: %s", subPostTitle));
     }
 
 
