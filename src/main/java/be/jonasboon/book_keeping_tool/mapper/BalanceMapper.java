@@ -21,10 +21,11 @@ public class BalanceMapper {
                 .build();
     }
 
-    public static BalanceSubPost toEntity(AddBalancePostDTO dto) {
+    public static BalanceSubPost toEntity(BalancePost balancePost,AddBalancePostDTO dto) {
         return BalanceSubPost.builder()
                 .title(dto.subPost().title())
                 .amount(dto.subPost().amount())
+                .balancePost(balancePost)
                 .build();
     }
 }

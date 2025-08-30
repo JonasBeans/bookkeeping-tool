@@ -7,6 +7,7 @@ import be.jonasboon.book_keeping_tool.mapper.BalanceMapper;
 import be.jonasboon.book_keeping_tool.persistence.entity.BalancePost;
 import be.jonasboon.book_keeping_tool.persistence.entity.BalanceSubPost;
 import be.jonasboon.book_keeping_tool.persistence.repository.BalanceRepository;
+import be.jonasboon.book_keeping_tool.persistence.repository.BalanceSubPostRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import static java.util.function.UnaryOperator.identity;
 public class BalanceService {
 
     private final BalanceRepository balanceRepository;
+    private final BalanceSubPostRepository balanceSubPostRepository;
 
     public GetBalanceInformationDTO findBalancePostByTitle(String balancePostTitle) {
         BalancePost balancePost = balanceRepository.findByTitle(balancePostTitle)
@@ -28,10 +30,11 @@ public class BalanceService {
         return BalanceMapper.toDTO(balancePost);
     }
 
-    public void saveBalancePost(AddBalancePostDTO dto) {
+    public void saveBalanceSubPost(AddBalancePostDTO dto) {
         BalancePost balancePost = balanceRepository.findByTitle(dto.title())
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Balance post not found: %s", dto.title())));
-        BalanceSubPost entity = BalanceMapper.toEntity(dto);
+
+        BalanceSubPost entity = BalanceMapper.toEntity(balancePost, dto);
         balancePost.getBalanceSubPosts().add(entity);
         balanceRepository.save(balancePost);
     }
@@ -57,17 +60,7 @@ public class BalanceService {
         balanceRepository.save(updatedEntity);
     }
 
-    public void deleteBalancePost(String balancePostTitle, String subPostTitle) {
-        BalancePost entity =
-                balanceRepository
-                        .findByTitle(balancePostTitle)
-                        .orElseThrow(() -> new IllegalArgumentException(String.format("Balance post not found: %s", subPostTitle)));
-
-        boolean isASubPostRemoved = entity.getBalanceSubPosts().removeIf(balanceSubPost -> subPostTitle.equals(balanceSubPost.getTitle()));
-        if (!isASubPostRemoved)
-            throw new IllegalArgumentException(String.format("Sub post not found: %s", subPostTitle));
-        else
-            log.info("Deleting sub post: {}", subPostTitle);
-        balanceRepository.save(entity);
+    public void deleteBalancePost(String subPostTitle) {
+        balanceSubPostRepository.deleteById(subPostTitle);
     }
 }

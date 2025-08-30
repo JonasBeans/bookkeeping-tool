@@ -1,9 +1,6 @@
 package be.jonasboon.book_keeping_tool.persistence.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +19,7 @@ public class BalancePost {
     @Id
     private String title;
 
-    @OneToMany(mappedBy = "title")
+    @OneToMany(mappedBy = "balancePost", cascade = CascadeType.ALL)
     private List<BalanceSubPost> balanceSubPosts;
 
 }
