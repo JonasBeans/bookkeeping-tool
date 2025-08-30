@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "cost_centers")
+@Table(name = "cost_centers", schema = "public")
 public class CostCenter {
 
     @Id
@@ -19,6 +19,8 @@ public class CostCenter {
     private Boolean isCost;
     @Setter
     private BigDecimal totalAmount;
+    @Version
+    private Long version;
 
     @OneToMany(mappedBy = "costCenter", fetch = FetchType.LAZY)
     private List<Transaction> transactions;

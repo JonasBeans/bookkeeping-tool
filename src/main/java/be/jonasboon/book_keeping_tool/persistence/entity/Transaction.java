@@ -24,6 +24,8 @@ public class Transaction {
     private LocalDate transactionDate;
     private BigDecimal amount;
     private String nameOtherParty;
+    @Version
+    private Long version;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cost_center")

@@ -15,15 +15,11 @@ public class CostCenterDTO {
     private String costCenter;
     private Boolean isCost;
     private BigDecimal totalAmount;
+    private Long version;
 
     public CostCenterDTO(String costCenter, String isCost) {
         this.costCenter = costCenter;
         this.isCost = Boolean.valueOf(isCost);
     }
 
-    public CostCenterDTO(String costCenter, String isCost, BigDecimal totalAmount) {
-        this.costCenter = costCenter;
-        this.isCost = Boolean.valueOf(isCost);
-        this.totalAmount = totalAmount;
-    }
 }

@@ -7,8 +7,8 @@ import be.jonasboon.book_keeping_tool.mapper.CostCenterMapper;
 import be.jonasboon.book_keeping_tool.model.AccumulatedAmounts;
 import be.jonasboon.book_keeping_tool.model.TransactionDTO;
 import be.jonasboon.book_keeping_tool.persistence.entity.CostCenter;
-import be.jonasboon.book_keeping_tool.persistence.repository.CostCenterCustomRepository;
 import be.jonasboon.book_keeping_tool.persistence.repository.CostCenterRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,21 +17,22 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class CostCenterService {
 
     private final String SKIP_COST_CENTER = "Skip";
     private final CostCenterRepository costCenterRepository;
-    private final CostCenterCustomRepository costCenterCustomRepository;
+    private final EntityManager entityManager;
 
     public List<CostCenterDTO> getAllCostCenters() {
         return costCenterRepository.findAll().stream()
-                .map(CostCenterMapper::fromEntity).toList();
+                .map(CostCenterMapper::of).toList();
     }
 
-    @Transactional
     public void updateTotalAmounts(List<TransactionDTO> transactions) {
-        costCenterCustomRepository.resetTotalAllAmounts();
+        costCenterRepository.resetTotalAllAmounts();
+        entityManager.clear();
 
         transactions.forEach(transaction -> {
             Optional<CostCenter> foundEntity = costCenterRepository.findById(transaction.getCostCenterReference());
@@ -54,7 +55,7 @@ public class CostCenterService {
 
     public void addCostCenter(AddCostCenterDTO costCenterDTO) throws CostCenterException {
         costCenterRepository.findByCostCenter(costCenterDTO.costCenter()).ifPresent(result -> CostCenterException.throwAlreadyExists(result.getCostCenter()));
-        costCenterRepository.save(CostCenterMapper.toEntity(costCenterDTO));
+        costCenterRepository.save(CostCenterMapper.of(costCenterDTO));
     }
 
     public static class CostCenterException extends RuntimeException {
@@ -66,8 +67,5 @@ public class CostCenterService {
             throw new CostCenterException("Cost center already exists: " + costCenter);
         }
 
-        public String toJson() {
-            return String.format("{ 'error': '%s'}", this.getMessage());
-        }
     }
 }

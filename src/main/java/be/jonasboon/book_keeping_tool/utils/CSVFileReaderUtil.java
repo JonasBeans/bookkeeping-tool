@@ -8,8 +8,6 @@ import com.opencsv.exceptions.CsvValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -24,14 +22,6 @@ public class CSVFileReaderUtil {
     public static CSVReader consume(MultipartFile file) {
         try {
             return new CSVReader(new InputStreamReader(file.getInputStream()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static CSVReader consume(File file) {
-        try {
-            return new CSVReader(new InputStreamReader(new FileInputStream(file) ));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

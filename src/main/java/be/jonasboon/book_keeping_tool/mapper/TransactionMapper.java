@@ -15,11 +15,13 @@ public class TransactionMapper {
 
     public TransactionDTO from(Transaction entity) {
         return TransactionDTO.builder()
+                .withId(entity.getId())
                 .withAmount(entity.getAmount())
                 .withBookDate(entity.getBookDate())
                 .withTransactionDate(entity.getTransactionDate())
                 .withNameOtherParty(entity.getNameOtherParty())
                 .withCostCenterReference(entity.getCostCenter().getCostCenter())
+                .withVersion(entity.getVersion())
                 .build();
     }
 
@@ -28,11 +30,13 @@ public class TransactionMapper {
                 .orElseThrow(() -> new IllegalArgumentException("CostCenter not found with id: " + dto.getCostCenterReference()));
 
         return Transaction.builder()
+                .withId(dto.getId())
                 .withAmount(dto.getAmount())
                 .withBookDate(dto.getBookDate())
                 .withTransactionDate(dto.getTransactionDate())
                 .withNameOtherParty(dto.getNameOtherParty())
                 .withCostCenter(costCenter)
+                .withVersion(dto.getVersion())
                 .build();
     }
 }
