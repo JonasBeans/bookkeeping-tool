@@ -6,8 +6,11 @@ services:
     environment:
       POSTGRES_PASSWORD: jauzK8c0AfAMy6
       POSTGRES_USER: postgres
+      POSTGRES_DB: bookkeeping_tool
     ports:
       - "5432:5432"
+    volumes:
+      - db_data:/data/postgresql
   pgadmin:
     image: dpage/pgadmin4:latest
     environment:
@@ -18,11 +21,15 @@ services:
     depends_on:
       - db
   springboot-app:
-    image: javabeans108/bookkeeping-tool:2.4.1
+    image: javabeans108/bookkeeping-tool:3.0.1
     container_name: bookkeeping-tool
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/bookkeeping
+      POSTGRES_PASSWORD: jauzK8c0AfAMy6
+      POSTGRES_USER: postgres
+      DATABASE_URL: jdbc:postgresql://db:5432/bookkeeping_tool
     depends_on:
       - db
+volumes:
+    db_data:
