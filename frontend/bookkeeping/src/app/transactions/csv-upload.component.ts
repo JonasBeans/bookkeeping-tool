@@ -80,7 +80,7 @@ export class CsvUploadComponent implements OnInit {
 		this.uploading = true;
 		this.progress = 0;
 
-		this.http.post<Transaction[]>('http://localhost:8080/backup/upload', formData, {
+		this.http.post<Transaction[]>('http://localhost:8080/synchronization/upload', formData, {
 			reportProgress: true,
 			observe: 'events'
 		}).subscribe({
@@ -91,7 +91,7 @@ export class CsvUploadComponent implements OnInit {
 	}
 
 	downloadBackupFiles() {
-		this.http.get('http://localhost:8080/backup/download', {responseType: 'blob'})
+		this.http.get('http://localhost:8080/synchronization/download', {responseType: 'blob'})
 			.subscribe({
 				next: (blob) => {
 					const url = window.URL.createObjectURL(blob);
@@ -106,7 +106,7 @@ export class CsvUploadComponent implements OnInit {
 	}
 
 	restore() {
-		this.http.put('http://localhost:8080/backup/restore', {}, {reportProgress: true, observe: 'events'})
+		this.http.put('http://localhost:8080/synchronization/restore', {}, {reportProgress: true, observe: 'events'})
 			.subscribe({
 				next: respone => this.retrieveAllTransactions(),
 				error: (error: HttpErrorResponse) => console.log(error),
@@ -144,7 +144,7 @@ export class CsvUploadComponent implements OnInit {
 		this.saving = true;
 		this.saving_progress = 0;
 
-		this.http.post<any>("http://localhost:8080/backup/request", {})
+		this.http.post<any>("http://localhost:8080/synchronization/backup", {})
 			.subscribe({
 				next: response => this.saving_progress = 100,
 				error: response => this.handle_save_error(response),
