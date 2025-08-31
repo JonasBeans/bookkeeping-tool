@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -44,13 +45,13 @@ public class SynchronizationService {
         log.info("Successfully restored {}", filePath);
     }
 
-    public void downloadBackup(HttpServletResponse response, String... fileNames) {
+    public void downloadBackup(HttpServletResponse response, List<String> fileNames) {
         log.info("Preparing files for downloading backup");
         DownloadExecutor.execute(response, fileNames);
         log.info("Successfully prepared files for downloading backup");
     }
 
-    public void uploadBackup(InputStream inputStream, String... allowedFileNames) {
+    public void uploadBackup(InputStream inputStream, List<String> allowedFileNames) {
         log.info("Preparing files for uploading backup");
         UploadExecutor.execute(inputStream, allowedFileNames);
         log.info("Successfully saved uploaded backup files");

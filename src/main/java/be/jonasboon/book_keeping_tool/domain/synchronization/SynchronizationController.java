@@ -1,11 +1,8 @@
 package be.jonasboon.book_keeping_tool.domain.synchronization;
 
 import be.jonasboon.book_keeping_tool.domain.balance_posts.entity.BalancePost;
-import be.jonasboon.book_keeping_tool.domain.balance_posts.repository.BalanceRepository;
 import be.jonasboon.book_keeping_tool.domain.cost_centers.entity.CostCenter;
-import be.jonasboon.book_keeping_tool.domain.cost_centers.repository.CostCenterRepository;
 import be.jonasboon.book_keeping_tool.domain.transactions.entity.Transaction;
-import be.jonasboon.book_keeping_tool.domain.transactions.repository.TransactionRepository;
 import be.jonasboon.book_keeping_tool.utils.ExceptionUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -22,24 +19,22 @@ import java.io.InputStream;
 @RequestMapping("synchronization")
 public class SynchronizationController {
 
-    private TransactionRepository transactionRepository;
-    private CostCenterRepository costCenterRepository;
-    private BalanceRepository balanceRepository;
+    private SynchronizationFileProperties synchronizationFileProperties;
     private SynchronizationService synchronizationService;
 
     @PostMapping("/backup")
     public ResponseEntity<String> createBackup() {
-        synchronizationService.make("transactions_backup.bkt", transactionRepository);
-        synchronizationService.make("cost_centers_backup.bkt", costCenterRepository);
-        synchronizationService.make("balance_posts.bkt", balanceRepository);
+        synchronizationFileProperties.PROPERTIES.forEach(property ->
+                synchronizationService.make(property.fileName(), property.repository())
+        );
         return ResponseEntity.ok("Backup successfully requested");
     }
 
     @PutMapping("/restore")
     public ResponseEntity<String> restoreFromBackup() {
-        synchronizationService.restore("transactions_backup.bkt", transactionRepository, ParameterizedTypeReference.forType(Transaction.class));
-        synchronizationService.restore("cost_centers_backup.bkt", costCenterRepository, ParameterizedTypeReference.forType(CostCenter.class));
-        synchronizationService.restore("balance_posts.bkt", balanceRepository, ParameterizedTypeReference.forType(BalancePost.class));
+        synchronizationFileProperties.PROPERTIES.forEach(property ->
+                synchronizationService.restore(property.fileName(), property.repository(), property.typeReference())
+        );
         return ResponseEntity.ok("Backup successfully restored");
     }
 
@@ -47,13 +42,13 @@ public class SynchronizationController {
     public void downloadBackup(HttpServletResponse response) {
         response.setHeader("Content-Type", "application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=backup.zip");
-        synchronizationService.downloadBackup(response, "transactions_backup.bkt", "cost_centers_backup.bkt", "balance_posts.bkt");
+        synchronizationService.downloadBackup(response, synchronizationFileProperties.getAllFileNames());
     }
 
     @PostMapping(consumes = "multipart/form-data", path = "/upload")
     public ResponseEntity<String> uploadBackup(@RequestParam("file") MultipartFile file) {
         try (InputStream inputStream = file.getInputStream()) {
-            synchronizationService.uploadBackup(inputStream, "transactions_backup.bkt", "cost_centers_backup.bkt", "balance_posts.bkt");
+            synchronizationService.uploadBackup(inputStream, synchronizationFileProperties.getAllFileNames());
         } catch (IOException e) {
             return ExceptionUtils.sendExceptionResponse(e, 500);
         }

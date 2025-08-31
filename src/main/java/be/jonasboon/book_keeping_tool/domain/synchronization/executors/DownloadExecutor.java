@@ -16,12 +16,10 @@ import java.util.zip.ZipOutputStream;
 @Slf4j
 public class DownloadExecutor {
 
-    public static void execute(HttpServletResponse response, String... fileNames) {
-        List<String> fileNamesList = ArrayUtils.toUnmodifiableList(fileNames);
-
+    public static void execute(HttpServletResponse response, List<String> fileNames) {
         // Create ZIP output stream
         try (ZipOutputStream zipOut = new ZipOutputStream(response.getOutputStream())) {
-            fileNamesList.forEach(fileName -> {
+            fileNames.forEach(fileName -> {
                 addFileToZip(fileName, zipOut);
             });
         } catch (IOException e) {

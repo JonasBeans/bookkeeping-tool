@@ -1,7 +1,7 @@
 package be.jonasboon.book_keeping_tool.domain.synchronization.executors;
 
 import be.jonasboon.book_keeping_tool.utils.FileReaderUtil;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,17 +13,16 @@ import java.io.File;
 @AllArgsConstructor
 public class RestoreExecutor {
 
-    private final Gson gson;
+    private final ObjectMapper objectMapper;
 
     public <I> void executeJson(File file, JpaRepository<I, ?> repository, ParameterizedTypeReference<I> reference) {
         repository.deleteAll();
         repository.saveAll(
                 FileReaderUtil.convertFileToType(
                         file.getPath(),
-                        gson,
+                        objectMapper,
                         reference
                 )
         );
     }
 }
-

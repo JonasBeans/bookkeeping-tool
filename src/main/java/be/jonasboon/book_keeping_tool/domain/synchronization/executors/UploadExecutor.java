@@ -16,9 +16,7 @@ import java.util.zip.ZipInputStream;
 @Slf4j
 public class UploadExecutor {
 
-    public static void execute(InputStream inputStream, String... allowedFileNames) {
-        List<String> allowedFileNamesList = ArrayUtils.toUnmodifiableList(allowedFileNames);
-
+    public static void execute(InputStream inputStream, List<String> allowedFileNames) {
         try (
                 ZipInputStream zis = new ZipInputStream(inputStream)) {
             ZipEntry entry;
@@ -27,7 +25,7 @@ public class UploadExecutor {
             Files.createDirectories(targetDir);
 
             while ((entry = zis.getNextEntry()) != null) {
-                if (!allowedFileNamesList.contains(entry.getName())) {
+                if (!allowedFileNames.contains(entry.getName())) {
                     throw new RuntimeException("Invalid file name: " + entry.getName());
                 }
                 Path filePath = targetDir.resolve(entry.getName());

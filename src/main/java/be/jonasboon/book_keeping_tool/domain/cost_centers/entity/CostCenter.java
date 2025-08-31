@@ -1,6 +1,7 @@
 package be.jonasboon.book_keeping_tool.domain.cost_centers.entity;
 
 import be.jonasboon.book_keeping_tool.domain.transactions.entity.Transaction;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,7 @@ public class CostCenter {
     @Version
     private Long version;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "costCenter", fetch = FetchType.LAZY)
     private List<Transaction> transactions;
 

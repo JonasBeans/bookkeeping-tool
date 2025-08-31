@@ -1,5 +1,7 @@
 package be.jonasboon.book_keeping_tool.domain.balance_posts.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +21,7 @@ public class BalancePost {
     @Id
     private String title;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "balancePost", cascade = CascadeType.ALL)
     private List<BalanceSubPost> balanceSubPosts;
 

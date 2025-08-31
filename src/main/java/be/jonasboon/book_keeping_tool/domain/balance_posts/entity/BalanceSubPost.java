@@ -1,5 +1,7 @@
 package be.jonasboon.book_keeping_tool.domain.balance_posts.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +19,7 @@ public class BalanceSubPost {
     @Setter
     private Double amount;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "balance_post_id")
     private BalancePost balancePost;

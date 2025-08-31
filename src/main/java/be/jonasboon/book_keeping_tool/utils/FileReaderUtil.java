@@ -1,6 +1,6 @@
 package be.jonasboon.book_keeping_tool.utils;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.ParameterizedTypeReference;
 
 import java.io.BufferedReader;
@@ -12,13 +12,13 @@ import java.util.List;
 
 public class FileReaderUtil {
 
-    public static <I> List<I> convertFileToType(String fileName, Gson jsonConverter, ParameterizedTypeReference<I> reference) {
+    public static <I> List<I> convertFileToType(String fileName, ObjectMapper objectMapper, ParameterizedTypeReference<I> reference) {
         List<I> items = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                I convertedItem = jsonConverter.fromJson(line, reference.getType());
+                I convertedItem = objectMapper.readValue(line, objectMapper.constructType(reference.getType()));
                 items.add(convertedItem);
                 System.out.println(convertedItem);
             }
