@@ -1,12 +1,8 @@
 package be.jonasboon.book_keeping_tool.domain.synchronization;
 
-import be.jonasboon.book_keeping_tool.domain.balance_posts.entity.BalancePost;
-import be.jonasboon.book_keeping_tool.domain.cost_centers.entity.CostCenter;
-import be.jonasboon.book_keeping_tool.domain.transactions.entity.Transaction;
 import be.jonasboon.book_keeping_tool.utils.ExceptionUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,8 +28,9 @@ public class SynchronizationController {
 
     @PutMapping("/restore")
     public ResponseEntity<String> restoreFromBackup() {
+        synchronizationService.clearAllTables();
         synchronizationFileProperties.PROPERTIES.forEach(property ->
-                synchronizationService.restore(property.fileName(), property.repository(), property.typeReference())
+                synchronizationService.restore(property.fileName(), property.repository(), property.getEntityHandler(), property.typeReference())
         );
         return ResponseEntity.ok("Backup successfully restored");
     }

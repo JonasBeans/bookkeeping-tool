@@ -1,9 +1,9 @@
 package be.jonasboon.book_keeping_tool.domain.balance_posts.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -12,14 +12,13 @@ import lombok.*;
 @Table(name = "balance_sub_posts")
 @AllArgsConstructor
 @NoArgsConstructor
-public class BalanceSubPost {
+public class BalanceSubPost implements Serializable {
 
     @Id
     private String title;
     @Setter
     private Double amount;
 
-    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "balance_post_id")
     private BalancePost balancePost;

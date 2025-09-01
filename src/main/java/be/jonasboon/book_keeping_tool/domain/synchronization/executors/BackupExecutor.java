@@ -15,7 +15,7 @@ public class BackupExecutor {
 
     private final ObjectMapper objectMapper;
 
-    public <I> void executeJson(File filePath, Collection<I> models) {
+    public <I> void execute(File filePath, Collection<I> models) {
         String[] items = models.stream()
                 .map(model -> {
                     try {

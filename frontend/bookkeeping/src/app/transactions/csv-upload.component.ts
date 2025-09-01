@@ -144,7 +144,7 @@ export class CsvUploadComponent implements OnInit {
 		this.saving = true;
 		this.saving_progress = 0;
 
-		this.http.post<any>("http://localhost:8080/synchronization/backup", {})
+		this.http.post<String>("http://localhost:8080/synchronization/backup", {})
 			.subscribe({
 				next: response => this.saving_progress = 100,
 				error: response => this.handle_save_error(response),
