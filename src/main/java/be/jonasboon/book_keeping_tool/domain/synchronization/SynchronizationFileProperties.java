@@ -39,9 +39,9 @@ public class SynchronizationFileProperties {
 
     public void load() {
         PROPERTIES = List.of(
-                new SynchronizationFileProperty<>("cost_centers.bkt", costCenterRepository, new EntityHandlerDefault(), ParameterizedTypeReference.forType(CostCenter.class)),
-                new SynchronizationFileProperty<>("balance_posts.bkt", balanceRepository, new EntityHandlerDefault(), ParameterizedTypeReference.forType(BalanceSubPost.class)),
-                new SynchronizationFileProperty<>("balance_sub_posts.bkt", balanceSubPostRepository, new EntityHandlerDefault(), ParameterizedTypeReference.forType(BalanceSubPost.class)),
+                new SynchronizationFileProperty<>("cost_centers.bkt", costCenterRepository, ParameterizedTypeReference.forType(CostCenter.class)),
+                new SynchronizationFileProperty<>("balance_posts.bkt", balanceRepository, ParameterizedTypeReference.forType(BalanceSubPost.class)),
+                new SynchronizationFileProperty<>("balance_sub_posts.bkt", balanceSubPostRepository, ParameterizedTypeReference.forType(BalanceSubPost.class)),
                 new SynchronizationFileProperty<>("transactions.bkt", transactionRepository, transactionEntityHandler, ParameterizedTypeReference.forType(Transaction.class))
         );
     }
@@ -53,7 +53,13 @@ public class SynchronizationFileProperties {
    public record SynchronizationFileProperty<ENTITY>(
             String fileName,
             JpaRepository<ENTITY,?> repository,
-            EntityHandler getEntityHandler,
+            EntityHandler entityHandler,
             ParameterizedTypeReference<ENTITY> typeReference
-    ) { }
+    ) {
+       SynchronizationFileProperty(
+               String fileName,
+               JpaRepository<ENTITY,?> repository,
+               ParameterizedTypeReference<ENTITY> typeReference
+       ) {this(fileName, repository, new EntityHandlerDefault(), typeReference);}
+   }
 }

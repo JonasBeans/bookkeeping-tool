@@ -30,7 +30,7 @@ public class SynchronizationController {
     public ResponseEntity<String> restoreFromBackup() {
         synchronizationService.clearAllTables();
         synchronizationFileProperties.PROPERTIES.forEach(property ->
-                synchronizationService.restore(property.fileName(), property.repository(), property.getEntityHandler(), property.typeReference())
+                synchronizationService.restore(property.fileName(), property.repository(), property.entityHandler(), property.typeReference())
         );
         return ResponseEntity.ok("Backup successfully restored");
     }
