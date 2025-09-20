@@ -19,8 +19,7 @@ public class UploadExecutor {
     public static void execute(InputStream inputStream, String... allowedFileNames) {
         List<String> allowedFileNamesList = ArrayUtils.toUnmodifiableList(allowedFileNames);
 
-        try (
-                ZipInputStream zis = new ZipInputStream(inputStream)) {
+        try (ZipInputStream zis = new ZipInputStream(inputStream)) {
             ZipEntry entry;
             Path targetDir = FileUtils.getTempDirectory().toPath();
             // Ensure the target directory exists
