@@ -2,16 +2,15 @@ package be.jonasboon.book_keeping_tool.domain.transactions.service;
 
 import be.jonasboon.book_keeping_tool.domain.cost_centers.service.CostCenterService;
 import be.jonasboon.book_keeping_tool.domain.transactions.DTO.TransactionDTO;
-import be.jonasboon.book_keeping_tool.domain.transactions.mapper.TransactionCSVMapper;
 import be.jonasboon.book_keeping_tool.domain.transactions.mapper.TransactionMapper;
+import be.jonasboon.book_keeping_tool.domain.transactions.processor.TransactionFileStrategy;
 import be.jonasboon.book_keeping_tool.domain.transactions.repository.TransactionRepository;
-import be.jonasboon.book_keeping_tool.utils.CSVFileReaderUtil;
-import com.opencsv.CSVReader;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +25,7 @@ public class TransactionService {
     private final TransactionMapper transactionMapper;
     private final TransactionRepository transactionRepository;
     private final CostCenterService costCenterService;
+    private final TransactionFileStrategy transactionFileStrategy;
     private final EntityManager entityManager;
 
     public List<TransactionDTO> getAllTransactions() {
@@ -34,16 +34,11 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
 
-    public List<TransactionDTO> processTransactionCSVUpload(CSVReader csvReader) {
+    public List<TransactionDTO> processTransactionUpload(MultipartFile file) {
         transactionRepository.deleteAll(); entityManager.flush();
         costCenterService.resetAllTotalAmounts();
-        transactionRepository.saveAll(
-                CSVFileReaderUtil
-                        .convert(new TransactionCSVMapper(), csvReader)
-                        .stream()
-                        .map(transactionMapper::map)
-                        .toList()
-        );
+        //todo refactor to support multiple file types
+        transactionRepository.saveAll(transactionFileStrategy.process(file, "xlsx"));
         return transactionRepository.findAll().stream().map(transactionMapper::from).toList();
     }
 

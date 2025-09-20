@@ -2,8 +2,6 @@ package be.jonasboon.book_keeping_tool.domain.transactions.controller;
 
 import be.jonasboon.book_keeping_tool.domain.transactions.DTO.TransactionDTO;
 import be.jonasboon.book_keeping_tool.domain.transactions.service.TransactionService;
-import be.jonasboon.book_keeping_tool.utils.CSVFileReaderUtil;
-import com.opencsv.CSVReader;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,8 +22,7 @@ public class TransactionController {
 
     @PostMapping(value = "/upload/transaction-file")
     public List<TransactionDTO> uploadTransactionsCSV(@RequestParam("file") MultipartFile file) {
-        CSVReader reader = CSVFileReaderUtil.consume(file);
-        return transactionService.processTransactionCSVUpload(reader);
+        return transactionService.processTransactionUpload(file);
     }
 
     @PutMapping(value = "/assigned")
