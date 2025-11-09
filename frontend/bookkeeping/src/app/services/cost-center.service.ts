@@ -2,6 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {CostCenter} from "../../dto/cost-center";
 import {HttpClient} from "@angular/common/http";
 import {AccumulatedAmounts} from "../../dto/accumulated-amounts";
+import {environment} from "../../environments/environment";
 
 @Injectable({
 	providedIn: 'root'
@@ -13,6 +14,7 @@ export class CostCenterService {
 	public incomes: CostCenter[] = [];
 	public accumulatedAmounts: AccumulatedAmounts = {totalIncome: 0, totalCost: 0};
 	public client: HttpClient = inject(HttpClient);
+	private readonly baseUrl = environment.apiBaseUrl; // empty string means same-origin
 
 	constructor() {
 		this.refresh_data();
@@ -23,8 +25,12 @@ export class CostCenterService {
 		this.getAccumulatedAmounts();
 	}
 
+	private api(path: string): string { // ensure leading slash
+		return `${this.baseUrl}${path.startsWith('/') ? path : '/' + path}`;
+	}
+
 	private getCostCenters(): void {
-		this.client.get<CostCenter[]>('http://localhost:8080/api/cost-centers/all')
+		this.client.get<CostCenter[]>(this.api('/api/cost-centers/all'))
 			.subscribe((response) => {
 				this.all = response;
 				this.costs = this.all.filter(item => item.isCost);
@@ -33,7 +39,7 @@ export class CostCenterService {
 	}
 
 	private getAccumulatedAmounts(): void {
-		this.client.get<AccumulatedAmounts>('http://localhost:8080/api/cost-centers/accumulated-amounts')
+		this.client.get<AccumulatedAmounts>(this.api('/api/cost-centers/accumulated-amounts'))
 			.subscribe({
 				next: value => this.accumulatedAmounts = value,
 				error: err => {
@@ -45,7 +51,7 @@ export class CostCenterService {
 
 	addCostCenter(cost_center_title: string, isCost: boolean) : void {
 		this.client.post(
-			'http://localhost:8080/api/cost-centers/add',
+			this.api('/api/cost-centers/add'),
 			{title: cost_center_title, isCost: isCost}
 		).subscribe({
 			next: result => {

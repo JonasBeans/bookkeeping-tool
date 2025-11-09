@@ -8,7 +8,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatOption, MatSelectModule} from "@angular/material/select";
 import {FormsModule} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
-
+import {environment} from "../../environments/environment";
 
 @Component({
 	selector: 'app-csv-upload',
@@ -48,6 +48,9 @@ export class CsvUploadComponent implements OnInit {
 
 	expand_operations : boolean = false;
 
+	private readonly baseUrl = environment.apiBaseUrl;
+	private api(path: string): string { return `${this.baseUrl}${path.startsWith('/') ? path : '/' + path}`; }
+
 	constructor(private http: HttpClient) {}
 
 	ngOnInit() {
@@ -55,7 +58,7 @@ export class CsvUploadComponent implements OnInit {
 	}
 
 	private retrieveAllTransactions() {
-		this.http.get<Transaction[]>('http://localhost:8080/transactions/all').subscribe({
+		this.http.get<Transaction[]>(this.api('/transactions/all')).subscribe({
 			next: (transactions) => this.transactions = transactions,
 			error: (error: HttpErrorResponse) => this.error = error.message
 		});
@@ -80,7 +83,7 @@ export class CsvUploadComponent implements OnInit {
 		this.uploading = true;
 		this.progress = 0;
 
-		this.http.post<Transaction[]>('http://localhost:8080/synchronization/upload', formData, {
+		this.http.post<Transaction[]>(this.api('/synchronization/upload'), formData, {
 			reportProgress: true,
 			observe: 'events'
 		}).subscribe({
@@ -91,7 +94,7 @@ export class CsvUploadComponent implements OnInit {
 	}
 
 	downloadBackupFiles() {
-		this.http.get('http://localhost:8080/synchronization/download', {responseType: 'blob'})
+		this.http.get(this.api('/synchronization/download'), {responseType: 'blob'})
 			.subscribe({
 				next: (blob) => {
 					const url = window.URL.createObjectURL(blob);
@@ -106,7 +109,7 @@ export class CsvUploadComponent implements OnInit {
 	}
 
 	restore() {
-		this.http.put('http://localhost:8080/synchronization/restore', {}, {reportProgress: true, observe: 'events'})
+		this.http.put(this.api('/synchronization/restore'), {}, {reportProgress: true, observe: 'events'})
 			.subscribe({
 				next: respone => this.retrieveAllTransactions(),
 				error: (error: HttpErrorResponse) => console.log(error),
@@ -114,7 +117,7 @@ export class CsvUploadComponent implements OnInit {
 	}
 
 	assign() {
-		this.http.put<Transaction[]>('http://localhost:8080/transactions/assigned', this.transactions, {reportProgress: true, observe: 'events'})
+		this.http.put<Transaction[]>(this.api('/transactions/assigned'), this.transactions, {reportProgress: true, observe: 'events'})
 			.subscribe({
 				next: (response: HttpEvent<Transaction[]>) => this.assign_callback(response),
 				error: (error) => this.handle_assign_error(error)
@@ -130,7 +133,7 @@ export class CsvUploadComponent implements OnInit {
 		this.uploading = true;
 		this.progress = 0;
 
-		this.http.post<Transaction[]>('http://localhost:8080/transactions/upload/transaction-file', formData, {
+		this.http.post<Transaction[]>(this.api('/transactions/upload/transaction-file'), formData, {
 			reportProgress: true,
 			observe: 'events'
 		}).subscribe({
@@ -144,7 +147,7 @@ export class CsvUploadComponent implements OnInit {
 		this.saving = true;
 		this.saving_progress = 0;
 
-		this.http.post<any>("http://localhost:8080/synchronization/backup", {})
+		this.http.post<any>(this.api('/synchronization/backup'), {})
 			.subscribe({
 				next: response => this.saving_progress = 100,
 				error: response => this.handle_save_error(response),
