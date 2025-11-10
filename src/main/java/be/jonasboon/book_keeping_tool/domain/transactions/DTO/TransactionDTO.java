@@ -3,6 +3,7 @@ package be.jonasboon.book_keeping_tool.domain.transactions.DTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,6 +20,15 @@ public class TransactionDTO {
     private String nameOtherParty;
     private String costCenterReference;
     private Long version;
+
+    public boolean hasNoEmptyField() {
+        return
+            ObjectUtils.isNotEmpty(bookDate) ||
+            ObjectUtils.isNotEmpty(transactionDate) ||
+            ObjectUtils.isNotEmpty(amount) ||
+            ObjectUtils.isNotEmpty(nameOtherParty) ||
+            ObjectUtils.isNotEmpty(costCenterReference);
+    }
 
     @Override
     public String toString() {

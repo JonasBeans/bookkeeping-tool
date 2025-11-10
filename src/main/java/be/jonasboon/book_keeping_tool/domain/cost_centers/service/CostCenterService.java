@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static io.micrometer.common.util.StringUtils.isNotBlank;
+
 @Service
 @Transactional
 @AllArgsConstructor
@@ -38,13 +40,15 @@ public class CostCenterService {
     public void updateTotalAmounts(List<TransactionDTO> transactions) {
         this.resetAllTotalAmounts();
 
-        transactions.forEach(transaction -> {
-            Optional<CostCenter> foundEntity = costCenterRepository.findById(transaction.getCostCenterReference());
-            foundEntity.ifPresent(costCenterEntity -> {
-                costCenterEntity.addToTotalAmount(transaction.getAmount().abs());
-                costCenterRepository.save(costCenterEntity);
-            });
-        });
+        transactions.stream()
+                .filter(transaction -> isNotBlank(transaction.getCostCenterReference()))
+                .forEach(transaction -> {
+                    Optional<CostCenter> foundEntity = costCenterRepository.findById(transaction.getCostCenterReference());
+                    foundEntity.ifPresent(costCenterEntity -> {
+                        costCenterEntity.addToTotalAmount(transaction.getAmount().abs());
+                        costCenterRepository.save(costCenterEntity);
+                    });
+                });
     }
 
     public AccumulatedAmountsDTO getAccumulatedAmounts() {

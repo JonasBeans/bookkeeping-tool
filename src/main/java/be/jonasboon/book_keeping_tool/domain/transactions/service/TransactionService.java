@@ -37,13 +37,18 @@ public class TransactionService {
     public List<TransactionDTO> processTransactionUpload(MultipartFile file) {
         transactionRepository.deleteAll(); entityManager.flush();
         costCenterService.resetAllTotalAmounts();
-        //todo refactor to support multiple file types
         transactionRepository.saveAll(transactionFileStrategy.process(file, "xlsx"));
         return transactionRepository.findAll().stream().map(transactionMapper::from).toList();
     }
 
     public List<TransactionDTO> loadAssigned(List<TransactionDTO> transactions) {
-        transactionRepository.saveAll(transactions.stream().map(transactionMapper::from).toList()); entityManager.flush();
+        transactionRepository.saveAll(
+                transactions.stream()
+                        .filter(TransactionDTO::hasNoEmptyField)
+                        .map(transactionMapper::from)
+                        .toList()
+        );
+        entityManager.flush();
         costCenterService.updateTotalAmounts(transactions);
         return transactionRepository.findAll().stream().map(transactionMapper::from).toList();
     }

@@ -9,6 +9,8 @@ import be.jonasboon.book_keeping_tool.utils.mapper.CSVObject;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static io.micrometer.common.util.StringUtils.isNotBlank;
+
 @Component
 @AllArgsConstructor
 public class TransactionMapper {
@@ -28,18 +30,25 @@ public class TransactionMapper {
     }
 
     public Transaction from(TransactionDTO dto) {
-        CostCenter costCenter = costCenterRepository.findById(dto.getCostCenterReference())
-                .orElseThrow(() -> new IllegalArgumentException("CostCenter not found with id: " + dto.getCostCenterReference()));
-
         return Transaction.builder()
                 .withId(dto.getId())
                 .withAmount(dto.getAmount())
                 .withBookDate(dto.getBookDate())
                 .withTransactionDate(dto.getTransactionDate())
                 .withNameOtherParty(dto.getNameOtherParty())
-                .withCostCenter(costCenter)
+                .withCostCenter(getCostCenter(dto))
                 .withVersion(dto.getVersion())
                 .build();
+    }
+
+    private CostCenter getCostCenter(TransactionDTO dto) {
+        CostCenter costCenter = null;
+
+        if (isNotBlank( dto.getCostCenterReference())) {
+             costCenter = costCenterRepository.findById(dto.getCostCenterReference())
+                    .orElseThrow(() -> new IllegalArgumentException("CostCenter not found with id: " + dto.getCostCenterReference()));
+        }
+        return costCenter;
     }
 
     public Transaction map(CSVObject restoreModel) {
