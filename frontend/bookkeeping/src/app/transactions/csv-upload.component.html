@@ -1,16 +1,17 @@
-<a (click)="expand_operations=!expand_operations"><mat-icon [hidden]="expand_operations">keyboard_arrow_right</mat-icon></a>
-<a (click)="expand_operations=!expand_operations"><mat-icon [hidden]="!expand_operations">keyboard_arrow_down</mat-icon></a>
-<div class="flex flex-col items-center gap-4 p-6 max-w-md mx-auto bg-white shadow-xl rounded-2xl" [hidden]="!expand_operations">
+<mat-expansion-panel style="margin-bottom: 10px">
+	<mat-expansion-panel-header>
+		<mat-panel-title> File operations </mat-panel-title>
+	</mat-expansion-panel-header>
 	<div class="d-flex flex-row justify-content-between">
 		<div style="margin: 5px">
-			<button [disabled]="!file || uploading" (click)="upload()"
+			<button [disabled]="!file" (click)="upload()"
 					class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
-				{{ uploading ? 'Uploading…' : '1 Upload' }}
+				Upload
 			</button>
-			<button [disabled]="saving"
+			<button
 					class="px-6 py-2 rounded-xl shadow disabled:opacity-40"
 					(click)="save()">
-				{{ saving ? 'Saving…' : '3 Save' }}
+				Save
 			</button>
 			<button
 				class="px-6 py-2 rounded-xl shadow disabled:opacity-40"
@@ -22,17 +23,6 @@
 				(click)="downloadBackupFiles()">
 				5. Download backup files
 			</button>
-
-			<p *ngIf="progress>=0 && progress<100" class="text-sm">Uploading… {{ progress }}%</p>
-			<p *ngIf="progress===100" class="text-sm text-green-600">Upload complete ✓</p>
-			<p *ngIf="error" class="text-sm text-red-600">{{ error }}</p>
-
-			<p *ngIf="assign_upload" class="text-sm text-green-600">Assigning complete ✓</p>
-			<p *ngIf="assign_error" class="text-sm text-red-600">{{ assign_error }}</p>
-
-			<p *ngIf="saving_progress>=0 && saving_progress<100" class="text-sm text-green-600">Save complete ✓</p>
-			<p *ngIf="save_error" class="text-sm text-red-600">{{ save_error }}</p>
-
 		</div>
 		<div>
 			<p>Upload transactions</p>
@@ -45,7 +35,8 @@
 				   class="file:border file:rounded-lg file:px-4 file:py-2"/>
 		</div>
 	</div>
-</div>
+</mat-expansion-panel>
+
 <table mat-table [dataSource]="transactions">
 	<ng-container matColumnDef="bookDate">
 		<th mat-header-cell *matHeaderCellDef>Book Date</th>

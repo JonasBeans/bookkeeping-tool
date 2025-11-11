@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpEvent, HttpEventType} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpEvent} from '@angular/common/http';
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {Transaction} from "../../dto/transaction";
 import {CostCenterService} from "../services/cost-center.service";
@@ -7,8 +7,9 @@ import {MatTableModule} from "@angular/material/table";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatOption, MatSelectModule} from "@angular/material/select";
 import {FormsModule} from "@angular/forms";
-import {MatIcon} from "@angular/material/icon";
 import {environment} from "../../environments/environment";
+import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from "@angular/material/expansion";
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from "@angular/material/snack-bar";
 
 @Component({
 	selector: 'app-csv-upload',
@@ -22,7 +23,9 @@ import {environment} from "../../environments/environment";
 		FormsModule,
 		NgForOf,
 		DatePipe,
-		MatIcon
+		MatExpansionPanel,
+		MatExpansionPanelHeader,
+		MatExpansionPanelTitle,
 	],
 	standalone: true,
 	styleUrl: "csv-upload.component.css"
@@ -31,24 +34,14 @@ export class CsvUploadComponent implements OnInit {
 	file: File | null = null;
 	backupFile: File | null = null;
 
-	progress = -1;
-	uploading = false;
-	error: string | null = null;
-
-	assign_upload: boolean = false;
-	assign_error: string = "";
-
-	saving: boolean = false;
-	save_error: string = "";
-	saving_progress: number = -1;
-
 	transactions: Transaction[] = [];
 	costCenterService: CostCenterService = inject(CostCenterService);
 	displayedColumns: string[] = ['bookDate','transactionDate', 'amount', 'nameOtherParty', 'costCenter'];
 
-	expand_operations : boolean = false;
-
 	private readonly baseUrl = environment.apiBaseUrl;
+	private snackbar= inject(MatSnackBar);
+	private horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+	private verticalPosition: MatSnackBarVerticalPosition = 'bottom';
 	private api(path: string): string { return `${this.baseUrl}${path.startsWith('/') ? path : '/' + path}`; }
 
 	constructor(private http: HttpClient) {}
@@ -60,28 +53,23 @@ export class CsvUploadComponent implements OnInit {
 	private retrieveAllTransactions() {
 		this.http.get<Transaction[]>(this.api('/transactions/all')).subscribe({
 			next: (transactions) => this.transactions = transactions,
-			error: (error: HttpErrorResponse) => this.error = error.message
+			error: (error: HttpErrorResponse) => this.snackbar.open(`Error: ${error}`, "Close")
 		});
 	}
 
 	onFileSelected(event: Event) {
 		const input = event.target as HTMLInputElement;
 		this.file = input.files && input.files.length ? input.files[0] : null;
-		this.error = null;
 	}
 
 	onBackupFileSelected(event: Event) {
 		const input = event.target as HTMLInputElement;
 		this.backupFile = input.files && input.files.length ? input.files[0] : null;
-		this.error = null;
 
 		if (!this.backupFile) return;
 
 		const formData = new FormData();
 		formData.append('file', this.backupFile, this.backupFile.name);
-
-		this.uploading = true;
-		this.progress = 0;
 
 		this.http.post<Transaction[]>(this.api('/synchronization/upload'), formData, {
 			reportProgress: true,
@@ -111,16 +99,22 @@ export class CsvUploadComponent implements OnInit {
 	restore() {
 		this.http.put(this.api('/synchronization/restore'), {}, {reportProgress: true, observe: 'events'})
 			.subscribe({
-				next: respone => this.retrieveAllTransactions(),
-				error: (error: HttpErrorResponse) => console.log(error),
+				next: () => {
+					this.retrieveAllTransactions();
+					this.openSnackBar("Restore successfully", "Close", 1000);
+				},
+				error: (error: HttpErrorResponse) => this.snackbar.open(`Error: ${error}`, "Close")
 			})
 	}
 
 	assign() {
 		this.http.put<Transaction[]>(this.api('/transactions/assigned'), this.transactions, {reportProgress: true, observe: 'events'})
 			.subscribe({
-				next: (response: HttpEvent<Transaction[]>) => this.assign_callback(response),
-				error: (error) => this.handle_assign_error(error)
+				next: () => {
+					this.retrieveAllTransactions();
+					this.openSnackBar("Cost centers assigned successfully", "Close", 1000);
+				},
+				error: (error: HttpErrorResponse) => this.snackbar.open(`Error: ${error}`, "Close")
 			});
 	}
 
@@ -130,63 +124,29 @@ export class CsvUploadComponent implements OnInit {
 		const formData = new FormData();
 		formData.append('file', this.file, this.file.name);
 
-		this.uploading = true;
-		this.progress = 0;
-
 		this.http.post<Transaction[]>(this.api('/transactions/upload/transaction-file'), formData, {
 			reportProgress: true,
 			observe: 'events'
 		}).subscribe({
-				next: (response: HttpEvent<Transaction[]>) => this.upload_callback(response),
-				error: (error: HttpErrorResponse) => this.handle_upload_error(error)
+				next: () => this.openSnackBar("Upload successful", "Close", 1000),
+				error: (error: HttpErrorResponse) => this.snackbar.open(`Error: ${error}`, "Close")
 			}
 		);
 	}
 
 	save() {
-		this.saving = true;
-		this.saving_progress = 0;
-
 		this.http.post<any>(this.api('/synchronization/backup'), {})
 			.subscribe({
-				next: response => this.saving_progress = 100,
-				error: response => this.handle_save_error(response),
+				next: () => this.openSnackBar("Save successful", "Close", 1000),
+				error: (error: HttpErrorResponse) => this.snackbar.open(`Error: ${error}`, "Close")
 			});
 	}
 
-	upload_callback(event: HttpEvent<Transaction[]>) {
-		if (event.type === HttpEventType.UploadProgress && event.total) {
-			this.progress = Math.round((event.loaded / event.total) * 100);
-		} else if (event.type === HttpEventType.Response) {
-			this.progress = 100;
-			this.uploading = false;
-			this.transactions = event.body || [];
-		}
+	private openSnackBar(message: string, action: string, duration: number = 3000) {
+		this.snackbar.open(message, action, {
+			duration: duration,
+			horizontalPosition: this.horizontalPosition,
+			verticalPosition: this.verticalPosition,
+		});
 	}
-
-	handle_upload_error(error: HttpErrorResponse) {
-		this.error = error.message;
-		this.uploading = false;
-		this.progress = -1;
-	}
-
-	assign_callback(event: HttpEvent<Transaction[]>) {
-		console.log(event.type)
-		if (event.type === HttpEventType.Response) {
-			this.assign_upload = true;
-		}
-		this.retrieveAllTransactions();
-	}
-
-	handle_assign_error(error: HttpErrorResponse) {
-		this.assign_error = error.message;
-		this.assign_upload = false;
-	}
-
-	handle_save_error(error: HttpErrorResponse) {
-		this.save_error = error.error;
-		this.saving = false;
-		this.saving_progress = -1;
-	}
-
 }
