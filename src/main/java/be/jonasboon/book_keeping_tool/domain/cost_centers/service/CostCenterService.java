@@ -33,8 +33,10 @@ public class CostCenterService {
     }
 
     public void resetAllTotalAmounts() {
-        costCenterRepository.resetTotalAllAmounts();
-        entityManager.flush();
+        int affected = costCenterRepository.resetTotalAllAmounts();
+        // Clear persistence context so subsequent entity loads see updated values from DB
+        entityManager.clear();
+        // Optionally could log affected count
     }
 
     public void updateTotalAmounts(List<TransactionDTO> transactions) {
