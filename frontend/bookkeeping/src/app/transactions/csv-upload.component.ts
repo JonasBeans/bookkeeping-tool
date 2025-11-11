@@ -175,6 +175,7 @@ export class CsvUploadComponent implements OnInit {
 		if (event.type === HttpEventType.Response) {
 			this.assign_upload = true;
 		}
+		this.retrieveAllTransactions();
 	}
 
 	handle_assign_error(error: HttpErrorResponse) {
@@ -182,21 +183,10 @@ export class CsvUploadComponent implements OnInit {
 		this.assign_upload = false;
 	}
 
-	save_callback(event: HttpEvent<any>) {
-		if (event.type === HttpEventType.UploadProgress && event.total) {
-			this.progress = Math.round((event.loaded / event.total) * 100)
-		} else if (event.type === HttpEventType.Response) {
-			this.saving = false;
-		}
-	}
-
 	handle_save_error(error: HttpErrorResponse) {
 		this.save_error = error.error;
 		this.saving = false;
 		this.saving_progress = -1;
 	}
-
-	protected readonly CostCenterService = CostCenterService;
-
 
 }

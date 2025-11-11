@@ -7,9 +7,6 @@
 					class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
 				{{ uploading ? 'Uploading…' : '1 Upload' }}
 			</button>
-			<button [disabled]="transactions.length<1" (click)="assign()" class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
-				2 Assign
-			</button>
 			<button [disabled]="saving"
 					class="px-6 py-2 rounded-xl shadow disabled:opacity-40"
 					(click)="save()">
@@ -74,7 +71,8 @@
 		<th mat-header-cell *matHeaderCellDef>Cost center</th>
 		<td mat-cell *matCellDef="let element">
 			<mat-form-field appearance="fill" style="width: 100%;">
-				<mat-select [(ngModel)]="element.costCenterReference">
+				<mat-select [(ngModel)]="element.costCenterReference"
+							(selectionChange)="assign()">
 					<mat-optgroup label="Cost" *ngIf="costCenterService.costs.length">
 						<mat-option *ngFor="let costCenter of costCenterService.costs"
 									[value]="costCenter.costCenter"
