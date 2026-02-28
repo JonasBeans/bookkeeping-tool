@@ -3,6 +3,5 @@
 // Override at build time by editing this file or using a CI replacement step.
 export const environment = {
   production: true,
-  apiBaseUrl: 'http://192.168.0.229:8080' // e.g. 'https://api.example.com' if backend hosted separately
+  apiBaseUrl: 'http://my-dummy-server.local/bookkeeping' // e.g. 'https://api.example.com' if backend hosted separately
 };
-
