@@ -10,7 +10,7 @@
     </parent>
     <groupId>be.jonasboon</groupId>
     <artifactId>book-keeping-tool</artifactId>
-    <version>3.2.2-SNAPSHOT</version>
+    <version>3.2.3-SNAPSHOT</version>
     <name>book-keeping-tool</name>
     <description>Helper tool for organising my transactions into my bookkeeping excel</description>
     <url/>
