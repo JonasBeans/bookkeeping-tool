@@ -38,6 +38,11 @@
 </mat-expansion-panel>
 
 <table mat-table [dataSource]="transactions">
+	<ng-container matColumnDef="bookYear">
+		<th *matHeaderCellDef mat-header-cell>Bookyear</th>
+		<td *matCellDef="let element" mat-cell>{{ element.bookYear }}</td>
+	</ng-container>
+
 	<ng-container matColumnDef="bookDate">
 		<th mat-header-cell *matHeaderCellDef>Book Date</th>
 		<td mat-cell *matCellDef="let element">{{element.bookDate | date:'dd/MM/yyyy' }}</td>

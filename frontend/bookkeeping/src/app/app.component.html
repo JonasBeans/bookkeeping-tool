@@ -6,6 +6,16 @@
 		<a routerLink="income-statements">Income statements</a>
 		<a routerLink="charts">Charts</a>
 	</nav>
+	<mat-form-field *ngIf="bookYearService.availableBookYears.length" appearance="fill"
+	                style="margin-left: auto; margin-right: 20px; align-self: center;">
+		<mat-label>Bookyear</mat-label>
+		<mat-select (ngModelChange)="bookYearService.selectBookYear($event)"
+		            [ngModel]="bookYearService.selectedBookYear">
+			<mat-option *ngFor="let bookYear of bookYearService.availableBookYears" [value]="bookYear">
+				{{ bookYear }}
+			</mat-option>
+		</mat-select>
+	</mat-form-field>
 </div>
 <main>
 	<router-outlet></router-outlet>

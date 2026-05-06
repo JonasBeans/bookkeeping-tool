@@ -16,8 +16,13 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @GetMapping("/all")
-    public List<TransactionDTO> getAllTransactions() {
-        return transactionService.getAllTransactions();
+    public List<TransactionDTO> getAllTransactions(@RequestParam(value = "bookYear", required = false) Integer bookYear) {
+        return transactionService.getTransactionsForBookYear(bookYear);
+    }
+
+    @GetMapping("/bookyears")
+    public List<Integer> getAvailableBookYears() {
+        return transactionService.getAvailableBookYears();
     }
 
     @PostMapping(value = "/upload/transaction-file")
@@ -26,8 +31,9 @@ public class TransactionController {
     }
 
     @PutMapping(value = "/assigned")
-    public List<TransactionDTO> assignTransactions(@RequestBody List<TransactionDTO> transactions) {
-        return transactionService.loadAssigned(transactions);
+    public List<TransactionDTO> assignTransactions(@RequestBody List<TransactionDTO> transactions,
+                                                   @RequestParam(value = "bookYear", required = false) Integer bookYear) {
+        return transactionService.loadAssigned(transactions, bookYear);
     }
 
 }

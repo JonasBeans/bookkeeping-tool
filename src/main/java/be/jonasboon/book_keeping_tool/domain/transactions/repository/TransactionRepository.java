@@ -4,6 +4,12 @@ import be.jonasboon.book_keeping_tool.domain.transactions.entity.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
+    List<Transaction> findByBookDateGreaterThanEqualAndBookDateLessThan(LocalDate startInclusive, LocalDate endExclusive);
+
+    void deleteByBookDateGreaterThanEqualAndBookDateLessThan(LocalDate startInclusive, LocalDate endExclusive);
 }

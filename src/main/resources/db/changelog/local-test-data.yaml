@@ -1,0 +1,320 @@
+databaseChangeLog:
+  - changeSet:
+      id: local-test-data-20260506-1
+      author: Copilot
+      context: local
+      changes:
+        - insert:
+            tableName: balance_sub_posts
+            columns:
+              - column:
+                  name: title
+                  value: "Laptop"
+              - column:
+                  name: amount
+                  valueNumeric: 1250.00
+              - column:
+                  name: balance_post_id
+                  value: "Vaste activa"
+        - insert:
+            tableName: balance_sub_posts
+            columns:
+              - column:
+                  name: title
+                  value: "Spaarrekening"
+              - column:
+                  name: amount
+                  valueNumeric: 4250.00
+              - column:
+                  name: balance_post_id
+                  value: "Liquide middelen"
+        - insert:
+            tableName: balance_sub_posts
+            columns:
+              - column:
+                  name: title
+                  value: "Zichtrekening"
+              - column:
+                  name: amount
+                  valueNumeric: 1750.00
+              - column:
+                  name: balance_post_id
+                  value: "Liquide middelen"
+        - insert:
+            tableName: balance_sub_posts
+            columns:
+              - column:
+                  name: title
+                  value: "Startkapitaal"
+              - column:
+                  name: amount
+                  valueNumeric: 5500.00
+              - column:
+                  name: balance_post_id
+                  value: "Eigen vermogen"
+        - insert:
+            tableName: balance_sub_posts
+            columns:
+              - column:
+                  name: title
+                  value: "Kredietkaart"
+              - column:
+                  name: amount
+                  valueNumeric: 420.00
+              - column:
+                  name: balance_post_id
+                  value: "Kortlopende schulden"
+
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2025-01-05"
+              - column:
+                  name: transaction_date
+                  valueDate: "2025-01-04"
+              - column:
+                  name: amount
+                  valueNumeric: 2450.00
+              - column:
+                  name: name_other_party
+                  value: "ACME Payroll"
+              - column:
+                  name: cost_center
+                  value: "Salaris/loon"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2025-01-06"
+              - column:
+                  name: transaction_date
+                  valueDate: "2025-01-06"
+              - column:
+                  name: amount
+                  valueNumeric: -72.35
+              - column:
+                  name: name_other_party
+                  value: "Local Grocery"
+              - column:
+                  name: cost_center
+                  value: "Voedsel"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2025-02-01"
+              - column:
+                  name: transaction_date
+                  valueDate: "2025-02-01"
+              - column:
+                  name: amount
+                  valueNumeric: -900.00
+              - column:
+                  name: name_other_party
+                  value: "Rental Agency"
+              - column:
+                  name: cost_center
+                  value: "Huur"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2025-03-14"
+              - column:
+                  name: transaction_date
+                  valueDate: "2025-03-13"
+              - column:
+                  name: amount
+                  valueNumeric: -118.90
+              - column:
+                  name: name_other_party
+                  value: "Energy Supplier"
+              - column:
+                  name: cost_center
+                  value: "Elektriciteit & Gas"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2025-04-03"
+              - column:
+                  name: transaction_date
+                  valueDate: "2025-04-02"
+              - column:
+                  name: amount
+                  valueNumeric: -54.20
+              - column:
+                  name: name_other_party
+                  value: "Pharmacy"
+              - column:
+                  name: cost_center
+                  value: "Gezondheid"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2025-05-20"
+              - column:
+                  name: transaction_date
+                  valueDate: "2025-05-20"
+              - column:
+                  name: amount
+                  valueNumeric: 18.42
+              - column:
+                  name: name_other_party
+                  value: "Bank Interest"
+              - column:
+                  name: cost_center
+                  value: "Intresten"
+
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2026-01-03"
+              - column:
+                  name: transaction_date
+                  valueDate: "2026-01-02"
+              - column:
+                  name: amount
+                  valueNumeric: 2600.00
+              - column:
+                  name: name_other_party
+                  value: "ACME Payroll"
+              - column:
+                  name: cost_center
+                  value: "Salaris/loon"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2026-01-07"
+              - column:
+                  name: transaction_date
+                  valueDate: "2026-01-07"
+              - column:
+                  name: amount
+                  valueNumeric: -81.10
+              - column:
+                  name: name_other_party
+                  value: "Local Grocery"
+              - column:
+                  name: cost_center
+                  value: "Voedsel"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2026-02-01"
+              - column:
+                  name: transaction_date
+                  valueDate: "2026-02-01"
+              - column:
+                  name: amount
+                  valueNumeric: -950.00
+              - column:
+                  name: name_other_party
+                  value: "Rental Agency"
+              - column:
+                  name: cost_center
+                  value: "Huur"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2026-02-18"
+              - column:
+                  name: transaction_date
+                  valueDate: "2026-02-17"
+              - column:
+                  name: amount
+                  valueNumeric: -325.42
+              - column:
+                  name: name_other_party
+                  value: "Car Workshop"
+              - column:
+                  name: cost_center
+                  value: "Kosten voertuigen"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2026-03-08"
+              - column:
+                  name: transaction_date
+                  valueDate: "2026-03-08"
+              - column:
+                  name: amount
+                  valueNumeric: -44.99
+              - column:
+                  name: name_other_party
+                  value: "Streaming Service"
+              - column:
+                  name: cost_center
+                  value: "Ontspanning"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2026-04-15"
+              - column:
+                  name: transaction_date
+                  valueDate: "2026-04-15"
+              - column:
+                  name: amount
+                  valueNumeric: 125.00
+              - column:
+                  name: name_other_party
+                  value: "Dividend Payout"
+              - column:
+                  name: cost_center
+                  value: "Inkomsten uit rente en dividenden"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2026-06-22"
+              - column:
+                  name: transaction_date
+                  valueDate: "2026-06-22"
+              - column:
+                  name: amount
+                  valueNumeric: -63.50
+              - column:
+                  name: name_other_party
+                  value: "Online Shop"
+              - column:
+                  name: cost_center
+                  value: "Online Aankopen"
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: book_date
+                  valueDate: "2026-07-01"
+              - column:
+                  name: transaction_date
+                  valueDate: "2026-07-01"
+              - column:
+                  name: amount
+                  valueNumeric: -12.00
+              - column:
+                  name: name_other_party
+                  value: "Uncategorized Example"
+              - column:
+                  name: cost_center
+                  value: "Skip"

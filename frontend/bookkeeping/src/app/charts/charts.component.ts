@@ -1,7 +1,9 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Color, LegendPosition, NgxChartsModule, ScaleType} from "@swimlane/ngx-charts";
 import {ChartService} from "../services/chart.service";
 import {CostCenterService} from "../services/cost-center.service";
+import {BookYearService} from "../services/book-year.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-charts',
@@ -12,10 +14,12 @@ import {CostCenterService} from "../services/cost-center.service";
   templateUrl: './charts.component.html',
   styleUrl: './charts.component.css'
 })
-export class ChartsComponent implements OnInit {
+export class ChartsComponent implements OnInit, OnDestroy {
 
 	chart_service: ChartService = inject(ChartService);
 	cost_center_service: CostCenterService = inject(CostCenterService);
+	bookYearService: BookYearService = inject(BookYearService);
+	private readonly subscriptions = new Subscription();
 
 	// options
 	gradient: boolean = true;
@@ -25,9 +29,15 @@ export class ChartsComponent implements OnInit {
 	legendPosition: LegendPosition = LegendPosition.Below;
 
 	ngOnInit(): void {
-		this.cost_center_service.refresh_data();
-		this.chart_service.load(this.cost_center_service.costs, this.cost_center_service.incomes);
-    }
+		this.subscriptions.add(this.bookYearService.selectedBookYear$.subscribe(bookYear => this.cost_center_service.refresh_data(bookYear)));
+		this.subscriptions.add(this.cost_center_service.costCenters$.subscribe(() => {
+			this.chart_service.load(this.cost_center_service.costs, this.cost_center_service.incomes);
+		}));
+	}
+
+	ngOnDestroy(): void {
+		this.subscriptions.unsubscribe();
+	}
 
 	colorScheme: Color = {
 		name: 'coolScheme',

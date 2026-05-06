@@ -29,6 +29,7 @@ services:
       POSTGRES_PASSWORD: jauzK8c0AfAMy6
       POSTGRES_USER: postgres
       DATABASE_URL: jdbc:postgresql://db:5432/bookkeeping_tool
+      SPRING_PROFILES_ACTIVE: local
     depends_on:
       - db
 volumes:

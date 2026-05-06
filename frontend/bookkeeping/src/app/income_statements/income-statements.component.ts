@@ -1,9 +1,11 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {CostCenterService} from "../services/cost-center.service";
 import {CurrencyPipe, NgForOf} from "@angular/common";
 import {NewCostCenterDialog} from "./dialog/new-cost-center-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatIcon} from "@angular/material/icon";
+import {BookYearService} from "../services/book-year.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-income-statements',
@@ -16,14 +18,20 @@ import {MatIcon} from "@angular/material/icon";
   templateUrl: './income-statements.component.html',
   styleUrl: './income-statements.component.css'
 })
-export class IncomeStatementsComponent implements OnInit {
+export class IncomeStatementsComponent implements OnInit, OnDestroy {
 	readonly new_cost_center_title = signal('');
 	readonly is_new_cost_center_a_cost = signal(true);
 	cost_center_service: CostCenterService = inject(CostCenterService);
+	bookYearService: BookYearService = inject(BookYearService);
 	readonly dialog = inject(MatDialog);
+	private readonly subscriptions = new Subscription();
 
 	ngOnInit(): void {
-		this.cost_center_service.refresh_data();
+		this.subscriptions.add(this.bookYearService.selectedBookYear$.subscribe(bookYear => this.cost_center_service.refresh_data(bookYear)));
+	}
+
+	ngOnDestroy(): void {
+		this.subscriptions.unsubscribe();
 	}
 
 	open_add_new_cost_center_dialog() {

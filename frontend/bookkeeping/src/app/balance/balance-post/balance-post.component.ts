@@ -1,5 +1,5 @@
-import {Component, inject, Input, OnInit, signal} from '@angular/core';
-import {CurrencyPipe, NgForOf} from "@angular/common";
+import {Component, inject, Input, OnInit, PLATFORM_ID, signal} from '@angular/core';
+import {CurrencyPipe, isPlatformBrowser, NgForOf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
 import {AddBalancePostDialogComponent} from "../dialog/add-balance-post-dialog/add-balance-post-dialog.component";
@@ -25,6 +25,7 @@ export class BalancePostComponent implements OnInit {
 	@Input() post_title: string = "";
 	sub_posts = signal<SubPost[]>([]);
 	balance_service = inject(BalanceService);
+	private readonly platformId: Object = inject(PLATFORM_ID);
 
 	readonly dialog = inject(MatDialog);
 
@@ -37,6 +38,9 @@ export class BalancePostComponent implements OnInit {
 	}
 
 	get_balance_post(title: string): void {
+		if (!isPlatformBrowser(this.platformId)) {
+			return;
+		}
 		this.balance_service.get_balance_posts(title).subscribe({
 			next: result => {
 				this.sub_posts.update(posts => [...result.subPosts])

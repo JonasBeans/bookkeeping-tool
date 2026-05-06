@@ -22,6 +22,7 @@ public class TransactionMapper {
                 .withId(entity.getId())
                 .withAmount(entity.getAmount())
                 .withBookDate(entity.getBookDate())
+                .withBookYear(entity.getBookDate().getYear())
                 .withTransactionDate(entity.getTransactionDate())
                 .withNameOtherParty(entity.getNameOtherParty())
                 .withCostCenterReference(entity.getCostCenter().getCostCenter())

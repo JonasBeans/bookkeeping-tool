@@ -15,6 +15,7 @@ public class TransactionDTO {
 
     private Long id;
     private LocalDate bookDate;
+    private Integer bookYear;
     private LocalDate transactionDate;
     private BigDecimal amount;
     private String nameOtherParty;
