@@ -25,6 +25,11 @@ public class TransactionController {
         return transactionService.getAvailableBookYears();
     }
 
+    @DeleteMapping("/bookyears/{bookYear}")
+    public void deleteTransactionsForBookYear(@PathVariable Integer bookYear) {
+        transactionService.deleteTransactionsForBookYear(bookYear);
+    }
+
     @PostMapping(value = "/upload/transaction-file")
     public List<TransactionDTO> uploadTransactionsCSV(@RequestParam("file") MultipartFile file) {
         return transactionService.processTransactionUpload(file);

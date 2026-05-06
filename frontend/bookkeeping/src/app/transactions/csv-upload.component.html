@@ -23,6 +23,12 @@
 				(click)="downloadBackupFiles()">
 				5. Download backup files
 			</button>
+			<button
+				(click)="deleteSelectedBookYearTransactions()"
+				[disabled]="bookYearService.selectedBookYear === null"
+				class="px-6 py-2 rounded-xl shadow disabled:opacity-40">
+				Delete selected bookyear transactions
+			</button>
 		</div>
 		<div>
 			<p>Upload transactions</p>

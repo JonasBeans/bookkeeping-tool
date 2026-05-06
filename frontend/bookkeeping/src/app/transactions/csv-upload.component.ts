@@ -110,6 +110,27 @@ export class CsvUploadComponent implements OnInit, OnDestroy {
 			})
 	}
 
+	deleteSelectedBookYearTransactions() {
+		const selectedBookYear = this.bookYearService.selectedBookYear;
+		if (selectedBookYear === null) {
+			return;
+		}
+		if (!window.confirm(`Delete all transactions for bookyear ${selectedBookYear}?`)) {
+			return;
+		}
+
+		this.http.delete<void>(this.api(`/transactions/bookyears/${selectedBookYear}`))
+			.subscribe({
+				next: () => {
+					this.transactions = [];
+					this.bookYearService.refreshBookYears();
+					this.costCenterService.refresh_data(selectedBookYear);
+					this.openSnackBar(`Transactions for ${selectedBookYear} deleted`, "Close", 3000);
+				},
+				error: (error: HttpErrorResponse) => this.snackbar.open(`Error: ${error}`, "Close")
+			});
+	}
+
 	assign() {
 		this.http.put<Transaction[]>(this.api('/transactions/assigned'), this.transactions, {
 			...this.createRequestOptions(this.bookYearService.selectedBookYear),

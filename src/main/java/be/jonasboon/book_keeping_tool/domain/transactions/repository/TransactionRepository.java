@@ -14,6 +14,8 @@ import java.util.Set;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     List<Transaction> findByBookDateGreaterThanEqualAndBookDateLessThan(LocalDate startInclusive, LocalDate endExclusive);
 
+    void deleteByBookDateGreaterThanEqualAndBookDateLessThan(LocalDate startInclusive, LocalDate endExclusive);
+
     @Query("select transaction.transactionHash from Transaction transaction where transaction.transactionHash in :transactionHashes")
     Set<String> findExistingTransactionHashes(@Param("transactionHashes") Set<String> transactionHashes);
 }

@@ -83,6 +83,12 @@ public class TransactionService {
         return getTransactionsForBookYear(bookYear);
     }
 
+    public void deleteTransactionsForBookYear(Integer bookYear) {
+        transactionRepository.deleteByBookDateGreaterThanEqualAndBookDateLessThan(startOf(bookYear), endExclusiveOf(bookYear));
+        entityManager.flush();
+        costCenterService.updateTotalAmounts(getAllTransactions());
+    }
+
     private List<Transaction> filterNewTransactions(List<Transaction> transactions) {
         Map<String, Transaction> uniqueUploadedTransactions = new LinkedHashMap<>();
         transactions.forEach(transaction -> {

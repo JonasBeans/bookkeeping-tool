@@ -73,6 +73,34 @@ class TransactionServiceTest {
                 .isEqualTo("New");
     }
 
+    @Test
+    void deleteTransactionsForBookYearDeletesOnlyThatYearAndRefreshesTotals() {
+        TransactionMapper transactionMapper = mock(TransactionMapper.class);
+        TransactionRepository transactionRepository = mock(TransactionRepository.class);
+        CostCenterService costCenterService = mock(CostCenterService.class);
+        TransactionFileStrategy transactionFileStrategy = mock(TransactionFileStrategy.class);
+        CostCenterPredictionService costCenterPredictionService = mock(CostCenterPredictionService.class);
+        EntityManager entityManager = mock(EntityManager.class);
+
+        TransactionService transactionService = new TransactionService(
+                transactionMapper,
+                transactionRepository,
+                costCenterService,
+                transactionFileStrategy,
+                costCenterPredictionService,
+                entityManager
+        );
+
+        transactionService.deleteTransactionsForBookYear(2026);
+
+        verify(transactionRepository).deleteByBookDateGreaterThanEqualAndBookDateLessThan(
+                LocalDate.of(2026, 1, 1),
+                LocalDate.of(2027, 1, 1)
+        );
+        verify(entityManager).flush();
+        verify(costCenterService).updateTotalAmounts(any());
+    }
+
     private Transaction transaction(String description, String nameOtherParty, String message) {
         return Transaction.builder()
                 .withBookDate(LocalDate.of(2026, 1, 5))
