@@ -2,6 +2,7 @@ package be.jonasboon.book_keeping_tool.domain.transactions.service;
 
 import be.jonasboon.book_keeping_tool.domain.cost_centers.service.CostCenterService;
 import be.jonasboon.book_keeping_tool.domain.transactions.DTO.TransactionDTO;
+import be.jonasboon.book_keeping_tool.domain.transactions.classification.CostCenterPredictionService;
 import be.jonasboon.book_keeping_tool.domain.transactions.entity.Transaction;
 import be.jonasboon.book_keeping_tool.domain.transactions.mapper.TransactionMapper;
 import be.jonasboon.book_keeping_tool.domain.transactions.processor.TransactionFileStrategy;
@@ -33,6 +34,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final CostCenterService costCenterService;
     private final TransactionFileStrategy transactionFileStrategy;
+    private final CostCenterPredictionService costCenterPredictionService;
     private final EntityManager entityManager;
 
     public List<TransactionDTO> getAllTransactions() {
@@ -61,6 +63,7 @@ public class TransactionService {
 
     public List<TransactionDTO> processTransactionUpload(MultipartFile file) {
         List<Transaction> transactions = transactionFileStrategy.process(file, "xlsx");
+        costCenterPredictionService.prefillCostCenters(transactions);
         Set<Integer> uploadedBookYears = transactions.stream()
                 .map(Transaction::getBookDate)
                 .map(LocalDate::getYear)
