@@ -18,7 +18,9 @@ public class TransactionDTO {
     private Integer bookYear;
     private LocalDate transactionDate;
     private BigDecimal amount;
+    private String description;
     private String nameOtherParty;
+    private String message;
     private String costCenterReference;
     private Long version;
 
@@ -27,7 +29,9 @@ public class TransactionDTO {
             ObjectUtils.isNotEmpty(bookDate) ||
             ObjectUtils.isNotEmpty(transactionDate) ||
             ObjectUtils.isNotEmpty(amount) ||
+                    ObjectUtils.isNotEmpty(description) ||
             ObjectUtils.isNotEmpty(nameOtherParty) ||
+                    ObjectUtils.isNotEmpty(message) ||
             ObjectUtils.isNotEmpty(costCenterReference);
     }
 

@@ -39,7 +39,7 @@ export class CsvUploadComponent implements OnInit, OnDestroy {
 	transactions: Transaction[] = [];
 	costCenterService: CostCenterService = inject(CostCenterService);
 	bookYearService: BookYearService = inject(BookYearService);
-	displayedColumns: string[] = ['bookYear', 'bookDate', 'transactionDate', 'amount', 'nameOtherParty', 'costCenter'];
+	displayedColumns: string[] = ['bookYear', 'bookDate', 'transactionDate', 'amount', 'description', 'nameOtherParty', 'message', 'costCenter'];
 	private readonly subscriptions = new Subscription();
 	private readonly platformId: Object = inject(PLATFORM_ID);
 

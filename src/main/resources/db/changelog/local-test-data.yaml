@@ -318,3 +318,148 @@ databaseChangeLog:
               - column:
                   name: cost_center
                   value: "Skip"
+  - changeSet:
+      id: local-test-data-20260506-2
+      author: Copilot
+      context: local
+      changes:
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Monthly salary"
+              - column:
+                  name: message
+                  value: "January 2025 payroll"
+            where: "book_date = DATE '2025-01-05' AND name_other_party = 'ACME Payroll'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Groceries"
+              - column:
+                  name: message
+                  value: "Weekly shopping"
+            where: "book_date = DATE '2025-01-06' AND name_other_party = 'Local Grocery'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Rent"
+              - column:
+                  name: message
+                  value: "February rent"
+            where: "book_date = DATE '2025-02-01' AND name_other_party = 'Rental Agency'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Utilities"
+              - column:
+                  name: message
+                  value: "Energy advance invoice"
+            where: "book_date = DATE '2025-03-14' AND name_other_party = 'Energy Supplier'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Medication"
+              - column:
+                  name: message
+                  value: "Prescription"
+            where: "book_date = DATE '2025-04-03' AND name_other_party = 'Pharmacy'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Interest"
+              - column:
+                  name: message
+                  value: "Savings account interest"
+            where: "book_date = DATE '2025-05-20' AND name_other_party = 'Bank Interest'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Monthly salary"
+              - column:
+                  name: message
+                  value: "January 2026 payroll"
+            where: "book_date = DATE '2026-01-03' AND name_other_party = 'ACME Payroll'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Groceries"
+              - column:
+                  name: message
+                  value: "Weekly shopping"
+            where: "book_date = DATE '2026-01-07' AND name_other_party = 'Local Grocery'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Rent"
+              - column:
+                  name: message
+                  value: "February rent"
+            where: "book_date = DATE '2026-02-01' AND name_other_party = 'Rental Agency'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Vehicle maintenance"
+              - column:
+                  name: message
+                  value: "Annual service"
+            where: "book_date = DATE '2026-02-18' AND name_other_party = 'Car Workshop'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Streaming subscription"
+              - column:
+                  name: message
+                  value: "Monthly entertainment"
+            where: "book_date = DATE '2026-03-08' AND name_other_party = 'Streaming Service'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Dividend income"
+              - column:
+                  name: message
+                  value: "Quarterly dividend"
+            where: "book_date = DATE '2026-04-15' AND name_other_party = 'Dividend Payout'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Online order"
+              - column:
+                  name: message
+                  value: "Household supplies"
+            where: "book_date = DATE '2026-06-22' AND name_other_party = 'Online Shop'"
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  value: "Skipped transaction"
+              - column:
+                  name: message
+                  value: "Ignore in income totals"
+            where: "book_date = DATE '2026-07-01' AND name_other_party = 'Uncategorized Example'"

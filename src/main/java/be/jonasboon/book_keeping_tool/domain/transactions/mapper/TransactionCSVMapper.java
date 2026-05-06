@@ -16,23 +16,36 @@ public class TransactionCSVMapper implements CSVFileMapper {
 
     //Indexes of given value in the CSV file
     private final Integer BOOK_DATE = 1;
+    private final Integer DESCRIPTION = 4;
     private final Integer AMOUNT = 5;
     private final Integer TRANSACTION_DATE = 7;
     private final Integer NAME_OF_OTHER_PARTY = 9;
+    private final Integer MESSAGE = 10;
 
     @Override
     public CSVObject mapToObject(String[] seperatedValues) {
         LocalDate bookDate =  convertBookDate(seperatedValues[BOOK_DATE]);
+        String description = getOptionalValue(seperatedValues, DESCRIPTION);
         BigDecimal amount = convertAmount(seperatedValues[AMOUNT]);
         LocalDate transactionDate =  convertTransactionDate(seperatedValues[TRANSACTION_DATE]);
         String nameOtherParty = validateNameOfOtherParty(seperatedValues[NAME_OF_OTHER_PARTY]);
+        String message = getOptionalValue(seperatedValues, MESSAGE);
 
         return TransactionCSVObject.builder()
                 .withBookDate(bookDate)
                 .withAmount(amount)
                 .withTransactionDate(transactionDate)
+                .withDescription(description)
                 .withNameOtherParty(nameOtherParty)
+                .withMessage(message)
                 .build();
+    }
+
+    private String getOptionalValue(String[] separatedValues, Integer index) {
+        if (separatedValues.length <= index) {
+            return null;
+        }
+        return separatedValues[index];
     }
 
     private String validateNameOfOtherParty(String nameOtherParty) {

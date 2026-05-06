@@ -24,7 +24,9 @@ public class TransactionMapper {
                 .withBookDate(entity.getBookDate())
                 .withBookYear(entity.getBookDate().getYear())
                 .withTransactionDate(entity.getTransactionDate())
+                .withDescription(entity.getDescription())
                 .withNameOtherParty(entity.getNameOtherParty())
+                .withMessage(entity.getMessage())
                 .withCostCenterReference(entity.getCostCenter().getCostCenter())
                 .withVersion(entity.getVersion())
                 .build();
@@ -36,7 +38,9 @@ public class TransactionMapper {
                 .withAmount(dto.getAmount())
                 .withBookDate(dto.getBookDate())
                 .withTransactionDate(dto.getTransactionDate())
+                .withDescription(dto.getDescription())
                 .withNameOtherParty(dto.getNameOtherParty())
+                .withMessage(dto.getMessage())
                 .withCostCenter(getCostCenter(dto))
                 .withVersion(dto.getVersion())
                 .build();
@@ -58,7 +62,9 @@ public class TransactionMapper {
                     .withAmount(dto.getAmount())
                     .withBookDate(dto.getBookDate())
                     .withTransactionDate(dto.getTransactionDate())
+                    .withDescription(dto.getDescription())
                     .withNameOtherParty(dto.getNameOtherParty())
+                    .withMessage(dto.getMessage())
                     .build();
         }
         throw new ClassCastException();

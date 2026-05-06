@@ -18,7 +18,9 @@ public class TransactionCSVObject implements CSVObject {
     private LocalDate bookDate;
     private LocalDate transactionDate;
     private BigDecimal amount;
+    private String description;
     private String nameOtherParty;
+    private String message;
 
     @Override
     public String toString() {
@@ -26,7 +28,9 @@ public class TransactionCSVObject implements CSVObject {
                 Bookdate: %s
                 Transaction date: %s
                 Amount: %s
+                Description: %s
                 Name of other party: %s
-                """, bookDate, transactionDate, amount, nameOtherParty);
+                Message: %s
+                """, bookDate, transactionDate, amount, description, nameOtherParty, message);
     }
 }

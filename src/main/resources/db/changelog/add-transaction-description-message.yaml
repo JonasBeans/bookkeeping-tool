@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-transaction-description-message-20260506-1
+      author: Copilot
+      changes:
+        - addColumn:
+            tableName: transactions
+            columns:
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: message
+                  type: VARCHAR(255)

@@ -6,4 +6,6 @@ databaseChangeLog:
     - include:
         file: db/changelog/add-balance-posts.yaml
     - include:
+          file: db/changelog/add-transaction-description-message.yaml
+    - include:
         file: db/changelog/local-test-data.yaml

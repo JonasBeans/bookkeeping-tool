@@ -24,7 +24,9 @@ public class Transaction {
     public LocalDate bookDate;
     private LocalDate transactionDate;
     private BigDecimal amount;
+    private String description;
     private String nameOtherParty;
+    private String message;
     @Version
     private Long version;
 
