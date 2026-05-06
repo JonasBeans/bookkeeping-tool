@@ -9,3 +9,5 @@ databaseChangeLog:
           file: db/changelog/add-transaction-description-message.yaml
     - include:
         file: db/changelog/local-test-data.yaml
+    - include:
+          file: db/changelog/add-transaction-hash.yaml

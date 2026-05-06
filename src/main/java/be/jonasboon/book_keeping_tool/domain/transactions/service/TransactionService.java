@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static be.jonasboon.book_keeping_tool.utils.BookYearUtils.endExclusiveOf;
@@ -62,17 +60,12 @@ public class TransactionService {
     }
 
     public List<TransactionDTO> processTransactionUpload(MultipartFile file) {
-        List<Transaction> transactions = transactionFileStrategy.process(file, "xlsx");
+        List<Transaction> transactions = filterNewTransactions(transactionFileStrategy.process(file, "xlsx"));
         costCenterPredictionService.prefillCostCenters(transactions);
-        Set<Integer> uploadedBookYears = transactions.stream()
-                .map(Transaction::getBookDate)
-                .map(LocalDate::getYear)
-                .collect(Collectors.toSet());
 
-        uploadedBookYears.forEach(this::deleteTransactionsForBookYear);
-        entityManager.flush();
-
-        List<Transaction> savedTransactions = transactionRepository.saveAll(transactions);
+        List<Transaction> savedTransactions = transactions.isEmpty()
+                ? List.of()
+                : transactionRepository.saveAll(transactions);
         entityManager.flush();
         costCenterService.updateTotalAmounts(getAllTransactions());
         return savedTransactions.stream().map(transactionMapper::from).toList();
@@ -90,8 +83,27 @@ public class TransactionService {
         return getTransactionsForBookYear(bookYear);
     }
 
-    private void deleteTransactionsForBookYear(Integer bookYear) {
-        transactionRepository.deleteByBookDateGreaterThanEqualAndBookDateLessThan(startOf(bookYear), endExclusiveOf(bookYear));
+    private List<Transaction> filterNewTransactions(List<Transaction> transactions) {
+        Map<String, Transaction> uniqueUploadedTransactions = new LinkedHashMap<>();
+        transactions.forEach(transaction -> {
+            transaction.refreshTransactionHash();
+            uniqueUploadedTransactions.putIfAbsent(transaction.getTransactionHash(), transaction);
+        });
+
+        if (uniqueUploadedTransactions.isEmpty()) {
+            return List.of();
+        }
+
+        Set<String> existingTransactionHashes = transactionRepository.findExistingTransactionHashes(uniqueUploadedTransactions.keySet());
+        List<Transaction> newTransactions = uniqueUploadedTransactions.entrySet().stream()
+                .filter(entry -> !existingTransactionHashes.contains(entry.getKey()))
+                .map(Map.Entry::getValue)
+                .toList();
+        int skippedTransactions = transactions.size() - newTransactions.size();
+        if (skippedTransactions > 0) {
+            log.info("Skipped {} duplicate transactions during upload", skippedTransactions);
+        }
+        return newTransactions;
     }
 
 }

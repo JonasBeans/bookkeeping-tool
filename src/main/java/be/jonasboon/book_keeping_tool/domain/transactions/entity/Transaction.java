@@ -1,6 +1,7 @@
 package be.jonasboon.book_keeping_tool.domain.transactions.entity;
 
 import be.jonasboon.book_keeping_tool.domain.cost_centers.entity.CostCenter;
+import be.jonasboon.book_keeping_tool.domain.transactions.hash.TransactionHashCalculator;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +28,8 @@ public class Transaction {
     private String description;
     private String nameOtherParty;
     private String message;
+    @Column(name = "transaction_hash", length = 32, nullable = false)
+    private String transactionHash;
     @Version
     private Long version;
 
@@ -43,6 +46,12 @@ public class Transaction {
             return new CostCenter();
         }
         return costCenter;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void refreshTransactionHash() {
+        transactionHash = TransactionHashCalculator.calculate(this);
     }
 
 }

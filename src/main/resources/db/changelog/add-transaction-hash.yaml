@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-transaction-hash-20260506-1
+      author: Copilot
+      changes:
+        - addColumn:
+            tableName: transactions
+            columns:
+              - column:
+                  name: transaction_hash
+                  type: VARCHAR(32)
+        - update:
+            tableName: transactions
+            columns:
+              - column:
+                  name: transaction_hash
+                  valueComputed: "md5(concat(coalesce(book_date::text, ''), chr(31), coalesce(transaction_date::text, ''), chr(31), case when amount is null then '' when position('.' in amount::text) > 0 then trim(trailing '.' from trim(trailing '0' from amount::text)) else amount::text end, chr(31), coalesce(btrim(name_other_party), '')))"
+        - addNotNullConstraint:
+            tableName: transactions
+            columnName: transaction_hash
+            columnDataType: VARCHAR(32)
+        - createIndex:
+            tableName: transactions
+            indexName: idx_transactions_transaction_hash
+            columns:
+              - column:
+                  name: transaction_hash
