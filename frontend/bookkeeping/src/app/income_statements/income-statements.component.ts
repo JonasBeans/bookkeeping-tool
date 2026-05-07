@@ -8,15 +8,15 @@ import {BookYearService} from "../services/book-year.service";
 import {Subscription} from "rxjs";
 
 @Component({
-  selector: 'app-income-statements',
-  standalone: true,
+	selector: 'app-income-statements',
+	standalone: true,
 	imports: [
 		NgForOf,
 		CurrencyPipe,
 		MatIcon
 	],
-  templateUrl: './income-statements.component.html',
-  styleUrl: './income-statements.component.css'
+	templateUrl: './income-statements.component.html',
+	styleUrl: './income-statements.component.css'
 })
 export class IncomeStatementsComponent implements OnInit, OnDestroy {
 	readonly new_cost_center_title = signal('');
@@ -27,7 +27,8 @@ export class IncomeStatementsComponent implements OnInit, OnDestroy {
 	private readonly subscriptions = new Subscription();
 
 	ngOnInit(): void {
-		this.subscriptions.add(this.bookYearService.selectedBookYear$.subscribe(bookYear => this.cost_center_service.refresh_data(bookYear)));
+		this.subscriptions.add(this.bookYearService.selectedBookPeriod$
+			.subscribe(period => this.cost_center_service.refresh_data(period.bookYear, period.bookMonth)));
 	}
 
 	ngOnDestroy(): void {
@@ -36,7 +37,10 @@ export class IncomeStatementsComponent implements OnInit, OnDestroy {
 
 	open_add_new_cost_center_dialog() {
 		const dialogRef = this.dialog.open(NewCostCenterDialog, {
-			data: {new_cost_center_title: this.new_cost_center_title(), is_new_cost_center_a_cost: this.is_new_cost_center_a_cost()}
+			data: {
+				new_cost_center_title: this.new_cost_center_title(),
+				is_new_cost_center_a_cost: this.is_new_cost_center_a_cost()
+			}
 		});
 		dialogRef.afterClosed().subscribe(result => {
 			console.log('The dialog was closed');

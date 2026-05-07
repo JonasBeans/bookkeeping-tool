@@ -27,19 +27,20 @@ export class CostCenterService {
 		this.refresh_data();
 	}
 
-	public refresh_data(bookYear: number | null = this.bookYearService.selectedBookYear): void {
+	public refresh_data(bookYear: number | null = this.bookYearService.selectedBookYear,
+	                    bookMonth: number | null = this.bookYearService.selectedBookMonth): void {
 		if (!isPlatformBrowser(this.platformId)) {
 			return;
 		}
-		this.getCostCenters(bookYear);
-		this.getAccumulatedAmounts(bookYear);
+		this.getCostCenters(bookYear, bookMonth);
+		this.getAccumulatedAmounts(bookYear, bookMonth);
 	}
 
 	private api(path: string): string { // ensure leading slash
 		return `${this.baseUrl}${path.startsWith('/') ? path : '/' + path}`;
 	}
 
-	addCostCenter(cost_center_title: string, isCost: boolean) : void {
+	addCostCenter(cost_center_title: string, isCost: boolean): void {
 		this.client.post(
 			this.api('/api/cost-centers/add'),
 			{title: cost_center_title, isCost: isCost}
@@ -54,8 +55,8 @@ export class CostCenterService {
 		});
 	}
 
-	private getCostCenters(bookYear: number | null): void {
-		this.client.get<CostCenter[]>(this.api('/api/cost-centers/all'), this.createRequestOptions(bookYear))
+	private getCostCenters(bookYear: number | null, bookMonth: number | null): void {
+		this.client.get<CostCenter[]>(this.api('/api/cost-centers/all'), this.createRequestOptions(bookYear, bookMonth))
 			.subscribe((response) => {
 				this.all = response;
 				this.costs = this.all.filter(item => item.isCost);
@@ -64,8 +65,8 @@ export class CostCenterService {
 			})
 	}
 
-	private getAccumulatedAmounts(bookYear: number | null): void {
-		this.client.get<AccumulatedAmounts>(this.api('/api/cost-centers/accumulated-amounts'), this.createRequestOptions(bookYear))
+	private getAccumulatedAmounts(bookYear: number | null, bookMonth: number | null): void {
+		this.client.get<AccumulatedAmounts>(this.api('/api/cost-centers/accumulated-amounts'), this.createRequestOptions(bookYear, bookMonth))
 			.subscribe({
 				next: value => this.accumulatedAmounts = value,
 				error: err => {
@@ -75,11 +76,15 @@ export class CostCenterService {
 			});
 	}
 
-	private createRequestOptions(bookYear: number | null): { params?: HttpParams } {
+	private createRequestOptions(bookYear: number | null, bookMonth: number | null): { params?: HttpParams } {
 		if (bookYear === null) {
 			return {};
 		}
-		return {params: new HttpParams().set('bookYear', bookYear)};
+		let params = new HttpParams().set('bookYear', bookYear);
+		if (bookMonth !== null) {
+			params = params.set('bookMonth', bookMonth);
+		}
+		return {params};
 	}
 
 }

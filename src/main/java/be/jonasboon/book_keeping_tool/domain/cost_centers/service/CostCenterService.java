@@ -40,7 +40,11 @@ public class CostCenterService {
     }
 
     public List<CostCenterDTO> getAllCostCenters(Integer bookYear) {
-        Map<String, BigDecimal> totalsByCostCenter = getTransactions(bookYear).stream()
+        return getAllCostCenters(bookYear, null);
+    }
+
+    public List<CostCenterDTO> getAllCostCenters(Integer bookYear, Integer bookMonth) {
+        Map<String, BigDecimal> totalsByCostCenter = getTransactions(bookYear, bookMonth).stream()
                 .filter(transaction -> isNotBlank(transaction.getCostCenter().getCostCenter()))
                 .collect(Collectors.groupingBy(
                         transaction -> transaction.getCostCenter().getCostCenter(),
@@ -83,8 +87,12 @@ public class CostCenterService {
     }
 
     public AccumulatedAmountsDTO getAccumulatedAmounts(Integer bookYear) {
+        return getAccumulatedAmounts(bookYear, null);
+    }
+
+    public AccumulatedAmountsDTO getAccumulatedAmounts(Integer bookYear, Integer bookMonth) {
         AccumulatedAmounts totalAmounts = new AccumulatedAmounts();
-        List<CostCenterDTO> costCenters = getAllCostCenters(bookYear);
+        List<CostCenterDTO> costCenters = getAllCostCenters(bookYear, bookMonth);
         costCenters.stream()
                 .filter(CostCenterDTO::getIsCost)
                 .map(CostCenterDTO::getTotalAmount)
@@ -113,10 +121,10 @@ public class CostCenterService {
 
     }
 
-    private List<Transaction> getTransactions(Integer bookYear) {
+    private List<Transaction> getTransactions(Integer bookYear, Integer bookMonth) {
         if (bookYear == null) {
             return transactionRepository.findAll();
         }
-        return transactionRepository.findByBookDateGreaterThanEqualAndBookDateLessThan(startOf(bookYear), endExclusiveOf(bookYear));
+        return transactionRepository.findByBookDateGreaterThanEqualAndBookDateLessThan(startOf(bookYear, bookMonth), endExclusiveOf(bookYear, bookMonth));
     }
 }

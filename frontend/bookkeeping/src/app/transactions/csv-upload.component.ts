@@ -44,15 +44,28 @@ export class CsvUploadComponent implements OnInit, OnDestroy {
 	private readonly platformId: Object = inject(PLATFORM_ID);
 
 	private readonly baseUrl = environment.apiBaseUrl;
-	private snackbar= inject(MatSnackBar);
+	private snackbar = inject(MatSnackBar);
 	private horizontalPosition: MatSnackBarHorizontalPosition = 'end';
 	private verticalPosition: MatSnackBarVerticalPosition = 'bottom';
-	private api(path: string): string { return `${this.baseUrl}${path.startsWith('/') ? path : '/' + path}`; }
 
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient) {
+	}
 
 	ngOnInit() {
-		this.subscriptions.add(this.bookYearService.selectedBookYear$.subscribe(bookYear => this.retrieveAllTransactions(bookYear)));
+		this.subscriptions.add(this.bookYearService.selectedBookPeriod$
+			.subscribe(period => this.retrieveAllTransactions(period.bookYear, period.bookMonth)));
+	}
+
+	assign() {
+		this.http.put<Transaction[]>(this.api('/transactions/assigned'), this.transactions, {
+			...this.createRequestOptions(this.bookYearService.selectedBookYear, this.bookYearService.selectedBookMonth),
+			reportProgress: true,
+			observe: 'events'
+		})
+			.subscribe({
+				next: (response: HttpEvent<Transaction[]>) => this.assign_callback(response),
+				error: (error: HttpErrorResponse) => this.snackbar.open(`Error: ${error}`, "Close")
+			});
 	}
 
 	ngOnDestroy(): void {
@@ -131,16 +144,8 @@ export class CsvUploadComponent implements OnInit, OnDestroy {
 			});
 	}
 
-	assign() {
-		this.http.put<Transaction[]>(this.api('/transactions/assigned'), this.transactions, {
-			...this.createRequestOptions(this.bookYearService.selectedBookYear),
-			reportProgress: true,
-			observe: 'events'
-		})
-			.subscribe({
-				next: (response: HttpEvent<Transaction[]>) => this.assign_callback(response),
-				error: (error: HttpErrorResponse) => this.snackbar.open(`Error: ${error}`, "Close")
-			});
+	private api(path: string): string {
+		return `${this.baseUrl}${path.startsWith('/') ? path : '/' + path}`;
 	}
 
 	upload() {
@@ -159,11 +164,12 @@ export class CsvUploadComponent implements OnInit, OnDestroy {
 		);
 	}
 
-	private retrieveAllTransactions(bookYear: number | null = this.bookYearService.selectedBookYear) {
+	private retrieveAllTransactions(bookYear: number | null = this.bookYearService.selectedBookYear,
+	                                bookMonth: number | null = this.bookYearService.selectedBookMonth) {
 		if (!isPlatformBrowser(this.platformId)) {
 			return;
 		}
-		this.http.get<Transaction[]>(this.api('/transactions/all'), this.createRequestOptions(bookYear)).subscribe({
+		this.http.get<Transaction[]>(this.api('/transactions/all'), this.createRequestOptions(bookYear, bookMonth)).subscribe({
 			next: (transactions) => this.transactions = transactions,
 			error: (error: HttpErrorResponse) => this.snackbar.open(`Error: ${error}`, "Close")
 		});
@@ -200,16 +206,20 @@ export class CsvUploadComponent implements OnInit, OnDestroy {
 	private assign_callback(event: HttpEvent<Transaction[]>): void {
 		if (event.type === HttpEventType.Response) {
 			this.transactions = event.body || [];
-			this.costCenterService.refresh_data(this.bookYearService.selectedBookYear);
+			this.costCenterService.refresh_data(this.bookYearService.selectedBookYear, this.bookYearService.selectedBookMonth);
 			this.openSnackBar("Cost centers assigned successfully", "Close", 1000);
 		}
 	}
 
-	private createRequestOptions(bookYear: number | null): { params?: HttpParams } {
+	private createRequestOptions(bookYear: number | null, bookMonth: number | null): { params?: HttpParams } {
 		if (bookYear === null) {
 			return {};
 		}
-		return {params: new HttpParams().set('bookYear', bookYear)};
+		let params = new HttpParams().set('bookYear', bookYear);
+		if (bookMonth !== null) {
+			params = params.set('bookMonth', bookMonth);
+		}
+		return {params};
 	}
 
 	private getBookYears(transactions: Transaction[]): number[] {

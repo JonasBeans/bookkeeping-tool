@@ -6,13 +6,13 @@ import {BookYearService} from "../services/book-year.service";
 import {Subscription} from "rxjs";
 
 @Component({
-  selector: 'app-charts',
-  standalone: true,
+	selector: 'app-charts',
+	standalone: true,
 	imports: [
 		NgxChartsModule
 	],
-  templateUrl: './charts.component.html',
-  styleUrl: './charts.component.css'
+	templateUrl: './charts.component.html',
+	styleUrl: './charts.component.css'
 })
 export class ChartsComponent implements OnInit, OnDestroy {
 
@@ -29,7 +29,8 @@ export class ChartsComponent implements OnInit, OnDestroy {
 	legendPosition: LegendPosition = LegendPosition.Below;
 
 	ngOnInit(): void {
-		this.subscriptions.add(this.bookYearService.selectedBookYear$.subscribe(bookYear => this.cost_center_service.refresh_data(bookYear)));
+		this.subscriptions.add(this.bookYearService.selectedBookPeriod$
+			.subscribe(period => this.cost_center_service.refresh_data(period.bookYear, period.bookMonth)));
 		this.subscriptions.add(this.cost_center_service.costCenters$.subscribe(() => {
 			this.chart_service.load(this.cost_center_service.costs, this.cost_center_service.incomes);
 		}));

@@ -20,7 +20,8 @@ export class CostCenterComponent implements OnInit, OnDestroy {
 	private readonly subscriptions = new Subscription();
 
 	ngOnInit(): void {
-		this.subscriptions.add(this.bookYearService.selectedBookYear$.subscribe(bookYear => this.costCenterService.refresh_data(bookYear)));
+		this.subscriptions.add(this.bookYearService.selectedBookPeriod$
+			.subscribe(period => this.costCenterService.refresh_data(period.bookYear, period.bookMonth)));
 	}
 
 	ngOnDestroy(): void {

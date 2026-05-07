@@ -21,13 +21,15 @@ public class CostCenterController {
     private final CostCenterService costCenterService;
 
     @GetMapping("/all")
-    public List<CostCenterDTO> getAllCostCenters(@RequestParam(value = "bookYear", required = false) Integer bookYear) {
-        return costCenterService.getAllCostCenters(bookYear);
+    public List<CostCenterDTO> getAllCostCenters(@RequestParam(value = "bookYear", required = false) Integer bookYear,
+                                                 @RequestParam(value = "bookMonth", required = false) Integer bookMonth) {
+        return costCenterService.getAllCostCenters(bookYear, bookMonth);
     }
 
     @GetMapping("/accumulated-amounts")
-    public AccumulatedAmountsDTO getAccumulatedAmounts(@RequestParam(value = "bookYear", required = false) Integer bookYear) {
-        return costCenterService.getAccumulatedAmounts(bookYear);
+    public AccumulatedAmountsDTO getAccumulatedAmounts(@RequestParam(value = "bookYear", required = false) Integer bookYear,
+                                                       @RequestParam(value = "bookMonth", required = false) Integer bookMonth) {
+        return costCenterService.getAccumulatedAmounts(bookYear, bookMonth);
     }
 
     @PostMapping("/add")

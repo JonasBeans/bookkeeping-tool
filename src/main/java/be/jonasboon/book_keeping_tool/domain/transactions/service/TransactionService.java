@@ -42,10 +42,11 @@ public class TransactionService {
     }
 
     public List<TransactionDTO> getTransactionsForBookYear(Integer bookYear) {
-        if (bookYear == null) {
-            return getAllTransactions();
-        }
-        return transactionRepository.findByBookDateGreaterThanEqualAndBookDateLessThan(startOf(bookYear), endExclusiveOf(bookYear)).stream()
+        return getTransactionsForBookPeriod(bookYear, null);
+    }
+
+    public List<TransactionDTO> getTransactionsForBookPeriod(Integer bookYear, Integer bookMonth) {
+        return getTransactions(bookYear, bookMonth).stream()
                 .map(transactionMapper::from)
                 .collect(Collectors.toList());
     }
@@ -54,6 +55,15 @@ public class TransactionService {
         return transactionRepository.findAll().stream()
                 .map(Transaction::getBookDate)
                 .map(LocalDate::getYear)
+                .distinct()
+                .sorted(Comparator.reverseOrder())
+                .toList();
+    }
+
+    public List<Integer> getAvailableBookMonths(Integer bookYear) {
+        return getTransactions(bookYear, null).stream()
+                .map(Transaction::getBookDate)
+                .map(LocalDate::getMonthValue)
                 .distinct()
                 .sorted(Comparator.reverseOrder())
                 .toList();
@@ -72,6 +82,10 @@ public class TransactionService {
     }
 
     public List<TransactionDTO> loadAssigned(List<TransactionDTO> transactions, Integer bookYear) {
+        return loadAssigned(transactions, bookYear, null);
+    }
+
+    public List<TransactionDTO> loadAssigned(List<TransactionDTO> transactions, Integer bookYear, Integer bookMonth) {
         transactionRepository.saveAll(
                 transactions.stream()
                         .filter(TransactionDTO::hasNoEmptyField)
@@ -80,7 +94,7 @@ public class TransactionService {
         );
         entityManager.flush();
         costCenterService.updateTotalAmounts(getAllTransactions());
-        return getTransactionsForBookYear(bookYear);
+        return getTransactionsForBookPeriod(bookYear, bookMonth);
     }
 
     public void deleteTransactionsForBookYear(Integer bookYear) {
@@ -110,6 +124,13 @@ public class TransactionService {
             log.info("Skipped {} duplicate transactions during upload", skippedTransactions);
         }
         return newTransactions;
+    }
+
+    private List<Transaction> getTransactions(Integer bookYear, Integer bookMonth) {
+        if (bookYear == null) {
+            return transactionRepository.findAll();
+        }
+        return transactionRepository.findByBookDateGreaterThanEqualAndBookDateLessThan(startOf(bookYear, bookMonth), endExclusiveOf(bookYear, bookMonth));
     }
 
 }

@@ -101,6 +101,63 @@ class TransactionServiceTest {
         verify(costCenterService).updateTotalAmounts(any());
     }
 
+    @Test
+    void getTransactionsForBookPeriodFiltersByBookMonthWhenProvided() {
+        TransactionMapper transactionMapper = mock(TransactionMapper.class);
+        TransactionRepository transactionRepository = mock(TransactionRepository.class);
+        CostCenterService costCenterService = mock(CostCenterService.class);
+        TransactionFileStrategy transactionFileStrategy = mock(TransactionFileStrategy.class);
+        CostCenterPredictionService costCenterPredictionService = mock(CostCenterPredictionService.class);
+        EntityManager entityManager = mock(EntityManager.class);
+
+        TransactionService transactionService = new TransactionService(
+                transactionMapper,
+                transactionRepository,
+                costCenterService,
+                transactionFileStrategy,
+                costCenterPredictionService,
+                entityManager
+        );
+
+        transactionService.getTransactionsForBookPeriod(2026, 5);
+
+        verify(transactionRepository).findByBookDateGreaterThanEqualAndBookDateLessThan(
+                LocalDate.of(2026, 5, 1),
+                LocalDate.of(2026, 6, 1)
+        );
+    }
+
+    @Test
+    void getAvailableBookMonthsReturnsDistinctMonthsForSelectedBookYear() {
+        TransactionMapper transactionMapper = mock(TransactionMapper.class);
+        TransactionRepository transactionRepository = mock(TransactionRepository.class);
+        CostCenterService costCenterService = mock(CostCenterService.class);
+        TransactionFileStrategy transactionFileStrategy = mock(TransactionFileStrategy.class);
+        CostCenterPredictionService costCenterPredictionService = mock(CostCenterPredictionService.class);
+        EntityManager entityManager = mock(EntityManager.class);
+        Transaction mayTransaction = transaction("May", "Party", "Message");
+        mayTransaction.setBookDate(LocalDate.of(2026, 5, 15));
+        Transaction januaryTransaction = transaction("January", "Party", "Message");
+        januaryTransaction.setBookDate(LocalDate.of(2026, 1, 15));
+
+        when(transactionRepository.findByBookDateGreaterThanEqualAndBookDateLessThan(
+                LocalDate.of(2026, 1, 1),
+                LocalDate.of(2027, 1, 1)
+        )).thenReturn(List.of(januaryTransaction, mayTransaction, mayTransaction));
+
+        TransactionService transactionService = new TransactionService(
+                transactionMapper,
+                transactionRepository,
+                costCenterService,
+                transactionFileStrategy,
+                costCenterPredictionService,
+                entityManager
+        );
+
+        assertThat(transactionService.getAvailableBookMonths(2026))
+                .containsExactly(5, 1);
+    }
+
     private Transaction transaction(String description, String nameOtherParty, String message) {
         return Transaction.builder()
                 .withBookDate(LocalDate.of(2026, 1, 5))

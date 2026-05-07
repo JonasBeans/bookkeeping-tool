@@ -16,13 +16,19 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @GetMapping("/all")
-    public List<TransactionDTO> getAllTransactions(@RequestParam(value = "bookYear", required = false) Integer bookYear) {
-        return transactionService.getTransactionsForBookYear(bookYear);
+    public List<TransactionDTO> getAllTransactions(@RequestParam(value = "bookYear", required = false) Integer bookYear,
+                                                   @RequestParam(value = "bookMonth", required = false) Integer bookMonth) {
+        return transactionService.getTransactionsForBookPeriod(bookYear, bookMonth);
     }
 
     @GetMapping("/bookyears")
     public List<Integer> getAvailableBookYears() {
         return transactionService.getAvailableBookYears();
+    }
+
+    @GetMapping("/bookmonths")
+    public List<Integer> getAvailableBookMonths(@RequestParam(value = "bookYear", required = false) Integer bookYear) {
+        return transactionService.getAvailableBookMonths(bookYear);
     }
 
     @DeleteMapping("/bookyears/{bookYear}")
@@ -37,8 +43,9 @@ public class TransactionController {
 
     @PutMapping(value = "/assigned")
     public List<TransactionDTO> assignTransactions(@RequestBody List<TransactionDTO> transactions,
-                                                   @RequestParam(value = "bookYear", required = false) Integer bookYear) {
-        return transactionService.loadAssigned(transactions, bookYear);
+                                                   @RequestParam(value = "bookYear", required = false) Integer bookYear,
+                                                   @RequestParam(value = "bookMonth", required = false) Integer bookMonth) {
+        return transactionService.loadAssigned(transactions, bookYear, bookMonth);
     }
 
 }

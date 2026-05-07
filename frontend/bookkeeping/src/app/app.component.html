@@ -16,6 +16,17 @@
 			</mat-option>
 		</mat-select>
 	</mat-form-field>
+	<mat-form-field *ngIf="bookYearService.availableBookMonths.length" appearance="fill"
+	                style="margin-right: 20px; align-self: center;">
+		<mat-label>Bookmonth</mat-label>
+		<mat-select (ngModelChange)="bookYearService.selectBookMonth($event)"
+		            [ngModel]="bookYearService.selectedBookMonth">
+			<mat-option [value]="null">All months</mat-option>
+			<mat-option *ngFor="let bookMonth of bookYearService.availableBookMonths" [value]="bookMonth">
+				{{ bookYearService.getBookMonthLabel(bookMonth) }}
+			</mat-option>
+		</mat-select>
+	</mat-form-field>
 </div>
 <main>
 	<router-outlet></router-outlet>
