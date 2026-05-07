@@ -16,10 +16,16 @@ export class BookYearService {
 
 	public availableBookYears: number[] = [];
 	public availableBookMonths: number[] = [];
+
 	private readonly selectedBookYearSubject = new BehaviorSubject<number | null>(null);
+	public readonly selectedBookYear$ = this.selectedBookYearSubject.asObservable();
+	private readonly selectedBookMonthSubject = new BehaviorSubject<number | null>(null);
+	public readonly selectedBookMonth$ = this.selectedBookMonthSubject.asObservable();
+	private readonly client: HttpClient = inject(HttpClient);
+	private readonly platformId: Object = inject(PLATFORM_ID);
+	private readonly baseUrl = environment.apiBaseUrl;
 	public readonly selectedBookPeriod$ = combineLatest([this.selectedBookYear$, this.selectedBookMonth$])
 		.pipe(map(([bookYear, bookMonth]) => ({bookYear, bookMonth})));
-	public readonly selectedBookYear$ = this.selectedBookYearSubject.asObservable();
 	public readonly monthLabels = [
 		'January',
 		'February',
@@ -34,11 +40,7 @@ export class BookYearService {
 		'November',
 		'December'
 	];
-	private readonly selectedBookMonthSubject = new BehaviorSubject<number | null>(null);
-	public readonly selectedBookMonth$ = this.selectedBookMonthSubject.asObservable();
-	private readonly client: HttpClient = inject(HttpClient);
-	private readonly platformId: Object = inject(PLATFORM_ID);
-	private readonly baseUrl = environment.apiBaseUrl;
+
 
 	get selectedBookYear(): number | null {
 		return this.selectedBookYearSubject.value;
