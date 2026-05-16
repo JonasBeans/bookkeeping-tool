@@ -1,12 +1,16 @@
 <div style="display: flex; background-color:#f7f0e5;margin-bottom: 20px;">
 	<img src="./assets/banner-cropped.webp" alt="Logo">
-	<nav class="navbar">
+	<nav class="navbar" *ngIf="authService.isAuthenticated$ | async">
 		<a routerLink="transactions">Transactions</a>
 		<a routerLink="balance">Balance</a>
 		<a routerLink="income-statements">Income statements</a>
 		<a routerLink="charts">Charts</a>
 	</nav>
-	<mat-form-field *ngIf="bookYearService.availableBookYears.length" appearance="fill"
+	<div class="user-menu" *ngIf="authService.isAuthenticated$ | async">
+		<span>{{ authService.getDisplayName() }}</span>
+		<button type="button" (click)="logout()">Logout</button>
+	</div>
+	<mat-form-field *ngIf="(authService.isAuthenticated$ | async) && bookYearService.availableBookYears.length" appearance="fill"
 	                style="margin-left: auto; margin-right: 20px; align-self: center;">
 		<mat-label>Bookyear</mat-label>
 		<mat-select (ngModelChange)="bookYearService.selectBookYear($event)"
@@ -16,7 +20,7 @@
 			</mat-option>
 		</mat-select>
 	</mat-form-field>
-	<mat-form-field *ngIf="bookYearService.availableBookMonths.length" appearance="fill"
+	<mat-form-field *ngIf="(authService.isAuthenticated$ | async) && bookYearService.availableBookMonths.length" appearance="fill"
 	                style="margin-right: 20px; align-self: center;">
 		<mat-label>Bookmonth</mat-label>
 		<mat-select (ngModelChange)="bookYearService.selectBookMonth($event)"

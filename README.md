@@ -33,3 +33,23 @@ AI_COST_CENTER_CONFIDENCE_THRESHOLD=0.75
 Predictions are only applied when Claude returns an existing cost center with confidence at or above the threshold.
 If the API call fails, returns invalid JSON, predicts an unknown cost center, or has low confidence, the upload
 continues and the transaction remains available for manual assignment.
+
+## Keycloak authentication
+
+The REST endpoints are protected with Keycloak bearer tokens. The default realm is `production` on
+`http://keycloak.local`, matching an issuer URI of:
+
+```bash
+http://keycloak.local/realms/production
+```
+
+Create a public Keycloak client for the Angular app with client ID `bookkeeping`, standard flow enabled, and redirect
+URIs that include your deployed frontend URL, for example `http://localhost:4200/bookkeeping/*` and
+`http://home.bytesbyboon.be:21595/bookkeeping/*`.
+
+Override the backend Keycloak configuration with:
+
+```bash
+KEYCLOAK_ISSUER_URI=http://keycloak.local/realms/production
+KEYCLOAK_JWK_SET_URI=http://keycloak.local/realms/production/protocol/openid-connect/certs
+```

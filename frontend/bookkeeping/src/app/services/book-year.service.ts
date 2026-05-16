@@ -26,6 +26,7 @@ export class BookYearService {
 	private readonly baseUrl = environment.apiBaseUrl;
 	public readonly selectedBookPeriod$ = combineLatest([this.selectedBookYear$, this.selectedBookMonth$])
 		.pipe(map(([bookYear, bookMonth]) => ({bookYear, bookMonth})));
+
 	public readonly monthLabels = [
 		'January',
 		'February',
@@ -40,7 +41,6 @@ export class BookYearService {
 		'November',
 		'December'
 	];
-
 
 	get selectedBookYear(): number | null {
 		return this.selectedBookYearSubject.value;
