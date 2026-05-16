@@ -41,13 +41,19 @@ export class AuthService {
 
 		const initPromise = this.keycloak.init({
 			onLoad: 'check-sso',
+			checkLoginIframe: false,
 			pkceMethod: 'S256',
+			silentCheckSsoFallback: false,
 			silentCheckSsoRedirectUri: new URL('assets/silent-check-sso.html', this.document.baseURI).toString()
 		}).then((authenticated: boolean) => {
 			this.setAuthenticated(authenticated);
 			if (authenticated) {
 				return this.loadProfile().then(() => true);
 			}
+			return false;
+		}).catch((error: unknown) => {
+			this.setAuthenticated(false);
+			console.error('Failed to initialize Keycloak:', error);
 			return false;
 		});
 		this.initPromise = initPromise;

@@ -43,9 +43,12 @@ The REST endpoints are protected with Keycloak bearer tokens. The default realm 
 http://keycloak.local/realms/production
 ```
 
-Create a public Keycloak client for the Angular app with client ID `bookkeeping`, standard flow enabled, and redirect
-URIs that include your deployed frontend URL, for example `http://localhost:4200/bookkeeping/*` and
-`http://home.bytesbyboon.be:21595/bookkeeping/*`.
+Create a public Keycloak client for the Angular app with client ID `bookkeeping`, standard flow enabled, and PKCE
+`S256`. Configure redirect URIs that include your deployed frontend URL, for example
+`http://localhost:4200/bookkeeping/*` and `http://home.bytesbyboon.be:21595/bookkeeping/*`.
+
+For local development, set the client **Web origins** to `http://localhost:4200` or `+`. Without this, the browser
+blocks the token exchange with a CORS error even when Keycloak returns `200 OK`.
 
 Override the backend Keycloak configuration with:
 
